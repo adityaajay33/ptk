@@ -1,0 +1,2 @@
+/usr/bin/ar qc libruntime.a CMakeFiles/runtime.dir/src/core/runtime_context.cc.o CMakeFiles/runtime.dir/src/core/scheduler.cc.o CMakeFiles/runtime.dir/src/components/counter.cc.o CMakeFiles/runtime.dir/src/components/heartbeat.cc.o CMakeFiles/runtime.dir/src/components/frame_debugger.cc.o CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.o
+/usr/bin/ranlib libruntime.a

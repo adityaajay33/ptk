@@ -14,6 +14,7 @@ add_library(runtime
     src/components/heartbeat.cc
     src/components/frame_debugger.cc
     src/components/synthetic_camera.cc
+    src/components/pipeline.cc
 )
 
 target_include_directories(runtime PUBLIC

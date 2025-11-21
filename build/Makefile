@@ -262,6 +262,30 @@ src/components/synthetic_camera.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.s
 .PHONY : src/components/synthetic_camera.cc.s
 
+src/core/pipeline.o: src/core/pipeline.cc.o
+.PHONY : src/core/pipeline.o
+
+# target to build an object file
+src/core/pipeline.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/pipeline.cc.o
+.PHONY : src/core/pipeline.cc.o
+
+src/core/pipeline.i: src/core/pipeline.cc.i
+.PHONY : src/core/pipeline.i
+
+# target to preprocess a source file
+src/core/pipeline.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/pipeline.cc.i
+.PHONY : src/core/pipeline.cc.i
+
+src/core/pipeline.s: src/core/pipeline.cc.s
+.PHONY : src/core/pipeline.s
+
+# target to generate assembly for a file
+src/core/pipeline.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/pipeline.cc.s
+.PHONY : src/core/pipeline.cc.s
+
 src/core/runtime_context.o: src/core/runtime_context.cc.o
 .PHONY : src/core/runtime_context.o
 
@@ -310,6 +334,54 @@ src/core/scheduler.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/scheduler.cc.s
 .PHONY : src/core/scheduler.cc.s
 
+src/preprocess/preprocessor.o: src/preprocess/preprocessor.cc.o
+.PHONY : src/preprocess/preprocessor.o
+
+# target to build an object file
+src/preprocess/preprocessor.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o
+.PHONY : src/preprocess/preprocessor.cc.o
+
+src/preprocess/preprocessor.i: src/preprocess/preprocessor.cc.i
+.PHONY : src/preprocess/preprocessor.i
+
+# target to preprocess a source file
+src/preprocess/preprocessor.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.i
+.PHONY : src/preprocess/preprocessor.cc.i
+
+src/preprocess/preprocessor.s: src/preprocess/preprocessor.cc.s
+.PHONY : src/preprocess/preprocessor.s
+
+# target to generate assembly for a file
+src/preprocess/preprocessor.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.s
+.PHONY : src/preprocess/preprocessor.cc.s
+
+src/preprocess/transforms.o: src/preprocess/transforms.cc.o
+.PHONY : src/preprocess/transforms.o
+
+# target to build an object file
+src/preprocess/transforms.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o
+.PHONY : src/preprocess/transforms.cc.o
+
+src/preprocess/transforms.i: src/preprocess/transforms.cc.i
+.PHONY : src/preprocess/transforms.i
+
+# target to preprocess a source file
+src/preprocess/transforms.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/preprocess/transforms.cc.i
+.PHONY : src/preprocess/transforms.cc.i
+
+src/preprocess/transforms.s: src/preprocess/transforms.cc.s
+.PHONY : src/preprocess/transforms.s
+
+# target to generate assembly for a file
+src/preprocess/transforms.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/preprocess/transforms.cc.s
+.PHONY : src/preprocess/transforms.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -335,12 +407,21 @@ help:
 	@echo "... src/components/synthetic_camera.o"
 	@echo "... src/components/synthetic_camera.i"
 	@echo "... src/components/synthetic_camera.s"
+	@echo "... src/core/pipeline.o"
+	@echo "... src/core/pipeline.i"
+	@echo "... src/core/pipeline.s"
 	@echo "... src/core/runtime_context.o"
 	@echo "... src/core/runtime_context.i"
 	@echo "... src/core/runtime_context.s"
 	@echo "... src/core/scheduler.o"
 	@echo "... src/core/scheduler.i"
 	@echo "... src/core/scheduler.s"
+	@echo "... src/preprocess/preprocessor.o"
+	@echo "... src/preprocess/preprocessor.i"
+	@echo "... src/preprocess/preprocessor.s"
+	@echo "... src/preprocess/transforms.o"
+	@echo "... src/preprocess/transforms.i"
+	@echo "... src/preprocess/transforms.s"
 .PHONY : help
 
 

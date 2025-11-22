@@ -1,6 +1,7 @@
-CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o: \
-  /Users/adityaajay/Desktop/runtime/src/preprocess/transforms.cc \
-  /Users/adityaajay/Desktop/runtime/include/runtime/preprocess/transforms.h \
+CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.o: \
+  /Users/adityaajay/Desktop/runtime/src/runtime/components/synthetic_camera.cc \
+  /Users/adityaajay/Desktop/runtime/include/runtime/components/synthetic_camera.h \
+  /Users/adityaajay/Desktop/runtime/include/runtime/components/component_interface.h \
   /Users/adityaajay/Desktop/runtime/include/runtime/core/status.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/string \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/max.h \
@@ -644,8 +645,9 @@ CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/pstl.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/sample.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/bit \
-  /Users/adityaajay/Desktop/runtime/include/runtime/core/types.h \
+  /Users/adityaajay/Desktop/runtime/include/runtime/core/port.h \
   /Users/adityaajay/Desktop/runtime/include/runtime/data/frame.h \
+  /Users/adityaajay/Desktop/runtime/include/runtime/core/types.h \
   /Users/adityaajay/Desktop/runtime/include/runtime/data/tensor.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/vector \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__algorithm/lexicographical_compare_three_way.h \
@@ -758,4 +760,5 @@ CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_types/_nl_item.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__locale_dir/locale_base_api/bsd_locale_defaults.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/cstdarg \
-  /Users/adityaajay/Desktop/runtime/include/runtime/data/buffer.h
+  /Users/adityaajay/Desktop/runtime/include/runtime/data/buffer.h \
+  /Users/adityaajay/Desktop/runtime/include/runtime/core/runtime_context.h

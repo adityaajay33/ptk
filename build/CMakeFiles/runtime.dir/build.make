@@ -72,156 +72,156 @@ include CMakeFiles/runtime.dir/flags.make
 CMakeFiles/runtime.dir/codegen:
 .PHONY : CMakeFiles/runtime.dir/codegen
 
-CMakeFiles/runtime.dir/src/core/runtime_context.cc.o: CMakeFiles/runtime.dir/flags.make
-CMakeFiles/runtime.dir/src/core/runtime_context.cc.o: /Users/adityaajay/Desktop/runtime/src/core/runtime_context.cc
-CMakeFiles/runtime.dir/src/core/runtime_context.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/runtime.dir/src/core/runtime_context.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/core/runtime_context.cc.o -MF CMakeFiles/runtime.dir/src/core/runtime_context.cc.o.d -o CMakeFiles/runtime.dir/src/core/runtime_context.cc.o -c /Users/adityaajay/Desktop/runtime/src/core/runtime_context.cc
+CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.o: CMakeFiles/runtime.dir/flags.make
+CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.o: /Users/adityaajay/Desktop/runtime/src/runtime/core/runtime_context.cc
+CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.o -MF CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.o.d -o CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.o -c /Users/adityaajay/Desktop/runtime/src/runtime/core/runtime_context.cc
 
-CMakeFiles/runtime.dir/src/core/runtime_context.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/core/runtime_context.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/core/runtime_context.cc > CMakeFiles/runtime.dir/src/core/runtime_context.cc.i
+CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/runtime/core/runtime_context.cc > CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.i
 
-CMakeFiles/runtime.dir/src/core/runtime_context.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/core/runtime_context.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/core/runtime_context.cc -o CMakeFiles/runtime.dir/src/core/runtime_context.cc.s
+CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/runtime/core/runtime_context.cc -o CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.s
 
-CMakeFiles/runtime.dir/src/core/scheduler.cc.o: CMakeFiles/runtime.dir/flags.make
-CMakeFiles/runtime.dir/src/core/scheduler.cc.o: /Users/adityaajay/Desktop/runtime/src/core/scheduler.cc
-CMakeFiles/runtime.dir/src/core/scheduler.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/runtime.dir/src/core/scheduler.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/core/scheduler.cc.o -MF CMakeFiles/runtime.dir/src/core/scheduler.cc.o.d -o CMakeFiles/runtime.dir/src/core/scheduler.cc.o -c /Users/adityaajay/Desktop/runtime/src/core/scheduler.cc
+CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.o: CMakeFiles/runtime.dir/flags.make
+CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.o: /Users/adityaajay/Desktop/runtime/src/runtime/core/scheduler.cc
+CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.o -MF CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.o.d -o CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.o -c /Users/adityaajay/Desktop/runtime/src/runtime/core/scheduler.cc
 
-CMakeFiles/runtime.dir/src/core/scheduler.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/core/scheduler.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/core/scheduler.cc > CMakeFiles/runtime.dir/src/core/scheduler.cc.i
+CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/runtime/core/scheduler.cc > CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.i
 
-CMakeFiles/runtime.dir/src/core/scheduler.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/core/scheduler.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/core/scheduler.cc -o CMakeFiles/runtime.dir/src/core/scheduler.cc.s
+CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/runtime/core/scheduler.cc -o CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.s
 
-CMakeFiles/runtime.dir/src/components/counter.cc.o: CMakeFiles/runtime.dir/flags.make
-CMakeFiles/runtime.dir/src/components/counter.cc.o: /Users/adityaajay/Desktop/runtime/src/components/counter.cc
-CMakeFiles/runtime.dir/src/components/counter.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/runtime.dir/src/components/counter.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/components/counter.cc.o -MF CMakeFiles/runtime.dir/src/components/counter.cc.o.d -o CMakeFiles/runtime.dir/src/components/counter.cc.o -c /Users/adityaajay/Desktop/runtime/src/components/counter.cc
+CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.o: CMakeFiles/runtime.dir/flags.make
+CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.o: /Users/adityaajay/Desktop/runtime/src/runtime/core/pipeline.cc
+CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.o -MF CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.o.d -o CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.o -c /Users/adityaajay/Desktop/runtime/src/runtime/core/pipeline.cc
 
-CMakeFiles/runtime.dir/src/components/counter.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/components/counter.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/components/counter.cc > CMakeFiles/runtime.dir/src/components/counter.cc.i
+CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/runtime/core/pipeline.cc > CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.i
 
-CMakeFiles/runtime.dir/src/components/counter.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/components/counter.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/components/counter.cc -o CMakeFiles/runtime.dir/src/components/counter.cc.s
+CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/runtime/core/pipeline.cc -o CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.s
 
-CMakeFiles/runtime.dir/src/components/heartbeat.cc.o: CMakeFiles/runtime.dir/flags.make
-CMakeFiles/runtime.dir/src/components/heartbeat.cc.o: /Users/adityaajay/Desktop/runtime/src/components/heartbeat.cc
-CMakeFiles/runtime.dir/src/components/heartbeat.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/runtime.dir/src/components/heartbeat.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/components/heartbeat.cc.o -MF CMakeFiles/runtime.dir/src/components/heartbeat.cc.o.d -o CMakeFiles/runtime.dir/src/components/heartbeat.cc.o -c /Users/adityaajay/Desktop/runtime/src/components/heartbeat.cc
+CMakeFiles/runtime.dir/src/runtime/components/counter.cc.o: CMakeFiles/runtime.dir/flags.make
+CMakeFiles/runtime.dir/src/runtime/components/counter.cc.o: /Users/adityaajay/Desktop/runtime/src/runtime/components/counter.cc
+CMakeFiles/runtime.dir/src/runtime/components/counter.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/runtime.dir/src/runtime/components/counter.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/runtime/components/counter.cc.o -MF CMakeFiles/runtime.dir/src/runtime/components/counter.cc.o.d -o CMakeFiles/runtime.dir/src/runtime/components/counter.cc.o -c /Users/adityaajay/Desktop/runtime/src/runtime/components/counter.cc
 
-CMakeFiles/runtime.dir/src/components/heartbeat.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/components/heartbeat.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/components/heartbeat.cc > CMakeFiles/runtime.dir/src/components/heartbeat.cc.i
+CMakeFiles/runtime.dir/src/runtime/components/counter.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/runtime/components/counter.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/runtime/components/counter.cc > CMakeFiles/runtime.dir/src/runtime/components/counter.cc.i
 
-CMakeFiles/runtime.dir/src/components/heartbeat.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/components/heartbeat.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/components/heartbeat.cc -o CMakeFiles/runtime.dir/src/components/heartbeat.cc.s
+CMakeFiles/runtime.dir/src/runtime/components/counter.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/runtime/components/counter.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/runtime/components/counter.cc -o CMakeFiles/runtime.dir/src/runtime/components/counter.cc.s
 
-CMakeFiles/runtime.dir/src/components/frame_debugger.cc.o: CMakeFiles/runtime.dir/flags.make
-CMakeFiles/runtime.dir/src/components/frame_debugger.cc.o: /Users/adityaajay/Desktop/runtime/src/components/frame_debugger.cc
-CMakeFiles/runtime.dir/src/components/frame_debugger.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/runtime.dir/src/components/frame_debugger.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/components/frame_debugger.cc.o -MF CMakeFiles/runtime.dir/src/components/frame_debugger.cc.o.d -o CMakeFiles/runtime.dir/src/components/frame_debugger.cc.o -c /Users/adityaajay/Desktop/runtime/src/components/frame_debugger.cc
+CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.o: CMakeFiles/runtime.dir/flags.make
+CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.o: /Users/adityaajay/Desktop/runtime/src/runtime/components/heartbeat.cc
+CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.o -MF CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.o.d -o CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.o -c /Users/adityaajay/Desktop/runtime/src/runtime/components/heartbeat.cc
 
-CMakeFiles/runtime.dir/src/components/frame_debugger.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/components/frame_debugger.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/components/frame_debugger.cc > CMakeFiles/runtime.dir/src/components/frame_debugger.cc.i
+CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/runtime/components/heartbeat.cc > CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.i
 
-CMakeFiles/runtime.dir/src/components/frame_debugger.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/components/frame_debugger.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/components/frame_debugger.cc -o CMakeFiles/runtime.dir/src/components/frame_debugger.cc.s
+CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/runtime/components/heartbeat.cc -o CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.s
 
-CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.o: CMakeFiles/runtime.dir/flags.make
-CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.o: /Users/adityaajay/Desktop/runtime/src/components/synthetic_camera.cc
-CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.o -MF CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.o.d -o CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.o -c /Users/adityaajay/Desktop/runtime/src/components/synthetic_camera.cc
+CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.o: CMakeFiles/runtime.dir/flags.make
+CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.o: /Users/adityaajay/Desktop/runtime/src/runtime/components/frame_debugger.cc
+CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.o -MF CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.o.d -o CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.o -c /Users/adityaajay/Desktop/runtime/src/runtime/components/frame_debugger.cc
 
-CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/components/synthetic_camera.cc > CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.i
+CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/runtime/components/frame_debugger.cc > CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.i
 
-CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/components/synthetic_camera.cc -o CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.s
+CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/runtime/components/frame_debugger.cc -o CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.s
 
-CMakeFiles/runtime.dir/src/core/pipeline.cc.o: CMakeFiles/runtime.dir/flags.make
-CMakeFiles/runtime.dir/src/core/pipeline.cc.o: /Users/adityaajay/Desktop/runtime/src/core/pipeline.cc
-CMakeFiles/runtime.dir/src/core/pipeline.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/runtime.dir/src/core/pipeline.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/core/pipeline.cc.o -MF CMakeFiles/runtime.dir/src/core/pipeline.cc.o.d -o CMakeFiles/runtime.dir/src/core/pipeline.cc.o -c /Users/adityaajay/Desktop/runtime/src/core/pipeline.cc
+CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.o: CMakeFiles/runtime.dir/flags.make
+CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.o: /Users/adityaajay/Desktop/runtime/src/runtime/components/synthetic_camera.cc
+CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.o -MF CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.o.d -o CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.o -c /Users/adityaajay/Desktop/runtime/src/runtime/components/synthetic_camera.cc
 
-CMakeFiles/runtime.dir/src/core/pipeline.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/core/pipeline.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/core/pipeline.cc > CMakeFiles/runtime.dir/src/core/pipeline.cc.i
+CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/runtime/components/synthetic_camera.cc > CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.i
 
-CMakeFiles/runtime.dir/src/core/pipeline.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/core/pipeline.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/core/pipeline.cc -o CMakeFiles/runtime.dir/src/core/pipeline.cc.s
+CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/runtime/components/synthetic_camera.cc -o CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.s
 
-CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o: CMakeFiles/runtime.dir/flags.make
-CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o: /Users/adityaajay/Desktop/runtime/src/preprocess/preprocessor.cc
-CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o -MF CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o.d -o CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o -c /Users/adityaajay/Desktop/runtime/src/preprocess/preprocessor.cc
+CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.o: CMakeFiles/runtime.dir/flags.make
+CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.o: /Users/adityaajay/Desktop/runtime/src/runtime/preprocess/preprocessor.cc
+CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.o -MF CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.o.d -o CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.o -c /Users/adityaajay/Desktop/runtime/src/runtime/preprocess/preprocessor.cc
 
-CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/preprocess/preprocessor.cc > CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.i
+CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/runtime/preprocess/preprocessor.cc > CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.i
 
-CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/preprocess/preprocessor.cc -o CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.s
+CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/runtime/preprocess/preprocessor.cc -o CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.s
 
-CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o: CMakeFiles/runtime.dir/flags.make
-CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o: /Users/adityaajay/Desktop/runtime/src/preprocess/transforms.cc
-CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o -MF CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o.d -o CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o -c /Users/adityaajay/Desktop/runtime/src/preprocess/transforms.cc
+CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.o: CMakeFiles/runtime.dir/flags.make
+CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.o: /Users/adityaajay/Desktop/runtime/src/runtime/preprocess/transforms.cc
+CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.o: CMakeFiles/runtime.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.o -MF CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.o.d -o CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.o -c /Users/adityaajay/Desktop/runtime/src/runtime/preprocess/transforms.cc
 
-CMakeFiles/runtime.dir/src/preprocess/transforms.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/preprocess/transforms.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/preprocess/transforms.cc > CMakeFiles/runtime.dir/src/preprocess/transforms.cc.i
+CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/runtime/preprocess/transforms.cc > CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.i
 
-CMakeFiles/runtime.dir/src/preprocess/transforms.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/preprocess/transforms.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/preprocess/transforms.cc -o CMakeFiles/runtime.dir/src/preprocess/transforms.cc.s
+CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/runtime/preprocess/transforms.cc -o CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.s
 
 # Object files for target runtime
 runtime_OBJECTS = \
-"CMakeFiles/runtime.dir/src/core/runtime_context.cc.o" \
-"CMakeFiles/runtime.dir/src/core/scheduler.cc.o" \
-"CMakeFiles/runtime.dir/src/components/counter.cc.o" \
-"CMakeFiles/runtime.dir/src/components/heartbeat.cc.o" \
-"CMakeFiles/runtime.dir/src/components/frame_debugger.cc.o" \
-"CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.o" \
-"CMakeFiles/runtime.dir/src/core/pipeline.cc.o" \
-"CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o" \
-"CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o"
+"CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.o" \
+"CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.o" \
+"CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.o" \
+"CMakeFiles/runtime.dir/src/runtime/components/counter.cc.o" \
+"CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.o" \
+"CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.o" \
+"CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.o" \
+"CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.o" \
+"CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.o"
 
 # External object files for target runtime
 runtime_EXTERNAL_OBJECTS =
 
-libruntime.a: CMakeFiles/runtime.dir/src/core/runtime_context.cc.o
-libruntime.a: CMakeFiles/runtime.dir/src/core/scheduler.cc.o
-libruntime.a: CMakeFiles/runtime.dir/src/components/counter.cc.o
-libruntime.a: CMakeFiles/runtime.dir/src/components/heartbeat.cc.o
-libruntime.a: CMakeFiles/runtime.dir/src/components/frame_debugger.cc.o
-libruntime.a: CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.o
-libruntime.a: CMakeFiles/runtime.dir/src/core/pipeline.cc.o
-libruntime.a: CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o
-libruntime.a: CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o
+libruntime.a: CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.o
+libruntime.a: CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.o
+libruntime.a: CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.o
+libruntime.a: CMakeFiles/runtime.dir/src/runtime/components/counter.cc.o
+libruntime.a: CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.o
+libruntime.a: CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.o
+libruntime.a: CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.o
+libruntime.a: CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.o
+libruntime.a: CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.o
 libruntime.a: CMakeFiles/runtime.dir/build.make
 libruntime.a: CMakeFiles/runtime.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX static library libruntime.a"

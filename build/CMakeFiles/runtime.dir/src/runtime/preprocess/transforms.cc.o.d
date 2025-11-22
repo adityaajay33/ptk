@@ -1,5 +1,5 @@
-CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o: \
-  /Users/adityaajay/Desktop/runtime/src/preprocess/preprocessor.cc \
+CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.o: \
+  /Users/adityaajay/Desktop/runtime/src/runtime/preprocess/transforms.cc \
   /Users/adityaajay/Desktop/runtime/include/runtime/preprocess/transforms.h \
   /Users/adityaajay/Desktop/runtime/include/runtime/core/status.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/string \
@@ -758,8 +758,4 @@ CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/_types/_nl_item.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__locale_dir/locale_base_api/bsd_locale_defaults.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/cstdarg \
-  /Users/adityaajay/Desktop/runtime/include/runtime/data/buffer.h \
-  /Users/adityaajay/Desktop/runtime/include/runtime/preprocess/preprocessor.h \
-  /Users/adityaajay/Desktop/runtime/include/runtime/components/component_interface.h \
-  /Users/adityaajay/Desktop/runtime/include/runtime/core/port.h \
-  /Users/adityaajay/Desktop/runtime/include/runtime/core/runtime_context.h
+  /Users/adityaajay/Desktop/runtime/include/runtime/data/buffer.h

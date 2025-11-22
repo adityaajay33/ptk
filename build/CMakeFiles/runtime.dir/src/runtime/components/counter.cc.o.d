@@ -1,5 +1,5 @@
-CMakeFiles/runtime.dir/src/components/counter.cc.o: \
-  /Users/adityaajay/Desktop/runtime/src/components/counter.cc \
+CMakeFiles/runtime.dir/src/runtime/components/counter.cc.o: \
+  /Users/adityaajay/Desktop/runtime/src/runtime/components/counter.cc \
   /Users/adityaajay/Desktop/runtime/include/runtime/components/counter.h \
   /Users/adityaajay/Desktop/runtime/include/runtime/components/component_interface.h \
   /Users/adityaajay/Desktop/runtime/include/runtime/core/status.h \

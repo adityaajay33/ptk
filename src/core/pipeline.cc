@@ -1,10 +1,12 @@
 #include "runtime/core/pipeline.h"
+#include "runtime/core/runtime_context.h"
+#include "runtime/core/scheduler.h"
 
 namespace runtime {
 
-    Pipeline::Pipeline() : built_(false), components_() {}
+    Pipeline::Pipeline(): context_(nullptr), scheduler_(nullptr), built_(false), components_() {}
 
-    Pipeline::~Pipeline() {}
+    Pipeline::~Pipeline() = default;
 
     Status Pipeline::Build(RuntimeContext* context) {
         if (context==nullptr) {

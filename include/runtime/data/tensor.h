@@ -23,6 +23,17 @@ namespace runtime {
 
             int64_t dim(std::size_t index) const { return dims_[index]; }
 
+            std::int64_t num_elements() const {
+                if (dims_.empty()) {
+                    return 0;
+                }
+                std::int64_t total = 1;
+                for (std::int64_t d : dims_) {
+                    total *= d;
+                }
+                return total;
+            }
+
         private:
 
             std::vector<std::int64_t> dims_;
@@ -37,6 +48,8 @@ namespace runtime {
 
             TensorView(const BufferView& buffer_view, DataType data_type, const TensorShape& shape)
                 : buffer_view_(buffer_view), data_type_(data_type), shape_(shape) {}
+
+            DataType dtype() const { return data_type_;}
 
             const BufferView& buffer() const { return buffer_view_; }
             BufferView& buffer() { return buffer_view_; }

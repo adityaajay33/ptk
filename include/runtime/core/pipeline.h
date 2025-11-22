@@ -7,10 +7,12 @@
 
 namespace runtime {
 
+    class RuntimeContext;
+
     class Pipeline {
         public:
-            Pipeline() = default;
-            virtual ~Pipeline() = default;
+            Pipeline();
+            virtual ~Pipeline();
 
             Pipeline(const Pipeline&) = delete;
             Pipeline& operator=(const Pipeline&) = delete;
@@ -25,6 +27,8 @@ namespace runtime {
             Status AddComponent(ComponentInterface* component);
 
         private:
+            RuntimeContext* context_;
+            Scheduler* scheduler_;
             bool built_;
             std::vector<ComponentInterface*> components_;
     };

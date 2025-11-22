@@ -11,6 +11,7 @@ namespace runtime {
 struct Frame {
   TensorView image; //image tensor
   PixelFormat pixel_format; //channel interpretation
+  TensorLayout layout;
   int64_t timestamp_ns; //timestamp in from context
   int64_t frame_index; //optional sequential index
   int camera_id; //optional identifier
@@ -18,6 +19,7 @@ struct Frame {
   Frame()
     : image(),
         pixel_format(PixelFormat::kUnknown),
+        layout(TensorLayout::kUnknown),
         timestamp_ns(0),
         frame_index(0),
         camera_id(0) {}

@@ -19,6 +19,15 @@ namespace runtime {
         kFloat64,
     };
 
+    enum class TensorLayout {
+        kUnknown = 0,
+        kHwc,  // height, width, channels
+        kChw,  // channels, height, width
+        kNhwc, // batch, height, width, channels
+        kNchw, // batch, channels, height, width
+
+    };
+
     enum class PixelFormat {
 
         kUnknown = 0,

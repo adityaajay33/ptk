@@ -7,7 +7,7 @@
 #include "runtime/core/types.h"
 #include "runtime/data/buffer.h"
 
-namespace runtime {
+namespace ptk {
 
     class TensorShape {
 

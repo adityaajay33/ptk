@@ -8,7 +8,7 @@
 #include "runtime/core/status.h"
 
 
-namespace runtime {
+namespace ptk {
 
     class RuntimeContext;
 
@@ -31,7 +31,7 @@ namespace runtime {
             std::vector<ComponentInterface*> components_;
             bool running_;
             int tick_;
-    }; // namespace runtime
+    }; // namespace ptk
 }
 
 #endif // RUNTIME_CORE_SCHEDULER_H_

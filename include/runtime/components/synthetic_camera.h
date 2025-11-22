@@ -5,7 +5,7 @@
 #include "runtime/core/port.h"
 #include "runtime/data/frame.h"
 
-namespace runtime {
+namespace ptk {
 
     class SyntheticCamera : public ComponentInterface {
 

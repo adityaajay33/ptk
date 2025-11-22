@@ -4,7 +4,7 @@
 
 #include "runtime/core/runtime_context.h"
 
-namespace runtime {
+namespace ptk {
 
 Heartbeat::Heartbeat() : context_(nullptr), count_(0) {}
 
@@ -37,4 +37,4 @@ void Heartbeat::Tick() {
   }
 }
 
-}  // namespace runtime
+}  // namespace ptk

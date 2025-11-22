@@ -6,7 +6,7 @@
 
 #include "runtime/core/types.h"
 
-namespace runtime {
+namespace ptk {
 
     class BufferView {
         public:
@@ -30,6 +30,6 @@ namespace runtime {
             DeviceType device_type_;
     };
 
-} // namespace runtime
+} // namespace ptk
 
 #endif // RUNTIME_DATA_BUFFER_H_

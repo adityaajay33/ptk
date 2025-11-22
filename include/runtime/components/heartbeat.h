@@ -3,7 +3,7 @@
 
 #include "runtime/components/component_interface.h"
 
-namespace runtime {
+namespace ptk {
 
 class Heartbeat : public ComponentInterface {
  public:
@@ -20,6 +20,6 @@ class Heartbeat : public ComponentInterface {
   int count_;
 };
 
-}  // namespace runtime
+}  // namespace ptk
 
 #endif  // RUNTIME_COMPONENTS_HEARTBEAT_H_

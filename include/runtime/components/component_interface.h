@@ -3,7 +3,7 @@
 
 #include "runtime/core/status.h"
 
-namespace runtime {
+namespace ptk {
 
     class RuntimeContext;
 
@@ -23,6 +23,6 @@ namespace runtime {
 
     };
 
-} // namespace runtime
+} // namespace ptk
 
 #endif // RUNTIME_COMPONENTS_COMPONENT_INTERFACE_H_

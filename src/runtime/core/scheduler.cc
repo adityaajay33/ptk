@@ -1,7 +1,7 @@
 #include "runtime/core/scheduler.h"
 #include "runtime/core/runtime_context.h"
 
-namespace runtime{
+namespace ptk{
 
     Scheduler::Scheduler() : context_(nullptr), components_(), running_(false) {}
 
@@ -80,4 +80,4 @@ namespace runtime{
         }
     }
     }
-} // namespace runtime
+} // namespace ptk

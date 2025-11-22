@@ -16,9 +16,9 @@
 #include "runtime/core/types.h"
 #include "runtime/data/buffer.h"
 #include "runtime/data/tensor.h"
-#include "runtime/preprocess/transforms.h"
+#include "operators/transforms.h"
 
-using namespace runtime;
+using namespace ptk;
 
 // Simple helper to check if a path is a directory.
 bool IsDirectory(const std::string& path) {
@@ -148,7 +148,7 @@ int main(int argc, char** argv) {
     // Cast uint8 -> float32
     {
       Status s =
-          preprocess::CastUint8ToFloat32(rgb_u8_tensor, &rgb_float_tensor);
+          operators::CastUint8ToFloat32(rgb_u8_tensor, &rgb_float_tensor);
       if (!s.ok()) {
         std::cerr << "  CastUint8ToFloat32 failed: "
                   << s.message() << "\n";
@@ -176,7 +176,7 @@ int main(int argc, char** argv) {
     // RGB float -> Gray float
     {
       Status s =
-          preprocess::RgbToGray(rgb_float_tensor, &gray_float_tensor);
+          operators::RgbToGray(rgb_float_tensor, &gray_float_tensor);
       if (!s.ok()) {
         std::cerr << "  RgbToGray failed: "
                   << s.message() << "\n";
@@ -201,7 +201,7 @@ int main(int argc, char** argv) {
 
     {
       Status s =
-          preprocess::CastFloat32ToUint8(gray_float_tensor, &gray_u8_tensor);
+          operators::CastFloat32ToUint8(gray_float_tensor, &gray_u8_tensor);
       if (!s.ok()) {
         std::cerr << "  CastFloat32ToUint8 failed: "
                   << s.message() << "\n";

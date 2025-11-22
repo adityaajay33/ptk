@@ -2,7 +2,7 @@
 #include "runtime/core/runtime_context.h"
 #include "runtime/core/scheduler.h"
 
-namespace runtime {
+namespace ptk {
 
     Pipeline::Pipeline(): context_(nullptr), scheduler_(nullptr), built_(false), components_() {}
 
@@ -54,4 +54,4 @@ namespace runtime {
         components_.push_back(component);
         return Status::Ok();
     };
-} // namespace runtime
+} // namespace ptk

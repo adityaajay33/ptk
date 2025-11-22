@@ -8,7 +8,7 @@
 #include "runtime/data/frame.h"
 #include "runtime/data/tensor.h"  // whatever defines TensorView / TensorShape
 
-namespace runtime {
+namespace ptk {
 
 FrameDebugger::FrameDebugger()
     : context_(nullptr), input_(nullptr), tick_count_(0) {}
@@ -78,4 +78,4 @@ void FrameDebugger::Tick() {
   context_->LogInfo(msg.c_str());
 }
 
-}  // namespace runtime
+}  // namespace ptk

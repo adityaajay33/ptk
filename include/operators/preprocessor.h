@@ -1,13 +1,13 @@
-#ifndef RUNTIME_PREPROCESS_PREPROCESSOR_H_
-#define RUNTIME_PREPROCESS_PREPROCESSOR_H_
+#ifndef OPERATORS_PREPROCESSOR_H_
+#define OPERATORS_PREPROCESSOR_H_
 
 #include "runtime/components/component_interface.h"
 #include "runtime/core/port.h"
 #include "runtime/data/frame.h"
 #include "runtime/core/types.h"
-#include "runtime/preprocess/transforms.h"
+#include "operators/transforms.h"
 
-namespace runtime {
+namespace ptk {
 
     struct PreprocessorConfig {
         TensorLayout input_layout;
@@ -22,7 +22,7 @@ namespace runtime {
         bool normalize;
         bool add_batch_dimension;
         bool to_grayscale;
-        preprocess::NormalizationParams norm;
+        operators::NormalizationParams norm;
 
         int target_height;
         int target_width;
@@ -54,4 +54,5 @@ namespace runtime {
     };
 }
 
-#endif // RUNTIME_PREPROCESS_PREPROCESSOR_H_
+#endif // OPERATORS_PREPROCESSOR_H_
+

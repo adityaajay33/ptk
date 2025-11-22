@@ -3,7 +3,7 @@
 
 #include "runtime/components/component_interface.h"
 
-namespace runtime {
+namespace ptk {
 
     class Counter : public ComponentInterface {
         public:
@@ -20,6 +20,6 @@ namespace runtime {
             int count_;
     };
 
-} // namespace runtime
+} // namespace ptk
 
 #endif // RUNTIME_COMPONENTS_COUNTER_H_

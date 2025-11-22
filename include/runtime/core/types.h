@@ -4,7 +4,7 @@
 #include <cstdint>
 
 
-namespace runtime {
+namespace ptk {
     enum class DeviceType {
         kCpu = 0,
         kCuda,

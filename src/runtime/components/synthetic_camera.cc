@@ -4,7 +4,7 @@
 #include "runtime/core/runtime_context.h"
 #include "runtime/data/frame.h"
 
-namespace runtime {
+namespace ptk {
 
     SyntheticCamera::SyntheticCamera()
         : context_(nullptr), output_(nullptr), frame_index_(0) {}
@@ -51,4 +51,4 @@ namespace runtime {
         frame->timestamp_ns = context_->NowNanoseconds();
     }
 
-}  // namespace runtime
+}  // namespace ptk

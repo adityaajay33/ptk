@@ -1,7 +1,7 @@
 #include "runtime/components/counter.h"
 #include "runtime/core/runtime_context.h"
 
-namespace runtime {
+namespace ptk {
 
     Counter::Counter() : context_(nullptr), count_(0) {}
 
@@ -31,4 +31,4 @@ namespace runtime {
         context_->LogInfo(msg.c_str());
     }
     }
-} // namespace runtime
+} // namespace ptk

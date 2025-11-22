@@ -6,7 +6,7 @@
 #include "runtime/core/types.h"
 #include "runtime/data/tensor.h"
 
-namespace runtime {
+namespace ptk {
 
 struct Frame {
   TensorView image; //image tensor
@@ -25,6 +25,6 @@ struct Frame {
         camera_id(0) {}
 };
 
-}  // namespace runtime
+}  // namespace ptk
 
 #endif  // RUNTIME_DATA_FRAME_H_

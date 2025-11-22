@@ -1,9 +1,9 @@
-#include "runtime/preprocess/transforms.h"
-#include "runtime/preprocess/preprocessor.h"
+#include "operators/preprocessor.h"
+#include "operators/cast_uint8_to_float32.h"
 #include "runtime/core/runtime_context.h"
 #include "runtime/core/status.h"
 
-namespace runtime {
+namespace ptk {
 
 Preprocessor::Preprocessor(const PreprocessorConfig& config)
     : context_(nullptr),
@@ -74,7 +74,7 @@ void Preprocessor::Tick() {
   TensorView& dst = out->image;
 
   // For now: simple uint8 -> float32 cast.
-  Status s = preprocess::CastUint8ToFloat32(src, &dst);
+  Status s = operators::CastUint8ToFloat32(src, &dst);
   if (!s.ok()) {
     context_->LogError("Preprocessor: CastUint8ToFloat32 failed");
     return;
@@ -82,4 +82,5 @@ void Preprocessor::Tick() {
 
 }
 
-}  // namespace runtime
+}  // namespace ptk
+

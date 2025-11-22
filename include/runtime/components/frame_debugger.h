@@ -6,7 +6,7 @@
 #include "runtime/core/port.h"
 #include "runtime/data/frame.h"
 
-namespace runtime {
+namespace ptk {
 
 class FrameDebugger : public ComponentInterface {
  public:
@@ -27,6 +27,6 @@ class FrameDebugger : public ComponentInterface {
   int tick_count_;
 };
 
-}  // namespace runtime
+}  // namespace ptk
 
 #endif  // RUNTIME_COMPONENTS_FRAME_DEBUGGER_H_

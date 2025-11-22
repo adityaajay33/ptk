@@ -5,7 +5,7 @@
 #include "runtime/core/scheduler.h"
 #include "runtime/components/component_interface.h"
 
-namespace runtime {
+namespace ptk {
 
     class RuntimeContext;
 
@@ -32,6 +32,6 @@ namespace runtime {
             bool built_;
             std::vector<ComponentInterface*> components_;
     };
-} // namespace runtime
+} // namespace ptk
 
 #endif // RUNTIME_CORE_PIPELINE_H_

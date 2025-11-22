@@ -1,7 +1,7 @@
 #ifndef RUNTIME_CORE_PORT_H_
 #define RUNTIME_CORE_PORT_H_
 
-namespace runtime {
+namespace ptk {
 
     template <typename T>
     class OutputPort {
@@ -47,6 +47,6 @@ namespace runtime {
             const T* value_;
     };
 
-}  // namespace runtime
+}  // namespace ptk
 
 #endif // RUNTIME_CORE_PORT_H_

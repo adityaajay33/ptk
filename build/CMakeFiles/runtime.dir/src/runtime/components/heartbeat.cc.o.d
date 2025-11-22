@@ -1,5 +1,5 @@
-CMakeFiles/runtime.dir/src/components/heartbeat.cc.o: \
-  /Users/adityaajay/Desktop/runtime/src/components/heartbeat.cc \
+CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.o: \
+  /Users/adityaajay/Desktop/runtime/src/runtime/components/heartbeat.cc \
   /Users/adityaajay/Desktop/runtime/include/runtime/components/heartbeat.h \
   /Users/adityaajay/Desktop/runtime/include/runtime/components/component_interface.h \
   /Users/adityaajay/Desktop/runtime/include/runtime/core/status.h \

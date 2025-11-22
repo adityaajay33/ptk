@@ -72,28 +72,28 @@ include CMakeFiles/demo.dir/flags.make
 CMakeFiles/demo.dir/codegen:
 .PHONY : CMakeFiles/demo.dir/codegen
 
-CMakeFiles/demo.dir/demo.cc.o: CMakeFiles/demo.dir/flags.make
-CMakeFiles/demo.dir/demo.cc.o: /Users/adityaajay/Desktop/runtime/demo.cc
-CMakeFiles/demo.dir/demo.cc.o: CMakeFiles/demo.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/demo.dir/demo.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/demo.dir/demo.cc.o -MF CMakeFiles/demo.dir/demo.cc.o.d -o CMakeFiles/demo.dir/demo.cc.o -c /Users/adityaajay/Desktop/runtime/demo.cc
+CMakeFiles/demo.dir/src/apps/demo.cc.o: CMakeFiles/demo.dir/flags.make
+CMakeFiles/demo.dir/src/apps/demo.cc.o: /Users/adityaajay/Desktop/runtime/src/apps/demo.cc
+CMakeFiles/demo.dir/src/apps/demo.cc.o: CMakeFiles/demo.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/adityaajay/Desktop/runtime/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/demo.dir/src/apps/demo.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/demo.dir/src/apps/demo.cc.o -MF CMakeFiles/demo.dir/src/apps/demo.cc.o.d -o CMakeFiles/demo.dir/src/apps/demo.cc.o -c /Users/adityaajay/Desktop/runtime/src/apps/demo.cc
 
-CMakeFiles/demo.dir/demo.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/demo.dir/demo.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/demo.cc > CMakeFiles/demo.dir/demo.cc.i
+CMakeFiles/demo.dir/src/apps/demo.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/demo.dir/src/apps/demo.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/adityaajay/Desktop/runtime/src/apps/demo.cc > CMakeFiles/demo.dir/src/apps/demo.cc.i
 
-CMakeFiles/demo.dir/demo.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/demo.dir/demo.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/demo.cc -o CMakeFiles/demo.dir/demo.cc.s
+CMakeFiles/demo.dir/src/apps/demo.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/demo.dir/src/apps/demo.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/adityaajay/Desktop/runtime/src/apps/demo.cc -o CMakeFiles/demo.dir/src/apps/demo.cc.s
 
 # Object files for target demo
 demo_OBJECTS = \
-"CMakeFiles/demo.dir/demo.cc.o"
+"CMakeFiles/demo.dir/src/apps/demo.cc.o"
 
 # External object files for target demo
 demo_EXTERNAL_OBJECTS =
 
-demo: CMakeFiles/demo.dir/demo.cc.o
+demo: CMakeFiles/demo.dir/src/apps/demo.cc.o
 demo: CMakeFiles/demo.dir/build.make
 demo: libruntime.a
 demo: CMakeFiles/demo.dir/link.txt

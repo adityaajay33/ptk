@@ -1,5 +1,5 @@
-CMakeFiles/runtime.dir/src/components/frame_debugger.cc.o: \
-  /Users/adityaajay/Desktop/runtime/src/components/frame_debugger.cc \
+CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.o: \
+  /Users/adityaajay/Desktop/runtime/src/runtime/components/frame_debugger.cc \
   /Users/adityaajay/Desktop/runtime/include/runtime/components/frame_debugger.h \
   /Users/adityaajay/Desktop/runtime/include/runtime/components/component_interface.h \
   /Users/adityaajay/Desktop/runtime/include/runtime/core/status.h \

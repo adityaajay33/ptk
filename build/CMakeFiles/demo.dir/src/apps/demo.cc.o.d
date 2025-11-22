@@ -1,4 +1,5 @@
-CMakeFiles/demo.dir/demo.cc.o: /Users/adityaajay/Desktop/runtime/demo.cc \
+CMakeFiles/demo.dir/src/apps/demo.cc.o: \
+  /Users/adityaajay/Desktop/runtime/src/apps/demo.cc \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/cstdint \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__config \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__config_site \

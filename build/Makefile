@@ -142,245 +142,245 @@ demo/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/build
 .PHONY : demo/fast
 
-demo.o: demo.cc.o
-.PHONY : demo.o
+src/apps/demo.o: src/apps/demo.cc.o
+.PHONY : src/apps/demo.o
 
 # target to build an object file
-demo.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/demo.cc.o
-.PHONY : demo.cc.o
+src/apps/demo.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/apps/demo.cc.o
+.PHONY : src/apps/demo.cc.o
 
-demo.i: demo.cc.i
-.PHONY : demo.i
+src/apps/demo.i: src/apps/demo.cc.i
+.PHONY : src/apps/demo.i
 
 # target to preprocess a source file
-demo.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/demo.cc.i
-.PHONY : demo.cc.i
+src/apps/demo.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/apps/demo.cc.i
+.PHONY : src/apps/demo.cc.i
 
-demo.s: demo.cc.s
-.PHONY : demo.s
+src/apps/demo.s: src/apps/demo.cc.s
+.PHONY : src/apps/demo.s
 
 # target to generate assembly for a file
-demo.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/demo.cc.s
-.PHONY : demo.cc.s
+src/apps/demo.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/src/apps/demo.cc.s
+.PHONY : src/apps/demo.cc.s
 
-src/components/counter.o: src/components/counter.cc.o
-.PHONY : src/components/counter.o
+src/runtime/components/counter.o: src/runtime/components/counter.cc.o
+.PHONY : src/runtime/components/counter.o
 
 # target to build an object file
-src/components/counter.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/counter.cc.o
-.PHONY : src/components/counter.cc.o
+src/runtime/components/counter.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/components/counter.cc.o
+.PHONY : src/runtime/components/counter.cc.o
 
-src/components/counter.i: src/components/counter.cc.i
-.PHONY : src/components/counter.i
+src/runtime/components/counter.i: src/runtime/components/counter.cc.i
+.PHONY : src/runtime/components/counter.i
 
 # target to preprocess a source file
-src/components/counter.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/counter.cc.i
-.PHONY : src/components/counter.cc.i
+src/runtime/components/counter.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/components/counter.cc.i
+.PHONY : src/runtime/components/counter.cc.i
 
-src/components/counter.s: src/components/counter.cc.s
-.PHONY : src/components/counter.s
+src/runtime/components/counter.s: src/runtime/components/counter.cc.s
+.PHONY : src/runtime/components/counter.s
 
 # target to generate assembly for a file
-src/components/counter.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/counter.cc.s
-.PHONY : src/components/counter.cc.s
+src/runtime/components/counter.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/components/counter.cc.s
+.PHONY : src/runtime/components/counter.cc.s
 
-src/components/frame_debugger.o: src/components/frame_debugger.cc.o
-.PHONY : src/components/frame_debugger.o
+src/runtime/components/frame_debugger.o: src/runtime/components/frame_debugger.cc.o
+.PHONY : src/runtime/components/frame_debugger.o
 
 # target to build an object file
-src/components/frame_debugger.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/frame_debugger.cc.o
-.PHONY : src/components/frame_debugger.cc.o
+src/runtime/components/frame_debugger.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.o
+.PHONY : src/runtime/components/frame_debugger.cc.o
 
-src/components/frame_debugger.i: src/components/frame_debugger.cc.i
-.PHONY : src/components/frame_debugger.i
+src/runtime/components/frame_debugger.i: src/runtime/components/frame_debugger.cc.i
+.PHONY : src/runtime/components/frame_debugger.i
 
 # target to preprocess a source file
-src/components/frame_debugger.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/frame_debugger.cc.i
-.PHONY : src/components/frame_debugger.cc.i
+src/runtime/components/frame_debugger.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.i
+.PHONY : src/runtime/components/frame_debugger.cc.i
 
-src/components/frame_debugger.s: src/components/frame_debugger.cc.s
-.PHONY : src/components/frame_debugger.s
+src/runtime/components/frame_debugger.s: src/runtime/components/frame_debugger.cc.s
+.PHONY : src/runtime/components/frame_debugger.s
 
 # target to generate assembly for a file
-src/components/frame_debugger.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/frame_debugger.cc.s
-.PHONY : src/components/frame_debugger.cc.s
+src/runtime/components/frame_debugger.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/components/frame_debugger.cc.s
+.PHONY : src/runtime/components/frame_debugger.cc.s
 
-src/components/heartbeat.o: src/components/heartbeat.cc.o
-.PHONY : src/components/heartbeat.o
+src/runtime/components/heartbeat.o: src/runtime/components/heartbeat.cc.o
+.PHONY : src/runtime/components/heartbeat.o
 
 # target to build an object file
-src/components/heartbeat.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/heartbeat.cc.o
-.PHONY : src/components/heartbeat.cc.o
+src/runtime/components/heartbeat.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.o
+.PHONY : src/runtime/components/heartbeat.cc.o
 
-src/components/heartbeat.i: src/components/heartbeat.cc.i
-.PHONY : src/components/heartbeat.i
+src/runtime/components/heartbeat.i: src/runtime/components/heartbeat.cc.i
+.PHONY : src/runtime/components/heartbeat.i
 
 # target to preprocess a source file
-src/components/heartbeat.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/heartbeat.cc.i
-.PHONY : src/components/heartbeat.cc.i
+src/runtime/components/heartbeat.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.i
+.PHONY : src/runtime/components/heartbeat.cc.i
 
-src/components/heartbeat.s: src/components/heartbeat.cc.s
-.PHONY : src/components/heartbeat.s
+src/runtime/components/heartbeat.s: src/runtime/components/heartbeat.cc.s
+.PHONY : src/runtime/components/heartbeat.s
 
 # target to generate assembly for a file
-src/components/heartbeat.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/heartbeat.cc.s
-.PHONY : src/components/heartbeat.cc.s
+src/runtime/components/heartbeat.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/components/heartbeat.cc.s
+.PHONY : src/runtime/components/heartbeat.cc.s
 
-src/components/synthetic_camera.o: src/components/synthetic_camera.cc.o
-.PHONY : src/components/synthetic_camera.o
+src/runtime/components/synthetic_camera.o: src/runtime/components/synthetic_camera.cc.o
+.PHONY : src/runtime/components/synthetic_camera.o
 
 # target to build an object file
-src/components/synthetic_camera.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.o
-.PHONY : src/components/synthetic_camera.cc.o
+src/runtime/components/synthetic_camera.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.o
+.PHONY : src/runtime/components/synthetic_camera.cc.o
 
-src/components/synthetic_camera.i: src/components/synthetic_camera.cc.i
-.PHONY : src/components/synthetic_camera.i
+src/runtime/components/synthetic_camera.i: src/runtime/components/synthetic_camera.cc.i
+.PHONY : src/runtime/components/synthetic_camera.i
 
 # target to preprocess a source file
-src/components/synthetic_camera.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.i
-.PHONY : src/components/synthetic_camera.cc.i
+src/runtime/components/synthetic_camera.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.i
+.PHONY : src/runtime/components/synthetic_camera.cc.i
 
-src/components/synthetic_camera.s: src/components/synthetic_camera.cc.s
-.PHONY : src/components/synthetic_camera.s
+src/runtime/components/synthetic_camera.s: src/runtime/components/synthetic_camera.cc.s
+.PHONY : src/runtime/components/synthetic_camera.s
 
 # target to generate assembly for a file
-src/components/synthetic_camera.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/components/synthetic_camera.cc.s
-.PHONY : src/components/synthetic_camera.cc.s
+src/runtime/components/synthetic_camera.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/components/synthetic_camera.cc.s
+.PHONY : src/runtime/components/synthetic_camera.cc.s
 
-src/core/pipeline.o: src/core/pipeline.cc.o
-.PHONY : src/core/pipeline.o
+src/runtime/core/pipeline.o: src/runtime/core/pipeline.cc.o
+.PHONY : src/runtime/core/pipeline.o
 
 # target to build an object file
-src/core/pipeline.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/pipeline.cc.o
-.PHONY : src/core/pipeline.cc.o
+src/runtime/core/pipeline.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.o
+.PHONY : src/runtime/core/pipeline.cc.o
 
-src/core/pipeline.i: src/core/pipeline.cc.i
-.PHONY : src/core/pipeline.i
+src/runtime/core/pipeline.i: src/runtime/core/pipeline.cc.i
+.PHONY : src/runtime/core/pipeline.i
 
 # target to preprocess a source file
-src/core/pipeline.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/pipeline.cc.i
-.PHONY : src/core/pipeline.cc.i
+src/runtime/core/pipeline.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.i
+.PHONY : src/runtime/core/pipeline.cc.i
 
-src/core/pipeline.s: src/core/pipeline.cc.s
-.PHONY : src/core/pipeline.s
+src/runtime/core/pipeline.s: src/runtime/core/pipeline.cc.s
+.PHONY : src/runtime/core/pipeline.s
 
 # target to generate assembly for a file
-src/core/pipeline.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/pipeline.cc.s
-.PHONY : src/core/pipeline.cc.s
+src/runtime/core/pipeline.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/core/pipeline.cc.s
+.PHONY : src/runtime/core/pipeline.cc.s
 
-src/core/runtime_context.o: src/core/runtime_context.cc.o
-.PHONY : src/core/runtime_context.o
+src/runtime/core/runtime_context.o: src/runtime/core/runtime_context.cc.o
+.PHONY : src/runtime/core/runtime_context.o
 
 # target to build an object file
-src/core/runtime_context.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/runtime_context.cc.o
-.PHONY : src/core/runtime_context.cc.o
+src/runtime/core/runtime_context.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.o
+.PHONY : src/runtime/core/runtime_context.cc.o
 
-src/core/runtime_context.i: src/core/runtime_context.cc.i
-.PHONY : src/core/runtime_context.i
+src/runtime/core/runtime_context.i: src/runtime/core/runtime_context.cc.i
+.PHONY : src/runtime/core/runtime_context.i
 
 # target to preprocess a source file
-src/core/runtime_context.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/runtime_context.cc.i
-.PHONY : src/core/runtime_context.cc.i
+src/runtime/core/runtime_context.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.i
+.PHONY : src/runtime/core/runtime_context.cc.i
 
-src/core/runtime_context.s: src/core/runtime_context.cc.s
-.PHONY : src/core/runtime_context.s
+src/runtime/core/runtime_context.s: src/runtime/core/runtime_context.cc.s
+.PHONY : src/runtime/core/runtime_context.s
 
 # target to generate assembly for a file
-src/core/runtime_context.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/runtime_context.cc.s
-.PHONY : src/core/runtime_context.cc.s
+src/runtime/core/runtime_context.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/core/runtime_context.cc.s
+.PHONY : src/runtime/core/runtime_context.cc.s
 
-src/core/scheduler.o: src/core/scheduler.cc.o
-.PHONY : src/core/scheduler.o
+src/runtime/core/scheduler.o: src/runtime/core/scheduler.cc.o
+.PHONY : src/runtime/core/scheduler.o
 
 # target to build an object file
-src/core/scheduler.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/scheduler.cc.o
-.PHONY : src/core/scheduler.cc.o
+src/runtime/core/scheduler.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.o
+.PHONY : src/runtime/core/scheduler.cc.o
 
-src/core/scheduler.i: src/core/scheduler.cc.i
-.PHONY : src/core/scheduler.i
+src/runtime/core/scheduler.i: src/runtime/core/scheduler.cc.i
+.PHONY : src/runtime/core/scheduler.i
 
 # target to preprocess a source file
-src/core/scheduler.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/scheduler.cc.i
-.PHONY : src/core/scheduler.cc.i
+src/runtime/core/scheduler.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.i
+.PHONY : src/runtime/core/scheduler.cc.i
 
-src/core/scheduler.s: src/core/scheduler.cc.s
-.PHONY : src/core/scheduler.s
+src/runtime/core/scheduler.s: src/runtime/core/scheduler.cc.s
+.PHONY : src/runtime/core/scheduler.s
 
 # target to generate assembly for a file
-src/core/scheduler.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/core/scheduler.cc.s
-.PHONY : src/core/scheduler.cc.s
+src/runtime/core/scheduler.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/core/scheduler.cc.s
+.PHONY : src/runtime/core/scheduler.cc.s
 
-src/preprocess/preprocessor.o: src/preprocess/preprocessor.cc.o
-.PHONY : src/preprocess/preprocessor.o
+src/runtime/preprocess/preprocessor.o: src/runtime/preprocess/preprocessor.cc.o
+.PHONY : src/runtime/preprocess/preprocessor.o
 
 # target to build an object file
-src/preprocess/preprocessor.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.o
-.PHONY : src/preprocess/preprocessor.cc.o
+src/runtime/preprocess/preprocessor.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.o
+.PHONY : src/runtime/preprocess/preprocessor.cc.o
 
-src/preprocess/preprocessor.i: src/preprocess/preprocessor.cc.i
-.PHONY : src/preprocess/preprocessor.i
+src/runtime/preprocess/preprocessor.i: src/runtime/preprocess/preprocessor.cc.i
+.PHONY : src/runtime/preprocess/preprocessor.i
 
 # target to preprocess a source file
-src/preprocess/preprocessor.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.i
-.PHONY : src/preprocess/preprocessor.cc.i
+src/runtime/preprocess/preprocessor.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.i
+.PHONY : src/runtime/preprocess/preprocessor.cc.i
 
-src/preprocess/preprocessor.s: src/preprocess/preprocessor.cc.s
-.PHONY : src/preprocess/preprocessor.s
+src/runtime/preprocess/preprocessor.s: src/runtime/preprocess/preprocessor.cc.s
+.PHONY : src/runtime/preprocess/preprocessor.s
 
 # target to generate assembly for a file
-src/preprocess/preprocessor.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/preprocess/preprocessor.cc.s
-.PHONY : src/preprocess/preprocessor.cc.s
+src/runtime/preprocess/preprocessor.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/preprocess/preprocessor.cc.s
+.PHONY : src/runtime/preprocess/preprocessor.cc.s
 
-src/preprocess/transforms.o: src/preprocess/transforms.cc.o
-.PHONY : src/preprocess/transforms.o
+src/runtime/preprocess/transforms.o: src/runtime/preprocess/transforms.cc.o
+.PHONY : src/runtime/preprocess/transforms.o
 
 # target to build an object file
-src/preprocess/transforms.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/preprocess/transforms.cc.o
-.PHONY : src/preprocess/transforms.cc.o
+src/runtime/preprocess/transforms.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.o
+.PHONY : src/runtime/preprocess/transforms.cc.o
 
-src/preprocess/transforms.i: src/preprocess/transforms.cc.i
-.PHONY : src/preprocess/transforms.i
+src/runtime/preprocess/transforms.i: src/runtime/preprocess/transforms.cc.i
+.PHONY : src/runtime/preprocess/transforms.i
 
 # target to preprocess a source file
-src/preprocess/transforms.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/preprocess/transforms.cc.i
-.PHONY : src/preprocess/transforms.cc.i
+src/runtime/preprocess/transforms.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.i
+.PHONY : src/runtime/preprocess/transforms.cc.i
 
-src/preprocess/transforms.s: src/preprocess/transforms.cc.s
-.PHONY : src/preprocess/transforms.s
+src/runtime/preprocess/transforms.s: src/runtime/preprocess/transforms.cc.s
+.PHONY : src/runtime/preprocess/transforms.s
 
 # target to generate assembly for a file
-src/preprocess/transforms.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/preprocess/transforms.cc.s
-.PHONY : src/preprocess/transforms.cc.s
+src/runtime/preprocess/transforms.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/runtime.dir/build.make CMakeFiles/runtime.dir/src/runtime/preprocess/transforms.cc.s
+.PHONY : src/runtime/preprocess/transforms.cc.s
 
 # Help Target
 help:
@@ -392,36 +392,36 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... demo"
 	@echo "... runtime"
-	@echo "... demo.o"
-	@echo "... demo.i"
-	@echo "... demo.s"
-	@echo "... src/components/counter.o"
-	@echo "... src/components/counter.i"
-	@echo "... src/components/counter.s"
-	@echo "... src/components/frame_debugger.o"
-	@echo "... src/components/frame_debugger.i"
-	@echo "... src/components/frame_debugger.s"
-	@echo "... src/components/heartbeat.o"
-	@echo "... src/components/heartbeat.i"
-	@echo "... src/components/heartbeat.s"
-	@echo "... src/components/synthetic_camera.o"
-	@echo "... src/components/synthetic_camera.i"
-	@echo "... src/components/synthetic_camera.s"
-	@echo "... src/core/pipeline.o"
-	@echo "... src/core/pipeline.i"
-	@echo "... src/core/pipeline.s"
-	@echo "... src/core/runtime_context.o"
-	@echo "... src/core/runtime_context.i"
-	@echo "... src/core/runtime_context.s"
-	@echo "... src/core/scheduler.o"
-	@echo "... src/core/scheduler.i"
-	@echo "... src/core/scheduler.s"
-	@echo "... src/preprocess/preprocessor.o"
-	@echo "... src/preprocess/preprocessor.i"
-	@echo "... src/preprocess/preprocessor.s"
-	@echo "... src/preprocess/transforms.o"
-	@echo "... src/preprocess/transforms.i"
-	@echo "... src/preprocess/transforms.s"
+	@echo "... src/apps/demo.o"
+	@echo "... src/apps/demo.i"
+	@echo "... src/apps/demo.s"
+	@echo "... src/runtime/components/counter.o"
+	@echo "... src/runtime/components/counter.i"
+	@echo "... src/runtime/components/counter.s"
+	@echo "... src/runtime/components/frame_debugger.o"
+	@echo "... src/runtime/components/frame_debugger.i"
+	@echo "... src/runtime/components/frame_debugger.s"
+	@echo "... src/runtime/components/heartbeat.o"
+	@echo "... src/runtime/components/heartbeat.i"
+	@echo "... src/runtime/components/heartbeat.s"
+	@echo "... src/runtime/components/synthetic_camera.o"
+	@echo "... src/runtime/components/synthetic_camera.i"
+	@echo "... src/runtime/components/synthetic_camera.s"
+	@echo "... src/runtime/core/pipeline.o"
+	@echo "... src/runtime/core/pipeline.i"
+	@echo "... src/runtime/core/pipeline.s"
+	@echo "... src/runtime/core/runtime_context.o"
+	@echo "... src/runtime/core/runtime_context.i"
+	@echo "... src/runtime/core/runtime_context.s"
+	@echo "... src/runtime/core/scheduler.o"
+	@echo "... src/runtime/core/scheduler.i"
+	@echo "... src/runtime/core/scheduler.s"
+	@echo "... src/runtime/preprocess/preprocessor.o"
+	@echo "... src/runtime/preprocess/preprocessor.i"
+	@echo "... src/runtime/preprocess/preprocessor.s"
+	@echo "... src/runtime/preprocess/transforms.o"
+	@echo "... src/runtime/preprocess/transforms.i"
+	@echo "... src/runtime/preprocess/transforms.s"
 .PHONY : help
 
 

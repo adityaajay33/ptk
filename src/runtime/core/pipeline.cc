@@ -3,6 +3,7 @@
 #include "runtime/core/scheduler.h"
 
 namespace ptk {
+namespace core {
 
     Pipeline::Pipeline(): context_(nullptr), scheduler_(nullptr), built_(false), components_() {}
 
@@ -46,7 +47,7 @@ namespace ptk {
         
     }
 
-    Status Pipeline::AddComponent(ComponentInterface* component){
+    Status Pipeline::AddComponent(components::ComponentInterface* component){
         if (component == nullptr){
             return Status(StatusCode::kInvalidArgument, "Component is null");
         }
@@ -54,4 +55,6 @@ namespace ptk {
         components_.push_back(component);
         return Status::Ok();
     };
+
+} // namespace core
 } // namespace ptk

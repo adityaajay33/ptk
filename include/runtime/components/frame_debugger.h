@@ -7,6 +7,7 @@
 #include "runtime/data/frame.h"
 
 namespace ptk {
+namespace components {
 
 class FrameDebugger : public ComponentInterface {
  public:
@@ -14,19 +15,20 @@ class FrameDebugger : public ComponentInterface {
   ~FrameDebugger() override = default;
 
   // The pipeline or app calls this to connect a Frame source.
-  void BindInput(InputPort<Frame>* port);
+  void BindInput(core::InputPort<data::Frame>* port);
 
-  Status Init(RuntimeContext* context) override;
-  Status Start() override;
+  core::Status Init(core::RuntimeContext* context) override;
+  core::Status Start() override;
   void Stop() override;
   void Tick() override;
 
  private:
-  RuntimeContext* context_;
-  InputPort<Frame>* input_;
+  core::RuntimeContext* context_;
+  core::InputPort<data::Frame>* input_;
   int tick_count_;
 };
 
+}  // namespace components
 }  // namespace ptk
 
 #endif  // RUNTIME_COMPONENTS_FRAME_DEBUGGER_H_

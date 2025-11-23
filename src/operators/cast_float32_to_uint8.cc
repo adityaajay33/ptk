@@ -9,23 +9,23 @@ namespace ptk
 {
     namespace operators
     {
-        Status CastFloat32ToUint8(const TensorView &src, TensorView *dst)
+        core::Status CastFloat32ToUint8(const data::TensorView &src, data::TensorView *dst)
         {
             if (dst == nullptr)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "CastFloat32ToUint8: dst is null");
             }
-            if (src.dtype() != DataType::kFloat32 ||
-                dst->dtype() != DataType::kUint8)
+            if (src.dtype() != core::DataType::kFloat32 ||
+                dst->dtype() != core::DataType::kUint8)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "CastFloat32ToUint8: invalid data types");
             }
 
             if (src.shape().num_elements() != dst->shape().num_elements())
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "CastFloat32ToUint8: shape mismatch");
             }
 
@@ -42,7 +42,7 @@ namespace ptk
                 out[i] = static_cast<std::uint8_t>(in[i]);
             }
 
-            return Status::Ok();
+            return core::Status::Ok();
         }
     }
 }

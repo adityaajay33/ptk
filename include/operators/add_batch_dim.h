@@ -8,7 +8,7 @@ namespace ptk
 {
     namespace operators
     {
-        Status AddBatchDim(const TensorView &src, TensorView *dst);
+        core::Status AddBatchDim(const data::TensorView &src, data::TensorView *dst);
     }
 }
 

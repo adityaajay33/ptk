@@ -47,6 +47,10 @@ add_executable(demo
     src/apps/demo.cc
 )
 
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+target_link_libraries(ptk ${OpenCV_LIBS})
+
 target_link_libraries(demo PRIVATE runtime)
 
 target_include_directories(demo PRIVATE

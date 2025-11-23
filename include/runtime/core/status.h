@@ -4,6 +4,7 @@
 #include <string>
 
 namespace ptk {
+namespace core {
 
     enum class StatusCode {
         kOk = 0,
@@ -30,6 +31,7 @@ namespace ptk {
 
     };
     
+} // namespace core
 };
 
 #endif // RUNTIME_CORE_STATUS_H_

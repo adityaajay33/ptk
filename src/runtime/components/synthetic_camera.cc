@@ -5,30 +5,31 @@
 #include "runtime/data/frame.h"
 
 namespace ptk {
+namespace components {
 
     SyntheticCamera::SyntheticCamera()
         : context_(nullptr), output_(nullptr), frame_index_(0) {}
 
-    void SyntheticCamera::BindOutput(OutputPort<Frame>* port) {
+    void SyntheticCamera::BindOutput(core::OutputPort<data::Frame>* port) {
     output_ = port;
     }
 
-    Status SyntheticCamera::Init(RuntimeContext* context) {
+    core::Status SyntheticCamera::Init(core::RuntimeContext* context) {
         if (context == nullptr) {
-            return Status(StatusCode::kInvalidArgument, "Context is null");
+            return core::Status(core::StatusCode::kInvalidArgument, "Context is null");
         }
         context_ = context;
         frame_index_ = 0;
-        return Status::Ok();
+        return core::Status::Ok();
     }
 
-    Status SyntheticCamera::Start() {
+    core::Status SyntheticCamera::Start() {
         if (output_ == nullptr || !output_->is_bound()) {
-            return Status(StatusCode::kFailedPrecondition,
+            return core::Status(core::StatusCode::kFailedPrecondition,
                         "SyntheticCamera output not bound");
         }
         context_->LogInfo("SyntheticCamera started.");
-        return Status::Ok();
+        return core::Status::Ok();
     }
 
     void SyntheticCamera::Stop() {
@@ -41,7 +42,7 @@ namespace ptk {
             return;
         }
 
-        Frame* frame = output_->get();
+        data::Frame* frame = output_->get();
         if (frame == nullptr) {
             context_->LogError("SyntheticCamera Tick with null frame.");
             return;
@@ -51,4 +52,5 @@ namespace ptk {
         frame->timestamp_ns = context_->NowNanoseconds();
     }
 
+}  // namespace components
 }  // namespace ptk

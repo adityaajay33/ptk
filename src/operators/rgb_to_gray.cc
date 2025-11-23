@@ -8,27 +8,27 @@ namespace ptk
 {
     namespace operators
     {
-        Status RgbToGray(const TensorView &src, TensorView *dst)
+        core::Status RgbToGray(const data::TensorView &src, data::TensorView *dst)
         {
             if (dst == nullptr)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "RgbToGray: dst is null");
             }
 
-            if (src.dtype() != DataType::kFloat32 ||
-                dst->dtype() != DataType::kFloat32)
+            if (src.dtype() != core::DataType::kFloat32 ||
+                dst->dtype() != core::DataType::kFloat32)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "RgbToGray: expects float32 src and dst");
             }
 
-            const TensorShape &sshape = src.shape();
-            const TensorShape &dshape = dst->shape();
+            const data::TensorShape &sshape = src.shape();
+            const data::TensorShape &dshape = dst->shape();
 
             if (sshape.rank() != 3 || dshape.rank() != 3)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "RgbToGray: expects rank 3 HWC tensors");
             }
 
@@ -38,7 +38,7 @@ namespace ptk
 
             if (C != 3)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "RgbToGray: src must have 3 channels");
             }
 
@@ -46,7 +46,7 @@ namespace ptk
                 dshape.dim(1) != W ||
                 dshape.dim(2) != 1)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "RgbToGray: dst shape must be [H,W,1]");
             }
 
@@ -57,7 +57,7 @@ namespace ptk
 
             if (src_data == nullptr || dst_data == nullptr)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "RgbToGray: null buffer data");
             }
 
@@ -82,7 +82,7 @@ namespace ptk
                 }
             }
 
-            return Status::Ok();
+            return core::Status::Ok();
         }
     }
 }

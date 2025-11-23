@@ -18,7 +18,6 @@
 #include "runtime/data/tensor.h"
 #include "operators/transforms.h"
 
-using namespace ptk;
 
 // Simple helper to check if a path is a directory.
 bool IsDirectory(const std::string& path) {
@@ -120,35 +119,35 @@ int main(int argc, char** argv) {
         static_cast<std::size_t>(num_rgb_elems) * sizeof(std::uint8_t);
 
     // Wrap the loaded uint8 RGB data in a TensorView: [H,W,3] uint8 CPU.
-    BufferView rgb_u8_buffer(
+    ptk::data::BufferView rgb_u8_buffer(
         pixels,
         num_rgb_bytes,
-        DeviceType::kCpu);
+        ptk::core::DeviceType::kCpu);
 
-    TensorShape rgb_shape({H, W, C});
-    TensorView rgb_u8_tensor(
+    ptk::data::TensorShape rgb_shape({H, W, C});
+    ptk::data::TensorView rgb_u8_tensor(
         rgb_u8_buffer,
-        DataType::kUint8,
+        ptk::core::DataType::kUint8,
         rgb_shape);
 
     // Allocate float32 RGB HWC buffer.
     std::vector<float> rgb_float_storage(
         static_cast<std::size_t>(num_rgb_elems), 0.0f);
 
-    BufferView rgb_float_buffer(
+    ptk::data::BufferView rgb_float_buffer(
         rgb_float_storage.data(),
         static_cast<std::size_t>(num_rgb_elems) * sizeof(float),
-        DeviceType::kCpu);
+        ptk::core::DeviceType::kCpu);
 
-    TensorView rgb_float_tensor(
+    ptk::data::TensorView rgb_float_tensor(
         rgb_float_buffer,
-        DataType::kFloat32,
+        ptk::core::DataType::kFloat32,
         rgb_shape);
 
     // Cast uint8 -> float32
     {
-      Status s =
-          operators::CastUint8ToFloat32(rgb_u8_tensor, &rgb_float_tensor);
+      ptk::core::Status s =
+          ptk::operators::CastUint8ToFloat32(rgb_u8_tensor, &rgb_float_tensor);
       if (!s.ok()) {
         std::cerr << "  CastUint8ToFloat32 failed: "
                   << s.message() << "\n";
@@ -162,21 +161,21 @@ int main(int argc, char** argv) {
     std::vector<float> gray_float_storage(
         static_cast<std::size_t>(gray_elems), 0.0f);
 
-    TensorShape gray_shape({H, W, 1});
-    BufferView gray_float_buffer(
+    ptk::data::TensorShape gray_shape({H, W, 1});
+    ptk::data::BufferView gray_float_buffer(
         gray_float_storage.data(),
         static_cast<std::size_t>(gray_elems) * sizeof(float),
-        DeviceType::kCpu);
+        ptk::core::DeviceType::kCpu);
 
-    TensorView gray_float_tensor(
+    ptk::data::TensorView gray_float_tensor(
         gray_float_buffer,
-        DataType::kFloat32,
+        ptk::core::DataType::kFloat32,
         gray_shape);
 
     // RGB float -> Gray float
     {
-      Status s =
-          operators::RgbToGray(rgb_float_tensor, &gray_float_tensor);
+      ptk::core::Status s =
+          ptk::operators::RgbToGray(rgb_float_tensor, &gray_float_tensor);
       if (!s.ok()) {
         std::cerr << "  RgbToGray failed: "
                   << s.message() << "\n";
@@ -189,19 +188,19 @@ int main(int argc, char** argv) {
     std::vector<std::uint8_t> gray_u8_storage(
         static_cast<std::size_t>(gray_elems), 0);
 
-    BufferView gray_u8_buffer(
+    ptk::data::BufferView gray_u8_buffer(
         gray_u8_storage.data(),
         static_cast<std::size_t>(gray_elems) * sizeof(std::uint8_t),
-        DeviceType::kCpu);
+        ptk::core::DeviceType::kCpu);
 
-    TensorView gray_u8_tensor(
+    ptk::data::TensorView gray_u8_tensor(
         gray_u8_buffer,
-        DataType::kUint8,
+        ptk::core::DataType::kUint8,
         gray_shape);
 
     {
-      Status s =
-          operators::CastFloat32ToUint8(gray_float_tensor, &gray_u8_tensor);
+      ptk::core::Status s =
+          ptk::operators::CastFloat32ToUint8(gray_float_tensor, &gray_u8_tensor);
       if (!s.ok()) {
         std::cerr << "  CastFloat32ToUint8 failed: "
                   << s.message() << "\n";

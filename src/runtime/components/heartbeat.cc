@@ -5,21 +5,22 @@
 #include "runtime/core/runtime_context.h"
 
 namespace ptk {
+namespace components {
 
 Heartbeat::Heartbeat() : context_(nullptr), count_(0) {}
 
-Status Heartbeat::Init(RuntimeContext* context) {
+core::Status Heartbeat::Init(core::RuntimeContext* context) {
   if (context == nullptr) {
-    return Status(StatusCode::kInvalidArgument, "Context is null");
+    return core::Status(core::StatusCode::kInvalidArgument, "Context is null");
   }
   context_ = context;
-  return Status::Ok();
+  return core::Status::Ok();
 }
 
-Status Heartbeat::Start() {
+core::Status Heartbeat::Start() {
   count_ = 0;
   context_->LogInfo("Heartbeat started.");
-  return Status::Ok();
+  return core::Status::Ok();
 }
 
 void Heartbeat::Stop() {
@@ -37,4 +38,5 @@ void Heartbeat::Tick() {
   }
 }
 
+}  // namespace components
 }  // namespace ptk

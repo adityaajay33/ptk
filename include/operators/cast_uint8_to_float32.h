@@ -8,7 +8,7 @@ namespace ptk
 {
     namespace operators
     {
-        Status CastUint8ToFloat32(const TensorView &src, TensorView *dst);
+        core::Status CastUint8ToFloat32(const data::TensorView &src, data::TensorView *dst);
     }
 }
 

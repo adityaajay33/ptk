@@ -8,24 +8,24 @@ namespace ptk
 {
     namespace operators
     {
-        Status RgbToBgr(TensorView *tensor)
+        core::Status RgbToBgr(data::TensorView *tensor)
         {
             if (tensor == nullptr)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "RgbToBgr: tensor is null");
             }
 
-            if (tensor->dtype() != DataType::kFloat32)
+            if (tensor->dtype() != core::DataType::kFloat32)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "RgbToBgr: expects float32 tensor");
             }
 
-            const TensorShape &shape = tensor->shape();
+            const data::TensorShape &shape = tensor->shape();
             if (shape.rank() != 3)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "RgbToBgr: expects rank 3 HWC tensor");
             }
 
@@ -35,7 +35,7 @@ namespace ptk
 
             if (C != 3)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "RgbToBgr: expects 3 channel tensor");
             }
 
@@ -43,7 +43,7 @@ namespace ptk
                 static_cast<float *>(tensor->buffer().data());
             if (data == nullptr)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "RgbToBgr: tensor buffer data is null");
             }
 
@@ -62,7 +62,7 @@ namespace ptk
                 }
             }
 
-            return Status::Ok();
+            return core::Status::Ok();
         }
     }
 }

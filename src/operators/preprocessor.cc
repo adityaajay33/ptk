@@ -14,22 +14,22 @@ Preprocessor::Preprocessor(const PreprocessorConfig& config)
       uint8_temp_(),
       output_frame_() {}
 
-Status Preprocessor::Init(RuntimeContext* context) {
+core::Status Preprocessor::Init(core::RuntimeContext* context) {
   if (context == nullptr) {
-    return Status(StatusCode::kInvalidArgument, "Context is null");
+    return core::Status(core::StatusCode::kInvalidArgument, "Context is null");
   }
   context_ = context;
-  return Status::Ok();
+  return core::Status::Ok();
 }
 
-Status Preprocessor::Start() {
+core::Status Preprocessor::Start() {
   if (input_ == nullptr || !input_->is_bound() ||
       output_ == nullptr || !output_->is_bound()) {
-    return Status(
-        StatusCode::kFailedPrecondition,
+    return core::Status(
+        core::StatusCode::kFailedPrecondition,
         "Preprocessor ports not bound");
   }
-  return Status::Ok();
+  return core::Status::Ok();
 }
 
 void Preprocessor::Tick() {
@@ -45,8 +45,8 @@ void Preprocessor::Tick() {
     return;
   }
 
-  const Frame* in = input_->get();
-  Frame* out = output_->get();
+  const data::Frame* in = input_->get();
+  data::Frame* out = output_->get();
 
   if (in == nullptr || out == nullptr) {
     context_->LogError("Preprocessor: null frame from port");
@@ -70,11 +70,11 @@ void Preprocessor::Tick() {
     return;
   }
 
-  const TensorView& src = in->image;
-  TensorView& dst = out->image;
+  const data::TensorView& src = in->image;
+  data::TensorView& dst = out->image;
 
   // For now: simple uint8 -> float32 cast.
-  Status s = operators::CastUint8ToFloat32(src, &dst);
+  core::Status s = operators::CastUint8ToFloat32(src, &dst);
   if (!s.ok()) {
     context_->LogError("Preprocessor: CastUint8ToFloat32 failed");
     return;

@@ -7,9 +7,9 @@ namespace ptk
     namespace operators
     {
         // TODO: Implement PadToSize
-        Status PadToSize(const TensorView &src, int target_h, int target_w, TensorView *dst)
+        core::Status PadToSize(const data::TensorView &src, int target_h, int target_w, data::TensorView *dst)
         {
-            return Status(StatusCode::kInternal, "PadToSize not yet implemented");
+            return core::Status(core::StatusCode::kInternal, "PadToSize not yet implemented");
         }
     }
 }

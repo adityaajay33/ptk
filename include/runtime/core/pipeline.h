@@ -6,6 +6,7 @@
 #include "runtime/components/component_interface.h"
 
 namespace ptk {
+namespace core {
 
     class RuntimeContext;
 
@@ -24,14 +25,16 @@ namespace ptk {
             
             virtual Status DoBuild(RuntimeContext* context) = 0;
 
-            Status AddComponent(ComponentInterface* component);
+            Status AddComponent(components::ComponentInterface* component);
 
         private:
             RuntimeContext* context_;
             Scheduler* scheduler_;
             bool built_;
-            std::vector<ComponentInterface*> components_;
+            std::vector<components::ComponentInterface*> components_;
     };
+
+} // namespace core
 } // namespace ptk
 
 #endif // RUNTIME_CORE_PIPELINE_H_

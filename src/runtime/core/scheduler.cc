@@ -1,7 +1,8 @@
 #include "runtime/core/scheduler.h"
 #include "runtime/core/runtime_context.h"
 
-namespace ptk{
+namespace ptk {
+namespace core {
 
     Scheduler::Scheduler() : context_(nullptr), components_(), running_(false) {}
 
@@ -16,7 +17,7 @@ namespace ptk{
         return Status::Ok();
     }
 
-    Status Scheduler::AddComponent(ComponentInterface* component){
+    Status Scheduler::AddComponent(components::ComponentInterface* component){
         if (!context_) {
             return Status(StatusCode::kFailedPrecondition,
                         "Scheduler::Init must be called before AddComponent");
@@ -80,4 +81,6 @@ namespace ptk{
         }
     }
     }
+
+} // namespace core
 } // namespace ptk

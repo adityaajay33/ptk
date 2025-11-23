@@ -8,7 +8,7 @@ namespace ptk
 {
     namespace operators
     {
-        Status RgbToGray(const TensorView &src, TensorView *dst);
+        core::Status RgbToGray(const data::TensorView &src, data::TensorView *dst);
     }
 }
 

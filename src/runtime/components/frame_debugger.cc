@@ -9,30 +9,31 @@
 #include "runtime/data/tensor.h"  // whatever defines TensorView / TensorShape
 
 namespace ptk {
+namespace components {
 
 FrameDebugger::FrameDebugger()
     : context_(nullptr), input_(nullptr), tick_count_(0) {}
 
-void FrameDebugger::BindInput(InputPort<Frame>* port) {
+void FrameDebugger::BindInput(core::InputPort<data::Frame>* port) {
   input_ = port;
 }
 
-Status FrameDebugger::Init(RuntimeContext* context) {
+core::Status FrameDebugger::Init(core::RuntimeContext* context) {
   if (context == nullptr) {
-    return Status(StatusCode::kInvalidArgument, "Context is null");
+    return core::Status(core::StatusCode::kInvalidArgument, "Context is null");
   }
   context_ = context;
   tick_count_ = 0;
-  return Status::Ok();
+  return core::Status::Ok();
 }
 
-Status FrameDebugger::Start() {
+core::Status FrameDebugger::Start() {
   if (input_ == nullptr || !input_->is_bound()) {
-    return Status(StatusCode::kFailedPrecondition,
+    return core::Status(core::StatusCode::kFailedPrecondition,
                   "FrameDebugger input not bound");
   }
   context_->LogInfo("FrameDebugger started.");
-  return Status::Ok();
+  return core::Status::Ok();
 }
 
 void FrameDebugger::Stop() {
@@ -49,15 +50,15 @@ void FrameDebugger::Tick() {
     return;
   }
 
-  const Frame* frame = input_->get();
+  const data::Frame* frame = input_->get();
   if (frame == nullptr) {
     context_->LogError("FrameDebugger Tick with null frame.");
     return;
   }
 
   // Direct member access, since Frame is a struct.
-  const TensorView& image = frame->image;
-  const TensorShape& shape = image.shape();
+  const data::TensorView& image = frame->image;
+  const data::TensorShape& shape = image.shape();
 
   if (shape.rank() != 3) {
     context_->LogError("FrameDebugger expected HxWxC image.");
@@ -78,4 +79,5 @@ void FrameDebugger::Tick() {
   context_->LogInfo(msg.c_str());
 }
 
+}  // namespace components
 }  // namespace ptk

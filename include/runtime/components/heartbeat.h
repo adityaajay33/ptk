@@ -4,22 +4,24 @@
 #include "runtime/components/component_interface.h"
 
 namespace ptk {
+namespace components {
 
 class Heartbeat : public ComponentInterface {
  public:
   Heartbeat();
   ~Heartbeat() override = default;
 
-  Status Init(RuntimeContext* context) override;
-  Status Start() override;
+  core::Status Init(core::RuntimeContext* context) override;
+  core::Status Start() override;
   void Stop() override;
   void Tick() override;
 
  private:
-  RuntimeContext* context_;
+  core::RuntimeContext* context_;
   int count_;
 };
 
+}  // namespace components
 }  // namespace ptk
 
 #endif  // RUNTIME_COMPONENTS_HEARTBEAT_H_

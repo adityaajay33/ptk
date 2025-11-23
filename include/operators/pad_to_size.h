@@ -8,7 +8,7 @@ namespace ptk
 {
     namespace operators
     {
-        Status PadToSize(const TensorView &src, int target_h, int target_w, TensorView *dst);
+        core::Status PadToSize(const data::TensorView &src, int target_h, int target_w, data::TensorView *dst);
     }
 }
 

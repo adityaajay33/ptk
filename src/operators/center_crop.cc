@@ -7,9 +7,9 @@ namespace ptk
     namespace operators
     {
         // TODO: Implement CenterCrop
-        Status CenterCrop(const TensorView &src, int crop_h, int crop_w, TensorView *dst)
+        core::Status CenterCrop(const data::TensorView &src, int crop_h, int crop_w, data::TensorView *dst)
         {
-            return Status(StatusCode::kInternal, "CenterCrop not yet implemented");
+            return core::Status(core::StatusCode::kInternal, "CenterCrop not yet implemented");
         }
     }
 }

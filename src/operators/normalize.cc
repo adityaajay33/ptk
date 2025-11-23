@@ -8,23 +8,23 @@ namespace ptk
 {
     namespace operators
     {
-        Status Normalize(TensorView *tensor,
+        core::Status Normalize(data::TensorView *tensor,
                          const NormalizationParams &params,
-                         TensorLayout layout)
+                         core::TensorLayout layout)
         {
             if (tensor == nullptr)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "Normalize: tensor is null");
             }
 
-            if (tensor->dtype() != DataType::kFloat32)
+            if (tensor->dtype() != core::DataType::kFloat32)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "Normalize: expects float32 tensor");
             }
 
-            const TensorShape &shape = tensor->shape();
+            const data::TensorShape &shape = tensor->shape();
             const std::size_t rank = shape.rank();
 
             std::int64_t N = 1;
@@ -34,11 +34,11 @@ namespace ptk
 
             switch (layout)
             {
-            case TensorLayout::kHwc:
+            case core::TensorLayout::kHwc:
             {
                 if (rank != 3)
                 {
-                    return Status(StatusCode::kInvalidArgument,
+                    return core::Status(core::StatusCode::kInvalidArgument,
                                   "Normalize: HWC layout expects rank 3 tensor");
                 }
                 H = shape.dim(0);
@@ -47,11 +47,11 @@ namespace ptk
                 N = 1;
                 break;
             }
-            case TensorLayout::kChw:
+            case core::TensorLayout::kChw:
             {
                 if (rank != 3)
                 {
-                    return Status(StatusCode::kInvalidArgument,
+                    return core::Status(core::StatusCode::kInvalidArgument,
                                   "Normalize: CHW layout expects rank 3 tensor");
                 }
                 C = shape.dim(0);
@@ -60,11 +60,11 @@ namespace ptk
                 N = 1;
                 break;
             }
-            case TensorLayout::kNhwc:
+            case core::TensorLayout::kNhwc:
             {
                 if (rank != 4)
                 {
-                    return Status(StatusCode::kInvalidArgument,
+                    return core::Status(core::StatusCode::kInvalidArgument,
                                   "Normalize: NHWC layout expects rank 4 tensor");
                 }
                 N = shape.dim(0);
@@ -73,11 +73,11 @@ namespace ptk
                 C = shape.dim(3);
                 break;
             }
-            case TensorLayout::kNchw:
+            case core::TensorLayout::kNchw:
             {
                 if (rank != 4)
                 {
-                    return Status(StatusCode::kInvalidArgument,
+                    return core::Status(core::StatusCode::kInvalidArgument,
                                   "Normalize: NCHW layout expects rank 4 tensor");
                 }
                 N = shape.dim(0);
@@ -87,20 +87,20 @@ namespace ptk
                 break;
             }
             default:
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "Normalize: unsupported TensorLayout");
             }
 
             if (C <= 0 || H <= 0 || W <= 0 || N <= 0)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "Normalize: non positive dimension");
             }
 
             if (params.num_channels <= 0 ||
                 params.num_channels != C)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "Normalize: num_channels must match tensor channels");
             }
 
@@ -108,7 +108,7 @@ namespace ptk
             {
                 if (params.std[c] == 0.0f)
                 {
-                    return Status(StatusCode::kInvalidArgument,
+                    return core::Status(core::StatusCode::kInvalidArgument,
                                   "Normalize: std for a channel is zero");
                 }
             }
@@ -117,13 +117,13 @@ namespace ptk
                 static_cast<float *>(tensor->buffer().data());
             if (data == nullptr)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "Normalize: tensor buffer data is null");
             }
 
             switch (layout)
             {
-            case TensorLayout::kHwc:
+            case core::TensorLayout::kHwc:
             {
                 // (h, w, c) -> (h * W + w) * C + c
                 for (std::int64_t h = 0; h < H; ++h)
@@ -143,7 +143,7 @@ namespace ptk
                 break;
             }
 
-            case TensorLayout::kChw:
+            case core::TensorLayout::kChw:
             {
                 // (c, h, w) -> (c * H + h) * W + w
                 for (std::int64_t c = 0; c < C; ++c)
@@ -163,7 +163,7 @@ namespace ptk
                 break;
             }
 
-            case TensorLayout::kNhwc:
+            case core::TensorLayout::kNhwc:
             {
                 // (n, h, w, c) -> (((n * H + h) * W + w) * C + c)
                 for (std::int64_t n = 0; n < N; ++n)
@@ -187,7 +187,7 @@ namespace ptk
                 break;
             }
 
-            case TensorLayout::kNchw:
+            case core::TensorLayout::kNchw:
             {
                 // (n, c, h, w) -> (((n * C + c) * H + h) * W + w)
                 for (std::int64_t n = 0; n < N; ++n)
@@ -212,11 +212,11 @@ namespace ptk
             }
 
             default:
-                return Status(StatusCode::kInternal,
+                return core::Status(core::StatusCode::kInternal,
                               "Normalize: unreachable layout branch");
             }
 
-            return Status::Ok();
+            return core::Status::Ok();
         }
     }
 }

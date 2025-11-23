@@ -2,6 +2,7 @@
 #define RUNTIME_CORE_PORT_H_
 
 namespace ptk {
+namespace core {
 
     template <typename T>
     class OutputPort {
@@ -47,6 +48,7 @@ namespace ptk {
             const T* value_;
     };
 
+}  // namespace core
 }  // namespace ptk
 
 #endif // RUNTIME_CORE_PORT_H_

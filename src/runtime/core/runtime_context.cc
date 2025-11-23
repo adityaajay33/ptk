@@ -3,6 +3,7 @@
 #include <chrono>
 
 namespace ptk {
+namespace core {
 
     namespace{
 
@@ -74,5 +75,7 @@ namespace ptk {
                         message.empty() ? "(null)" : message.data());
             std::fflush(stream);
         }
+
+} // namespace core
 }
 

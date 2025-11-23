@@ -10,7 +10,7 @@ namespace ptk
 {
     namespace operators
     {
-        Status Normalize(TensorView *tensor, const NormalizationParams &params, TensorLayout layout);
+        core::Status Normalize(data::TensorView *tensor, const NormalizationParams &params, core::TensorLayout layout);
     }
 }
 

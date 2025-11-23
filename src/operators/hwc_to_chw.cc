@@ -8,26 +8,26 @@ namespace ptk
 {
     namespace operators
     {
-        Status HwcToChw(const TensorView &src, TensorView *dst)
+        core::Status HwcToChw(const data::TensorView &src, data::TensorView *dst)
         {
             if (dst == nullptr)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "HwcToChw: dst is null");
             }
-            if (src.dtype() != DataType::kFloat32 ||
-                dst->dtype() != DataType::kFloat32)
+            if (src.dtype() != core::DataType::kFloat32 ||
+                dst->dtype() != core::DataType::kFloat32)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "HwcToChw: expects float32 src and dst");
             }
 
-            const TensorShape &sshape = src.shape();
-            const TensorShape &dshape = dst->shape();
+            const data::TensorShape &sshape = src.shape();
+            const data::TensorShape &dshape = dst->shape();
 
             if (sshape.rank() != 3 || dshape.rank() != 3)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "HwcToChw: expects rank 3 tensors");
             }
 
@@ -39,7 +39,7 @@ namespace ptk
                 dshape.dim(1) != H ||
                 dshape.dim(2) != W)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "HwcToChw: dst shape must be [C,H,W]");
             }
 
@@ -50,7 +50,7 @@ namespace ptk
 
             if (src_data == nullptr || dst_data == nullptr)
             {
-                return Status(StatusCode::kInvalidArgument,
+                return core::Status(core::StatusCode::kInvalidArgument,
                               "HwcToChw: null buffer data");
             }
 
@@ -72,7 +72,7 @@ namespace ptk
                 }
             }
 
-            return Status::Ok();
+            return core::Status::Ok();
         }
     }
 }

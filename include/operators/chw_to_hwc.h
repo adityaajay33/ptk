@@ -8,7 +8,7 @@ namespace ptk
 {
     namespace operators
     {
-        Status ChwToHwc(const TensorView &src, TensorView *dst);
+        core::Status ChwToHwc(const data::TensorView &src, data::TensorView *dst);
     }
 }
 

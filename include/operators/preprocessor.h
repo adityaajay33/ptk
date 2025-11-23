@@ -10,13 +10,13 @@
 namespace ptk {
 
     struct PreprocessorConfig {
-        TensorLayout input_layout;
-        PixelFormat input_format;
-        DataType input_type;
+        core::TensorLayout input_layout;
+        core::PixelFormat input_format;
+        core::DataType input_type;
 
-        TensorLayout output_layout;
-        PixelFormat output_format;
-        DataType output_type;
+        core::TensorLayout output_layout;
+        core::PixelFormat output_format;
+        core::DataType output_type;
 
         bool convert_rgb_to_bgr;
         bool normalize;
@@ -28,29 +28,29 @@ namespace ptk {
         int target_width;
     };
 
-    class Preprocessor : public ComponentInterface {
+    class Preprocessor : public components::ComponentInterface {
         public:
             explicit Preprocessor(const PreprocessorConfig& config);
             ~Preprocessor() override = default;
 
-            void BindInput(InputPort<Frame>* in);
-            void BindOutput(OutputPort<Frame>* out);
+            void BindInput(core::InputPort<data::Frame>* in);
+            void BindOutput(core::OutputPort<data::Frame>* out);
 
-            Status Init(RuntimeContext* context) override;
-            Status Start() override;
+            core::Status Init(core::RuntimeContext* context) override;
+            core::Status Start() override;
             void Stop() override;
             void Tick() override;
 
         private:
-            RuntimeContext* context_;
-            InputPort<Frame>* input_;
-            OutputPort<Frame>* output_;
+            core::RuntimeContext* context_;
+            core::InputPort<data::Frame>* input_;
+            core::OutputPort<data::Frame>* output_;
             PreprocessorConfig config_;
 
             std::vector<float> float_buffer_;
             std::vector<std::uint8_t> uint8_temp_;
 
-            Frame output_frame_;
+            data::Frame output_frame_;
     };
 }
 

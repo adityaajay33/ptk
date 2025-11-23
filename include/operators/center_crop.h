@@ -8,7 +8,7 @@ namespace ptk
 {
     namespace operators
     {
-        Status CenterCrop(const TensorView &src, int crop_h, int crop_w, TensorView *dst);
+        core::Status CenterCrop(const data::TensorView &src, int crop_h, int crop_w, data::TensorView *dst);
     }
 }
 

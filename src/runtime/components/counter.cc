@@ -2,21 +2,22 @@
 #include "runtime/core/runtime_context.h"
 
 namespace ptk {
+namespace components {
 
     Counter::Counter() : context_(nullptr), count_(0) {}
 
-    Status Counter::Init(RuntimeContext* context) {
+    core::Status Counter::Init(core::RuntimeContext* context) {
         if (context == nullptr) {
-            return Status(StatusCode::kInvalidArgument, "Context is null");
+            return core::Status(core::StatusCode::kInvalidArgument, "Context is null");
         }
         context_ = context;
-        return Status::Ok();
+        return core::Status::Ok();
     }
 
-    Status Counter::Start(){
+    core::Status Counter::Start(){
         count_ = 0;
         context_ -> LogInfo("Counter started.");
-        return Status::Ok();
+        return core::Status::Ok();
     }
 
     void Counter::Stop() {
@@ -31,4 +32,6 @@ namespace ptk {
         context_->LogInfo(msg.c_str());
     }
     }
+
+} // namespace components
 } // namespace ptk

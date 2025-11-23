@@ -8,6 +8,7 @@
 #include "runtime/data/buffer.h"
 
 namespace ptk {
+namespace data {
 
     class TensorShape {
 
@@ -44,30 +45,32 @@ namespace ptk {
     class TensorView {
         public:
             
-            TensorView() : buffer_view_(), data_type_(DataType::kUnknown), shape_() {}
+            TensorView() : buffer_view_(), data_type_(core::DataType::kUnknown), shape_() {}
 
-            TensorView(const BufferView& buffer_view, DataType data_type, const TensorShape& shape)
+            TensorView(const BufferView& buffer_view, core::DataType data_type, const TensorShape& shape)
                 : buffer_view_(buffer_view), data_type_(data_type), shape_(shape) {}
 
-            DataType dtype() const { return data_type_;}
+            core::DataType dtype() const { return data_type_;}
 
             const BufferView& buffer() const { return buffer_view_; }
             BufferView& buffer() { return buffer_view_; }
 
-            DataType data_type() const { return data_type_; }
+            core::DataType data_type() const { return data_type_; }
 
             const TensorShape& shape() const { return shape_; }
             TensorShape& shape() { return shape_; }
 
-            DeviceType device_type() const { return buffer_view_.device_type(); }
+            core::DeviceType device_type() const { return buffer_view_.device_type(); }
 
-            bool empty() const { return buffer_view_.empty() || data_type_ == DataType::kUnknown; }
+            bool empty() const { return buffer_view_.empty() || data_type_ == core::DataType::kUnknown; }
 
         private:
             BufferView buffer_view_;
-            DataType data_type_;
+            core::DataType data_type_;
             TensorShape shape_;
     };
+
+} // namespace data
 }
 
 #endif // RUNTIME_DATA_TENSOR_H_

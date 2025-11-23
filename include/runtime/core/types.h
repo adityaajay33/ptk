@@ -5,6 +5,8 @@
 
 
 namespace ptk {
+namespace core {
+
     enum class DeviceType {
         kCpu = 0,
         kCuda,
@@ -37,6 +39,7 @@ namespace ptk {
         kRgba8,  // 4 channels
     };
 
+} // namespace core
 }
 
 #endif // RUNTIME_CORE_TYPES_H_

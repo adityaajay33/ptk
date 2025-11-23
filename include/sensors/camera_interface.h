@@ -1,22 +1,29 @@
-#ifndef SENSORS_CAMERA_INTERFACE_H
-#define SENSORS_CAMERA_INTERFACE_H
+#ifndef PTK_SENSORS_CAMERA_INTERFACE_H_
+#define PTK_SENSORS_CAMERA_INTERFACE_H_
 
-#include "runtime/components/component_interface.h"
+#include "runtime/core/status.h"
 #include "runtime/data/frame.h"
 
-namespace ptk {
-    namespace sensors {
-        class CameraInterface : public components::ComponentInterface {
-            public:
-                virtual ~CameraInterface() {};
+namespace ptk
+{
+    namespace sensors
+    {
 
-                virtual core::Status Init() = 0;
-                virtual core::Status Start() = 0;
-                virtual core::Status Stop() = 0;
+        class CameraInterface
+        {
+        public:
+            virtual ~CameraInterface() {}
 
-                virtual core::Status GetFrame(data::Frame* out) = 0;
-            };
-    }
-}
+            virtual core::Status Init() = 0;
+            virtual core::Status Start() = 0;
+            virtual core::Status Stop() = 0;
 
-#endif // SENSORS_CAMERA_INTERFACE_H
+            virtual core::Status GetFrame(ptk::data::Frame *out) = 0;
+
+            virtual void Tick() = 0;
+        };
+
+    } // namespace sensors
+} // namespace ptk
+
+#endif

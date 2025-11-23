@@ -1,7 +1,6 @@
 #include "sensors/mac_camera.h"
-
 #include <opencv2/opencv.hpp>
-#include <cstring> // memcpy
+#include <cstring>
 
 namespace ptk
 {
@@ -14,10 +13,10 @@ namespace ptk
         };
 
         MacCamera::MacCamera(int device_index)
-            : impl_(new Impl()),
-              device_index_(device_index),
+            : device_index_(device_index),
               is_running_(false),
-              frame_index_(0) {}
+              frame_index_(0),
+              impl_(new Impl()) {}
 
         MacCamera::~MacCamera()
         {
@@ -61,6 +60,7 @@ namespace ptk
 
             impl_->cap.release();
             is_running_ = false;
+
             return core::Status::Ok();
         }
 
@@ -69,7 +69,7 @@ namespace ptk
             if (!is_running_)
             {
                 return core::Status(core::StatusCode::kFailedPrecondition,
-                                    "MacCamera: GetFrame while camera not running");
+                                    "MacCamera: GetFrame() while camera not running");
             }
 
             if (out == nullptr)
@@ -85,53 +85,37 @@ namespace ptk
                                     "MacCamera: failed to read frame");
             }
 
-            // Convert BGR -> RGB
             cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
 
             int H = img.rows;
             int W = img.cols;
             int C = img.channels();
-            std::size_t num_bytes = static_cast<std::size_t>(H * W * C);
 
-            // Allocate memory manually because you have no Buffer class
-            uint8_t *mem = new uint8_t[num_bytes];
-            std::memcpy(mem, img.data, num_bytes);
+            size_t num_bytes = static_cast<size_t>(H * W * C);
 
-            // Wrap memory into BufferView
-            ptk::data::BufferView buffer_view(mem, num_bytes, core::DeviceType::kCpu);
+            // Allocate buffer
+            std::vector<uint8_t> buffer(num_bytes);
+            std::memcpy(buffer.data(), img.data, num_bytes);
 
-            // Create tensor shape
-            ptk::data::TensorShape shape({H, W, C});
-
-            // Assign into Frame::image
+            // Fill Frame
             out->image = ptk::data::TensorView(
-                buffer_view,
+                ptk::data::BufferView(buffer.data(), num_bytes, core::DeviceType::kCpu),
                 core::DataType::kUint8,
-                shape);
+                ptk::data::TensorShape({H, W, C}));
 
-            // Fill metadata
             out->pixel_format = core::PixelFormat::kRgb8;
             out->layout = core::TensorLayout::kHwc;
-            out->timestamp_ns = 0; // TODO: Integrate runtime clock
             out->frame_index = frame_index_++;
+            out->timestamp_ns = 0;
             out->camera_id = device_index_;
 
             return core::Status::Ok();
         }
 
-        void MacCamera::Tick() {
-            if (!output_port_.is_bound()) {
-                return;
-            }
-
+        void MacCamera::Tick()
+        {
             ptk::data::Frame frame;
-            core::Status s = GetFrame(&frame);
-            if (!s.ok()) {
-                std::fprintf(stderr, "MacCamera Tick failed: %s\n", s.message().c_str());
-                return;
-            }
-
-            *(output_port_.get()) = frame;
+            GetFrame(&frame);
         }
 
     } // namespace sensors

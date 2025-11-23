@@ -3,4 +3,6 @@ data
 
 build
 
+src/apps
+
 .vscode

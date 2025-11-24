@@ -1,5 +1,4 @@
-#ifndef OPERATORS_NORMALIZE_H_
-#define OPERATORS_NORMALIZE_H_
+#pragma once
 
 #include "operators/normalization_params.h"
 #include "runtime/core/status.h"
@@ -13,6 +12,3 @@ namespace ptk
         core::Status Normalize(data::TensorView *tensor, const NormalizationParams &params, core::TensorLayout layout);
     }
 }
-
-#endif // OPERATORS_NORMALIZE_H_
-

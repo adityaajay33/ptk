@@ -1,5 +1,4 @@
-#ifndef OPERATORS_RGB_TO_BGR_H_
-#define OPERATORS_RGB_TO_BGR_H_
+#pragma once
 
 #include "runtime/core/status.h"
 #include "runtime/data/tensor.h"
@@ -11,6 +10,3 @@ namespace ptk
         core::Status RgbToBgr(data::TensorView *tensor);
     }
 }
-
-#endif // OPERATORS_RGB_TO_BGR_H_
-

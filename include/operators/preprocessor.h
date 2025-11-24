@@ -1,11 +1,10 @@
-#ifndef OPERATORS_PREPROCESSOR_H_
-#define OPERATORS_PREPROCESSOR_H_
+#pragma once
 
 #include "runtime/components/component_interface.h"
 #include "runtime/core/port.h"
 #include "runtime/data/frame.h"
 #include "runtime/core/types.h"
-#include "operators/transforms.h"
+#include "operators/normalization_params.h"
 
 namespace ptk {
 
@@ -38,7 +37,7 @@ namespace ptk {
 
             core::Status Init(core::RuntimeContext* context) override;
             core::Status Start() override;
-            void Stop() override;
+            core::Status Stop() override;
             void Tick() override;
 
         private:
@@ -53,6 +52,4 @@ namespace ptk {
             data::Frame output_frame_;
     };
 }
-
-#endif // OPERATORS_PREPROCESSOR_H_
 

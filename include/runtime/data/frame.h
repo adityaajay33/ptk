@@ -1,5 +1,4 @@
-#ifndef RUNTIME_DATA_FRAME_H_
-#define RUNTIME_DATA_FRAME_H_
+#pragma once
 
 #include <cstdint>
 
@@ -28,5 +27,3 @@ namespace data {
 
 }  // namespace data
 }  // namespace ptk
-
-#endif  // RUNTIME_DATA_FRAME_H_

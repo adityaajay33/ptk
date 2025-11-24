@@ -1,6 +1,5 @@
 // include/runtime/components/frame_debugger.h
-#ifndef RUNTIME_COMPONENTS_FRAME_DEBUGGER_H_
-#define RUNTIME_COMPONENTS_FRAME_DEBUGGER_H_
+#pragma once
 
 #include "runtime/components/component_interface.h"
 #include "runtime/core/port.h"
@@ -19,7 +18,7 @@ class FrameDebugger : public ComponentInterface {
 
   core::Status Init(core::RuntimeContext* context) override;
   core::Status Start() override;
-  void Stop() override;
+  core::Status Stop() override;
   void Tick() override;
 
  private:
@@ -30,5 +29,3 @@ class FrameDebugger : public ComponentInterface {
 
 }  // namespace components
 }  // namespace ptk
-
-#endif  // RUNTIME_COMPONENTS_FRAME_DEBUGGER_H_

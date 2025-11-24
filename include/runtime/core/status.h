@@ -1,5 +1,4 @@
-#ifndef RUNTIME_CORE_STATUS_H_
-#define RUNTIME_CORE_STATUS_H_
+#pragma once
 
 #include <string>
 
@@ -33,5 +32,3 @@ namespace core {
     
 } // namespace core
 };
-
-#endif // RUNTIME_CORE_STATUS_H_

@@ -1,5 +1,4 @@
-#ifndef RUNTIME_COMPONENTS_COMPONENT_INTERFACE_H_
-#define RUNTIME_COMPONENTS_COMPONENT_INTERFACE_H_
+#pragma once
 
 #include "runtime/core/status.h"
 
@@ -28,5 +27,3 @@ namespace components {
 
 } // namespace components
 } // namespace ptk
-
-#endif // RUNTIME_COMPONENTS_COMPONENT_INTERFACE_H_

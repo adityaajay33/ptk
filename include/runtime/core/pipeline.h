@@ -1,5 +1,4 @@
-#ifndef RUNTIME_CORE_PIPELINE_H_
-#define RUNTIME_CORE_PIPELINE_H_
+#pragma once
 
 #include "runtime/core/status.h"
 #include "runtime/core/scheduler.h"
@@ -36,5 +35,3 @@ namespace core {
 
 } // namespace core
 } // namespace ptk
-
-#endif // RUNTIME_CORE_PIPELINE_H_

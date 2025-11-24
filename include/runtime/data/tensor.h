@@ -1,5 +1,4 @@
-#ifndef RUNTIME_DATA_TENSOR_H_
-#define RUNTIME_DATA_TENSOR_H_
+#pragma once
 
 #include <cstdint>
 #include <vector>
@@ -72,5 +71,3 @@ namespace data {
 
 } // namespace data
 }
-
-#endif // RUNTIME_DATA_TENSOR_H_

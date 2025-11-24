@@ -20,8 +20,9 @@ namespace components {
         return core::Status::Ok();
     }
 
-    void Counter::Stop() {
+    core::Status Counter::Stop() {
         context_->LogInfo("Counter stopped at count: " + std::to_string(count_));
+        return core::Status::Ok();
     }
 
     void Counter::Tick() {

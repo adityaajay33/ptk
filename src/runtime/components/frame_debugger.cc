@@ -36,10 +36,11 @@ core::Status FrameDebugger::Start() {
   return core::Status::Ok();
 }
 
-void FrameDebugger::Stop() {
+core::Status FrameDebugger::Stop() {
   std::string msg = "FrameDebugger stopped after " +
                     std::to_string(tick_count_) + " ticks.";
   context_->LogInfo(msg.c_str());
+  return core::Status::Ok();
 }
 
 void FrameDebugger::Tick() {

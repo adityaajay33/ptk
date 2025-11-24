@@ -1,5 +1,4 @@
-#ifndef RUNTIME_CORE_RUNTIME_CONTEXT_H_
-#define RUNTIME_CORE_RUNTIME_CONTEXT_H_
+#pragma once
 
 #include <string_view>
 
@@ -58,6 +57,3 @@ namespace core {
 
 } // namespace core
 }
-
-
-#endif //RUNTIME_CORE_RUNTIME_CONTEXT_H_

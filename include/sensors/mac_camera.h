@@ -1,5 +1,4 @@
-#ifndef PTK_SENSORS_MAC_CAMERA_H_
-#define PTK_SENSORS_MAC_CAMERA_H_
+#pragma once
 
 #include "sensors/camera_interface.h"
 #include "runtime/core/status.h"
@@ -35,5 +34,3 @@ namespace ptk
 
     } // namespace sensors
 } // namespace ptk
-
-#endif

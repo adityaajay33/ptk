@@ -1,5 +1,4 @@
-#ifndef RUNTIME_COMPONENTS_HEARTBEAT_H_
-#define RUNTIME_COMPONENTS_HEARTBEAT_H_
+#pragma once
 
 #include "runtime/components/component_interface.h"
 
@@ -13,7 +12,7 @@ class Heartbeat : public ComponentInterface {
 
   core::Status Init(core::RuntimeContext* context) override;
   core::Status Start() override;
-  void Stop() override;
+  core::Status Stop() override;
   void Tick() override;
 
  private:
@@ -23,5 +22,3 @@ class Heartbeat : public ComponentInterface {
 
 }  // namespace components
 }  // namespace ptk
-
-#endif  // RUNTIME_COMPONENTS_HEARTBEAT_H_

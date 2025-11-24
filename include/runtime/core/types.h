@@ -1,5 +1,4 @@
-#ifndef RUNTIME_CORE_TYPES_H_
-#define RUNTIME_CORE_TYPES_H_
+#pragma once
 
 #include <cstdint>
 
@@ -41,5 +40,3 @@ namespace core {
 
 } // namespace core
 }
-
-#endif // RUNTIME_CORE_TYPES_H_

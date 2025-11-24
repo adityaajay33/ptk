@@ -1,5 +1,4 @@
-#ifndef OPERATORS_NORMALIZATION_PARAMS_H_
-#define OPERATORS_NORMALIZATION_PARAMS_H_
+#pragma once
 
 namespace ptk
 {
@@ -13,6 +12,3 @@ namespace ptk
         };
     }
 }
-
-#endif // OPERATORS_NORMALIZATION_PARAMS_H_
-

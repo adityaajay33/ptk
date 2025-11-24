@@ -32,8 +32,9 @@ namespace components {
         return core::Status::Ok();
     }
 
-    void SyntheticCamera::Stop() {
+    core::Status SyntheticCamera::Stop() {
         context_->LogInfo("SyntheticCamera stopped.");
+        return core::Status::Ok();
     }
 
     void SyntheticCamera::Tick() {

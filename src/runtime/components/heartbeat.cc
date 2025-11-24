@@ -23,10 +23,11 @@ core::Status Heartbeat::Start() {
   return core::Status::Ok();
 }
 
-void Heartbeat::Stop() {
+core::Status Heartbeat::Stop() {
   std::string msg =
       "Heartbeat stopped at count: " + std::to_string(count_);
   context_->LogInfo(msg.c_str());
+  return core::Status::Ok();
 }
 
 void Heartbeat::Tick() {

@@ -1,5 +1,4 @@
-#ifndef RUNTIME_CORE_PORT_H_
-#define RUNTIME_CORE_PORT_H_
+#pragma once
 
 namespace ptk {
 namespace core {
@@ -50,5 +49,3 @@ namespace core {
 
 }  // namespace core
 }  // namespace ptk
-
-#endif // RUNTIME_CORE_PORT_H_

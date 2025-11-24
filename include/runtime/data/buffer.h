@@ -1,5 +1,4 @@
-#ifndef RUNTIME_DATA_BUFFER_H_
-#define RUNTIME_DATA_BUFFER_H_
+#pragma once
 
 #include <cstddef>
 #include <cstdint>
@@ -33,5 +32,3 @@ namespace data {
 
 } // namespace data
 } // namespace ptk
-
-#endif // RUNTIME_DATA_BUFFER_H_

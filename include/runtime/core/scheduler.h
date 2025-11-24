@@ -1,5 +1,4 @@
-#ifndef RUNTIME_CORE_SCHEDULER_H_
-#define RUNTIME_CORE_SCHEDULER_H_
+#pragma once
 
 
 #include <vector>
@@ -36,5 +35,3 @@ namespace core {
 
 } // namespace core
 }
-
-#endif // RUNTIME_CORE_SCHEDULER_H_

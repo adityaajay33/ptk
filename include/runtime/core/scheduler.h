@@ -1,37 +1,36 @@
 #pragma once
 
-
 #include <vector>
 
 #include "runtime/components/component_interface.h"
 #include "runtime/core/status.h"
 
+namespace ptk
+{
+    namespace core
+    {
 
-namespace ptk {
-namespace core {
+        class RuntimeContext;
 
-    class RuntimeContext;
-
-    class Scheduler {
+        class Scheduler
+        {
 
         public:
-
             Scheduler();
 
-            Status Init(RuntimeContext* context);
-            Status AddComponent(components::ComponentInterface* component);
+            Status Init(RuntimeContext *context);
+            Status AddComponent(components::ComponentInterface *component);
             Status Start();
             void Stop();
             void RunLoop(int num_ticks);
 
         private:
+            RuntimeContext *context_;
 
-            RuntimeContext* context_;
-
-            std::vector<components::ComponentInterface*> components_;
+            std::vector<components::ComponentInterface *> components_;
             bool running_;
             int tick_;
-    };
+        };
 
-} // namespace core
+    } // namespace core
 }

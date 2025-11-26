@@ -5,18 +5,21 @@
 
 #include "runtime/core/types.h"
 
-namespace ptk {
-namespace data {
+namespace ptk
+{
+    namespace data
+    {
 
-    class BufferView {
+        class BufferView
+        {
         public:
-            BufferView() : data_(nullptr), size_bytes_(0),    device_type_(core::DeviceType::kCpu) {}
+            BufferView() : data_(nullptr), size_bytes_(0), device_type_(core::DeviceType::kCpu) {}
 
-            BufferView(void* data, std::size_t size_bytes, core::DeviceType device_type)
+            BufferView(void *data, std::size_t size_bytes, core::DeviceType device_type)
                 : data_(data), size_bytes_(size_bytes), device_type_(device_type) {}
 
-            void* data() { return data_; }
-            const void* data() const { return data_; }
+            void *data() { return data_; }
+            const void *data() const { return data_; }
 
             std::size_t size_bytes() const { return size_bytes_; }
 
@@ -25,10 +28,10 @@ namespace data {
             bool empty() const { return data_ == nullptr || size_bytes_ == 0; }
 
         private:
-            void* data_;
+            void *data_;
             std::size_t size_bytes_;
             core::DeviceType device_type_;
-    };
+        };
 
-} // namespace data
+    } // namespace data
 } // namespace ptk

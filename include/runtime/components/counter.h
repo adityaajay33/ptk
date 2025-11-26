@@ -2,23 +2,26 @@
 
 #include "runtime/components/component_interface.h"
 
-namespace ptk {
-namespace components {
+namespace ptk
+{
+    namespace components
+    {
 
-    class Counter : public ComponentInterface {
+        class Counter : public ComponentInterface
+        {
         public:
             Counter();
             ~Counter() override = default;
 
-            core::Status Init(core::RuntimeContext* context) override;
+            core::Status Init(core::RuntimeContext *context) override;
             core::Status Start() override;
             core::Status Stop() override;
             void Tick() override;
 
         private:
-            core::RuntimeContext* context_;
+            core::RuntimeContext *context_;
             int count_;
-    };
+        };
 
-} // namespace components
+    } // namespace components
 } // namespace ptk

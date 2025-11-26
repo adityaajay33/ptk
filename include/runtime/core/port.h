@@ -1,51 +1,59 @@
 #pragma once
 
-namespace ptk {
-namespace core {
+namespace ptk
+{
+    namespace core
+    {
 
-    template <typename T>
-    class OutputPort {
+        template <typename T>
+        class OutputPort
+        {
         public:
-
             OutputPort() : value_(nullptr) {}
 
-            void Bind(T* value){
+            void Bind(T *value)
+            {
                 value_ = value;
             }
 
-            bool is_bound() const {
+            bool is_bound() const
+            {
                 return value_ != nullptr;
             }
 
-            T* get() const {
+            T *get() const
+            {
                 return value_;
             }
 
         private:
-            T* value_;
-    };
+            T *value_;
+        };
 
-    template <typename T>
-    class InputPort {
+        template <typename T>
+        class InputPort
+        {
         public:
-
             InputPort() : value_(nullptr) {}
 
-            void Bind(T* value){
+            void Bind(T *value)
+            {
                 value_ = value;
             }
 
-            bool is_bound() const {
+            bool is_bound() const
+            {
                 return value_ != nullptr;
             }
 
-            const T* get() const {
+            const T *get() const
+            {
                 return value_;
             }
 
         private:
-            const T* value_;
-    };
+            const T *value_;
+        };
 
-}  // namespace core
-}  // namespace ptk
+    } // namespace core
+} // namespace ptk

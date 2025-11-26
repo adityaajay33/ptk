@@ -4,34 +4,36 @@
 #include "runtime/core/scheduler.h"
 #include "runtime/components/component_interface.h"
 
-namespace ptk {
-namespace core {
+namespace ptk
+{
+    namespace core
+    {
 
-    class RuntimeContext;
+        class RuntimeContext;
 
-    class Pipeline {
+        class Pipeline
+        {
         public:
             Pipeline();
             virtual ~Pipeline();
 
-            Pipeline(const Pipeline&) = delete;
-            Pipeline& operator=(const Pipeline&) = delete;
+            Pipeline(const Pipeline &) = delete;
+            Pipeline &operator=(const Pipeline &) = delete;
 
-            Status Build(RuntimeContext* context);
-            Status RegisterComponents(Scheduler* scheduler);
+            Status Build(RuntimeContext *context);
+            Status RegisterComponents(Scheduler *scheduler);
 
         protected:
-            
-            virtual Status DoBuild(RuntimeContext* context) = 0;
+            virtual Status DoBuild(RuntimeContext *context) = 0;
 
-            Status AddComponent(components::ComponentInterface* component);
+            Status AddComponent(components::ComponentInterface *component);
 
         private:
-            RuntimeContext* context_;
-            Scheduler* scheduler_;
+            RuntimeContext *context_;
+            Scheduler *scheduler_;
             bool built_;
-            std::vector<components::ComponentInterface*> components_;
-    };
+            std::vector<components::ComponentInterface *> components_;
+        };
 
-} // namespace core
+    } // namespace core
 } // namespace ptk

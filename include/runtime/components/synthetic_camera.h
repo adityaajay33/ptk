@@ -4,28 +4,31 @@
 #include "runtime/core/port.h"
 #include "runtime/data/frame.h"
 
-namespace ptk {
-namespace components {
+namespace ptk
+{
+    namespace components
+    {
 
-    class SyntheticCamera : public ComponentInterface {
+        class SyntheticCamera : public ComponentInterface
+        {
 
-        public:   
+        public:
             SyntheticCamera();
             ~SyntheticCamera() override = default;
 
             // The pipeline or app calls this to connect a Frame sink.
-            void BindOutput(core::OutputPort<data::Frame>* port);
+            void BindOutput(core::OutputPort<data::Frame> *port);
 
-            core::Status Init(core::RuntimeContext* context) override;
+            core::Status Init(core::RuntimeContext *context) override;
             core::Status Start() override;
             core::Status Stop() override;
             void Tick() override;
 
-         private:
-            core::RuntimeContext* context_;
-            core::OutputPort<data::Frame>* output_;
+        private:
+            core::RuntimeContext *context_;
+            core::OutputPort<data::Frame> *output_;
             int frame_index_;
-    };
+        };
 
-} // namespace components
+    } // namespace components
 }

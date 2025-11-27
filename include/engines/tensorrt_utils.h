@@ -22,9 +22,12 @@ namespace ptk::trt
         case core::DataType::kInt8:
             return nvinfer1::DataType::kINT8;
         case core::DataType::kFloat64:
-            return nvinfer1::DataType::kFLOAT;
+            // TensorRT does not support Float64, assert unsupported
+            assert(false && "TensorRT does not support DataType::kFloat64");
+            return nvinfer1::DataType::kFLOAT; // unreachable
         default:
-            return nvinfer1::DataType::kFLOAT; // fallback, TRT doesn't support many types
+            assert(false && "Unsupported data type for TensorRT conversion");
+            return nvinfer1::DataType::kFLOAT;
         }
     }
 

@@ -8,10 +8,7 @@
 #include "runtime/data/frame.h"
 #include "runtime/data/tensor.h" // whatever defines TensorView / TensorShape
 
-namespace ptk
-{
-  namespace components
-  {
+namespace ptk::components {
 
     FrameDebugger::FrameDebugger()
         : context_(nullptr), input_(nullptr), tick_count_(0) {}

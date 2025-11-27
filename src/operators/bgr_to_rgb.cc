@@ -5,10 +5,10 @@
 
 namespace ptk::operators
 {
-    core::Status BgrToRgb(data::TensorView *tensor)
+    core::Status BgrToRgb(const data::TensorView &src, data::TensorView *dst)
     {
         // Same swap as RgbToBgr
-        return RgbToBgr(tensor);
+        return RgbToBgr(src, dst);
     }
 }
 

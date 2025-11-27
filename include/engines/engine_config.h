@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace ptk::perception{
+namespace ptk::perception {
 
     enum class EngineBackend {
         OnnxRuntime,
@@ -28,11 +28,11 @@ namespace ptk::perception{
 
         TensorRTPrecisionMode tensorrt_precision_mode = TensorRTPrecisionMode::FP32;
 
-        int device_id = 0; // GPU device ID
-        bool enable_dynamic_shapes = false; // for TensorRT
+        int device_id = 0;
+        bool enable_dynamic_shapes = false;
         size_t trt_workspace_size_mb = 1024;
         bool verbose = false;
-
-        std::string trt_engine_path = "";
+        std::string trt_engine_path;
     };
+
 }

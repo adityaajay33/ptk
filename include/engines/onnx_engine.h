@@ -1,14 +1,20 @@
 #pragma once
 
 #include "engine.h"
+#include "engine_config.h"
 #include <onnxruntime_cxx_api.h>
+#include <vector>
+#include <string>
+#include <memory>
+
+#include "runtime/data/tensor.h"
 
 namespace ptk::perception {
 
-    class OnxxEngine : public Engine {
+    class OnnxEngine : public Engine {
         public:
-            OnxxEngine();
-            ~OnxxEngine() override;
+            explicit OnnxEngine(const EngineConfig& config);
+            ~OnnxEngine() override;
 
             bool Load(const std::string& model_path) override;
 
@@ -19,9 +25,13 @@ namespace ptk::perception {
 
         private:
             Ort::Env env_;
-            Ort::Session* session_;
+            std::unique_ptr<Ort::Session> session_;
             Ort::SessionOptions session_options_;
             std::vector<std::string> input_names_;
             std::vector<std::string> output_names_;
+            EngineConfig config_;
+
+            // Helper: convert TensorView to Ort::Value (CPU zero-copy)
+            Ort::Value CreateOrtTensorFromPtk(const data::TensorView& tv);
     };
 }

@@ -7,7 +7,7 @@
 #include "runtime/data/tensor.h"
 #include "engine_config.h"
 
-namespace ptk::perception{
+namespace ptk::perception {
 
     class Engine {
         public:

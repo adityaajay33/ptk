@@ -6,21 +6,21 @@
 
 namespace ptk::operators
 {
-        core::Status RgbToBgr(data::TensorView *tensor)
+        core::Status RgbToBgr(const data::TensorView &src, data::TensorView *dst)
         {
-            if (tensor == nullptr)
+            if (dst == nullptr)
             {
                 return core::Status(core::StatusCode::kInvalidArgument,
-                              "RgbToBgr: tensor is null");
+                              "RgbToBgr: output tensor is null");
             }
 
-            if (tensor->dtype() != core::DataType::kFloat32)
+            if (src.dtype() != core::DataType::kFloat32)
             {
                 return core::Status(core::StatusCode::kInvalidArgument,
                               "RgbToBgr: expects float32 tensor");
             }
 
-            const data::TensorShape &shape = tensor->shape();
+            const data::TensorShape &shape = src.shape();
             if (shape.rank() != 3)
             {
                 return core::Status(core::StatusCode::kInvalidArgument,
@@ -38,11 +38,19 @@ namespace ptk::operators
             }
 
             float *data =
-                static_cast<float *>(tensor->buffer().data());
+                static_cast<float *>(const_cast<data::BufferView *>(&src.buffer())->data());
             if (data == nullptr)
             {
                 return core::Status(core::StatusCode::kInvalidArgument,
-                              "RgbToBgr: tensor buffer data is null");
+                              "RgbToBgr: source tensor buffer data is null");
+            }
+
+            float *dst_data =
+                static_cast<float *>(dst->buffer().data());
+            if (dst_data == nullptr)
+            {
+                return core::Status(core::StatusCode::kInvalidArgument,
+                              "RgbToBgr: destination tensor buffer data is null");
             }
 
             for (std::int64_t h = 0; h < H; ++h)
@@ -54,9 +62,9 @@ namespace ptk::operators
                     float r = data[base + 0];
                     float g = data[base + 1];
                     float b = data[base + 2];
-                    data[base + 0] = b;
-                    data[base + 1] = g;
-                    data[base + 2] = r;
+                    dst_data[base + 0] = b;
+                    dst_data[base + 1] = g;
+                    dst_data[base + 2] = r;
                 }
             }
 

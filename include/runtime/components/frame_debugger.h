@@ -5,12 +5,8 @@
 #include "runtime/core/port.h"
 #include "runtime/data/frame.h"
 
-namespace ptk
-{
-  namespace components
-  {
-
-    class FrameDebugger : public ComponentInterface
+namespace ptk::components
+{    class FrameDebugger : public ComponentInterface
     {
     public:
       FrameDebugger();
@@ -30,5 +26,4 @@ namespace ptk
       int tick_count_;
     };
 
-  } // namespace components
-} // namespace ptk
+}  // namespace ptk::components

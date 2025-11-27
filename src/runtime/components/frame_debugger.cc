@@ -92,5 +92,4 @@ namespace ptk
       context_->LogInfo(msg.c_str());
     }
 
-  } // namespace components
-} // namespace ptk
+}  // namespace ptk::components

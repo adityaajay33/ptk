@@ -2,10 +2,8 @@
 #include <opencv2/opencv.hpp>
 #include <cstring>
 
-namespace ptk
+namespace ptk::sensors
 {
-    namespace sensors
-    {
 
         struct MacCamera::Impl
         {
@@ -118,5 +116,4 @@ namespace ptk
             GetFrame(&frame);
         }
 
-    } // namespace sensors
-} // namespace ptk
+} // namespace ptk::sensors

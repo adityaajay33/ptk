@@ -2,10 +2,8 @@
 
 #include <cstdint>
 
-namespace ptk
+namespace ptk::core
 {
-    namespace core
-    {
 
         enum class DeviceType
         {
@@ -43,5 +41,4 @@ namespace ptk
             kRgba8, // 4 channels
         };
 
-    } // namespace core
-}
+} // namespace ptk::core

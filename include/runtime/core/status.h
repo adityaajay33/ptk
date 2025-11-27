@@ -2,10 +2,8 @@
 
 #include <string>
 
-namespace ptk
+namespace ptk::core
 {
-    namespace core
-    {
 
         enum class StatusCode
         {
@@ -32,5 +30,4 @@ namespace ptk
             std::string message_;
         };
 
-    } // namespace core
-};
+} // namespace ptk::core

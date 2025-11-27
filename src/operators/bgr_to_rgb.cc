@@ -3,15 +3,12 @@
 
 #include "runtime/core/status.h"
 
-namespace ptk
+namespace ptk::operators
 {
-    namespace operators
+    core::Status BgrToRgb(data::TensorView *tensor)
     {
-        core::Status BgrToRgb(data::TensorView *tensor)
-        {
-            // Same swap as RgbToBgr
-            return RgbToBgr(tensor);
-        }
+        // Same swap as RgbToBgr
+        return RgbToBgr(tensor);
     }
 }
 

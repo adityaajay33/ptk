@@ -2,15 +2,12 @@
 
 #include "runtime/core/status.h"
 
-namespace ptk
+namespace ptk::operators
 {
-    namespace operators
-    {
         // TODO: Implement CenterCrop
         core::Status CenterCrop(const data::TensorView &src, int crop_h, int crop_w, data::TensorView *dst)
         {
             return core::Status(core::StatusCode::kInternal, "CenterCrop not yet implemented");
         }
-    }
-}
+} // namespace ptk::operators
 

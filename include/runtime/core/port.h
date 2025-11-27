@@ -1,9 +1,7 @@
 #pragma once
 
-namespace ptk
+namespace ptk::core
 {
-    namespace core
-    {
 
         template <typename T>
         class OutputPort
@@ -55,5 +53,4 @@ namespace ptk
             const T *value_;
         };
 
-    } // namespace core
-} // namespace ptk
+}  // namespace ptk::core

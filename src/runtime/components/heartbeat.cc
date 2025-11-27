@@ -4,10 +4,8 @@
 
 #include "runtime/core/runtime_context.h"
 
-namespace ptk
+namespace ptk::components
 {
-  namespace components
-  {
 
     Heartbeat::Heartbeat() : context_(nullptr), count_(0) {}
 
@@ -47,5 +45,4 @@ namespace ptk
       }
     }
 
-  } // namespace components
-} // namespace ptk
+} // namespace ptk::components

@@ -2,12 +2,8 @@
 
 #include "runtime/components/component_interface.h"
 
-namespace ptk
-{
-  namespace components
-  {
-
-    class Heartbeat : public ComponentInterface
+namespace ptk::components
+{    class Heartbeat : public ComponentInterface
     {
     public:
       Heartbeat();
@@ -23,5 +19,4 @@ namespace ptk
       int count_;
     };
 
-  } // namespace components
-} // namespace ptk
+}  // namespace ptk::components

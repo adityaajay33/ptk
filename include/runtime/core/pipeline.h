@@ -4,10 +4,8 @@
 #include "runtime/core/scheduler.h"
 #include "runtime/components/component_interface.h"
 
-namespace ptk
+namespace ptk::core
 {
-    namespace core
-    {
 
         class RuntimeContext;
 
@@ -35,5 +33,4 @@ namespace ptk
             std::vector<components::ComponentInterface *> components_;
         };
 
-    } // namespace core
-} // namespace ptk
+} // namespace ptk::core

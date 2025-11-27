@@ -2,15 +2,13 @@
 
 #include "runtime/core/status.h"
 
-namespace ptk
+namespace ptk::core
 {
-    namespace core
-    {
-        class RuntimeContext;
-    } // namespace core
+    class RuntimeContext;
+}
 
-    namespace components
-    {
+namespace ptk::components
+{
 
         class ComponentInterface
         {
@@ -27,5 +25,4 @@ namespace ptk
             virtual void Tick() = 0; // called repeatedly by scheduler or external driver
         };
 
-    } // namespace components
-} // namespace ptk
+} // namespace ptk::components

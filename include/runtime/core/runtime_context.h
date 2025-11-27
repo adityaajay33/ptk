@@ -4,10 +4,8 @@
 
 #include "runtime/core/status.h"
 
-namespace ptk
+namespace ptk::core
 {
-    namespace core
-    {
 
         enum class LogSeverity
         {
@@ -58,5 +56,4 @@ namespace ptk
             RuntimeContextOptions options_;
         };
 
-    } // namespace core
-}
+} // namespace ptk::core

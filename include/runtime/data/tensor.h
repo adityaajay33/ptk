@@ -6,10 +6,8 @@
 #include "runtime/core/types.h"
 #include "runtime/data/buffer.h"
 
-namespace ptk
+namespace ptk::data
 {
-    namespace data
-    {
 
         class TensorShape
         {
@@ -66,11 +64,36 @@ namespace ptk
 
             bool empty() const { return buffer_view_.empty() || data_type_ == core::DataType::kUnknown; }
 
+            std::size_t num_elements() const { return shape_.num_elements(); }
+
+            std::size_t element_size() const
+            {
+                switch (data_type_)
+                {
+                case core::DataType::kUint8:
+                    return 1;
+                case core::DataType::kInt32:
+                    return 4;
+                case core::DataType::kInt64:
+                    return 8;
+                case core::DataType::kFloat32:
+                    return 4;
+                case core::DataType::kFloat64:
+                    return 8;
+                default:
+                    return 0;
+                }
+            }
+
+            std::size_t bytes() const
+            {
+                return num_elements() * element_size();
+            }
+
         private:
             BufferView buffer_view_;
             core::DataType data_type_;
             TensorShape shape_;
         };
 
-    } // namespace data
-}
+} // namespace ptk::data

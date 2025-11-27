@@ -5,10 +5,8 @@
 #include "runtime/data/tensor.h"
 #include <cstdint>
 
-namespace ptk
+namespace ptk::operators
 {
-    namespace operators
-    {
         core::Status CastFloat32ToUint8(const data::TensorView &src, data::TensorView *dst)
         {
             if (dst == nullptr)
@@ -44,6 +42,5 @@ namespace ptk
 
             return core::Status::Ok();
         }
-    }
-}
+} // namespace ptk::operators
 

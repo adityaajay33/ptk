@@ -5,10 +5,8 @@
 
 #include "runtime/core/types.h"
 
-namespace ptk
+namespace ptk::data
 {
-    namespace data
-    {
 
         class BufferView
         {
@@ -33,5 +31,4 @@ namespace ptk
             core::DeviceType device_type_;
         };
 
-    } // namespace data
-} // namespace ptk
+} // namespace ptk::data

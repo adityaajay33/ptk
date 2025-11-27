@@ -3,10 +3,7 @@
 #include "runtime/core/status.h"
 #include "runtime/data/tensor.h"
 
-namespace ptk
+namespace ptk::operators
 {
-    namespace operators
-    {
-        core::Status BgrToRgb(data::TensorView *tensor);
-    }
+    core::Status BgrToRgb(const data::TensorView &src, data::TensorView *dst);
 }

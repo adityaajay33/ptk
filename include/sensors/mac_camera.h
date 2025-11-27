@@ -4,10 +4,8 @@
 #include "runtime/core/status.h"
 #include "runtime/data/frame.h"
 
-namespace ptk
+namespace ptk::sensors
 {
-    namespace sensors
-    {
 
         class MacCamera : public CameraInterface
         {
@@ -32,5 +30,4 @@ namespace ptk
             Impl *impl_;
         };
 
-    } // namespace sensors
-} // namespace ptk
+} // namespace ptk::sensors

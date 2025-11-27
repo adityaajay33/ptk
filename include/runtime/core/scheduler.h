@@ -5,10 +5,8 @@
 #include "runtime/components/component_interface.h"
 #include "runtime/core/status.h"
 
-namespace ptk
+namespace ptk::core
 {
-    namespace core
-    {
 
         class RuntimeContext;
 
@@ -32,5 +30,4 @@ namespace ptk
             int tick_;
         };
 
-    } // namespace core
-}
+} // namespace ptk::core

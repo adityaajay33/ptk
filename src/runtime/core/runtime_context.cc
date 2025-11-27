@@ -2,10 +2,8 @@
 
 #include <chrono>
 
-namespace ptk
+namespace ptk::core
 {
-    namespace core
-    {
 
         namespace
         {
@@ -90,5 +88,4 @@ namespace ptk
             std::fflush(stream);
         }
 
-    } // namespace core
-}
+} // namespace ptk::core

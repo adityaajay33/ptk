@@ -4,10 +4,8 @@
 #include "runtime/core/types.h"
 #include "runtime/data/tensor.h"
 
-namespace ptk
+namespace ptk::operators
 {
-    namespace operators
-    {
         core::Status RgbToBgr(data::TensorView *tensor)
         {
             if (tensor == nullptr)
@@ -64,6 +62,5 @@ namespace ptk
 
             return core::Status::Ok();
         }
-    }
-}
+} // namespace ptk::operators
 

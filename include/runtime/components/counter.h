@@ -2,10 +2,8 @@
 
 #include "runtime/components/component_interface.h"
 
-namespace ptk
+namespace ptk::components
 {
-    namespace components
-    {
 
         class Counter : public ComponentInterface
         {
@@ -23,5 +21,4 @@ namespace ptk
             int count_;
         };
 
-    } // namespace components
-} // namespace ptk
+} // namespace ptk::components

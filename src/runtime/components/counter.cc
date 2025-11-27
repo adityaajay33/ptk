@@ -1,10 +1,8 @@
 #include "runtime/components/counter.h"
 #include "runtime/core/runtime_context.h"
 
-namespace ptk
+namespace ptk::components
 {
-    namespace components
-    {
 
         Counter::Counter() : context_(nullptr), count_(0) {}
 
@@ -42,5 +40,4 @@ namespace ptk
             }
         }
 
-    } // namespace components
-} // namespace ptk
+} // namespace ptk::components

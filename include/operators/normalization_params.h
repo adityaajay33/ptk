@@ -1,14 +1,11 @@
 #pragma once
 
-namespace ptk
+namespace ptk::operators
 {
-    namespace operators
-    {
         struct NormalizationParams
         {
             float mean[4];
             float std[4];
             int num_channels;
         };
-    }
 }

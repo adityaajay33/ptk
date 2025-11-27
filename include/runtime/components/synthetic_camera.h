@@ -4,10 +4,8 @@
 #include "runtime/core/port.h"
 #include "runtime/data/frame.h"
 
-namespace ptk
+namespace ptk::components
 {
-    namespace components
-    {
 
         class SyntheticCamera : public ComponentInterface
         {
@@ -30,5 +28,4 @@ namespace ptk
             int frame_index_;
         };
 
-    } // namespace components
-}
+} // namespace ptk::components

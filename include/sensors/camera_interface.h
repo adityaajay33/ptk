@@ -3,10 +3,8 @@
 #include "runtime/core/status.h"
 #include "runtime/data/frame.h"
 
-namespace ptk
+namespace ptk::sensors
 {
-    namespace sensors
-    {
 
         class CameraInterface
         {
@@ -22,5 +20,4 @@ namespace ptk
             virtual void Tick() = 0;
         };
 
-    } // namespace sensors
-} // namespace ptk
+} // namespace ptk::sensors

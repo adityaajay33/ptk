@@ -64,5 +64,4 @@ namespace ptk
             frame->timestamp_ns = context_->NowNanoseconds();
         }
 
-    } // namespace components
-} // namespace ptk
+} // namespace ptk::components

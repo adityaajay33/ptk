@@ -1,16 +1,9 @@
-#ifndef OPERATORS_CAST_UINT8_TO_FLOAT32_H_
-#define OPERATORS_CAST_UINT8_TO_FLOAT32_H_
+#pragma once
 
 #include "runtime/core/status.h"
 #include "runtime/data/tensor.h"
 
-namespace ptk
+namespace ptk::operators
 {
-    namespace operators
-    {
-        core::Status CastUint8ToFloat32(const data::TensorView &src, data::TensorView *dst);
-    }
+    core::Status CastUint8ToFloat32(const data::TensorView &src, data::TensorView *dst);
 }
-
-#endif // OPERATORS_CAST_UINT8_TO_FLOAT32_H_
-

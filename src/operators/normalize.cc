@@ -4,10 +4,8 @@
 #include "runtime/core/types.h"
 #include "runtime/data/tensor.h"
 
-namespace ptk
+namespace ptk::operators
 {
-    namespace operators
-    {
         core::Status Normalize(data::TensorView *tensor,
                          const NormalizationParams &params,
                          core::TensorLayout layout)
@@ -218,6 +216,5 @@ namespace ptk
 
             return core::Status::Ok();
         }
-    }
-}
+} // namespace ptk::operators
 

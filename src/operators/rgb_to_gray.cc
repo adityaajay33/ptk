@@ -4,10 +4,8 @@
 #include "runtime/core/types.h"
 #include "runtime/data/tensor.h"
 
-namespace ptk
+namespace ptk::operators
 {
-    namespace operators
-    {
         core::Status RgbToGray(const data::TensorView &src, data::TensorView *dst)
         {
             if (dst == nullptr)
@@ -84,6 +82,5 @@ namespace ptk
 
             return core::Status::Ok();
         }
-    }
-}
+} // namespace ptk::operators
 

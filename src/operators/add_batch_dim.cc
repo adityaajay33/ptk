@@ -2,15 +2,13 @@
 
 #include "runtime/core/status.h"
 
-namespace ptk
+namespace ptk::operators
 {
-    namespace operators
+    // TODO: Implement AddBatchDim
+    // This function should add a batch dimension to the input tensor.
+    core::Status AddBatchDim(const data::TensorView &src, data::TensorView *dst)
     {
-        // TODO: Implement AddBatchDim
-        core::Status AddBatchDim(const data::TensorView &src, data::TensorView *dst)
-        {
-            return core::Status(core::StatusCode::kInternal, "AddBatchDim not yet implemented");
-        }
+        return core::Status(core::StatusCode::kInternal, "AddBatchDim not yet implemented");
     }
 }
 

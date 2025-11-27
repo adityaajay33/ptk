@@ -1,14 +1,11 @@
-#ifndef PTK_SENSORS_MAC_CAMERA_H_
-#define PTK_SENSORS_MAC_CAMERA_H_
+#pragma once
 
 #include "sensors/camera_interface.h"
 #include "runtime/core/status.h"
 #include "runtime/data/frame.h"
 
-namespace ptk
+namespace ptk::sensors
 {
-    namespace sensors
-    {
 
         class MacCamera : public CameraInterface
         {
@@ -33,7 +30,4 @@ namespace ptk
             Impl *impl_;
         };
 
-    } // namespace sensors
-} // namespace ptk
-
-#endif
+} // namespace ptk::sensors

@@ -1,49 +1,49 @@
-#ifndef RUNTIME_CORE_RUNTIME_CONTEXT_H_
-#define RUNTIME_CORE_RUNTIME_CONTEXT_H_
+#pragma once
 
 #include <string_view>
 
 #include "runtime/core/status.h"
 
-namespace ptk {
-namespace core {
+namespace ptk::core
+{
 
-    enum class LogSeverity {
+        enum class LogSeverity
+        {
 
-        kInfo = 0,
-        kWarning,
-        kError,
-    };
+            kInfo = 0,
+            kWarning,
+            kError,
+        };
 
+        struct RuntimeContextOptions
+        {
+            // output stream for logging
+            std::FILE *info_stream = nullptr;
+            std::FILE *error_stream = nullptr;
+        };
 
-    struct RuntimeContextOptions {
-        //output stream for logging
-        std::FILE* info_stream = nullptr;
-        std::FILE* error_stream = nullptr;
-    };
-
-    class RuntimeContext {
+        class RuntimeContext
+        {
 
         public:
-
             RuntimeContext();
             ~RuntimeContext();
 
-            RuntimeContext(const RuntimeContext&) = delete;
-            RuntimeContext& operator=(const RuntimeContext&) = delete;
-            RuntimeContext(RuntimeContext&&) = delete;
-            RuntimeContext& operator=(RuntimeContext&&) = delete;
+            RuntimeContext(const RuntimeContext &) = delete;
+            RuntimeContext &operator=(const RuntimeContext &) = delete;
+            RuntimeContext(RuntimeContext &&) = delete;
+            RuntimeContext &operator=(RuntimeContext &&) = delete;
 
-            //call before use
-            Status Init(const RuntimeContextOptions& options);
+            // call before use
+            Status Init(const RuntimeContextOptions &options);
 
-            //clean up resources
+            // clean up resources
             void Shutdown();
 
             // clock
             std::int64_t NowNanoseconds() const;
 
-            //api for logging
+            // api for logging
             void Log(LogSeverity severity, std::string_view message) const;
             void LogInfo(std::string_view message) const { Log(LogSeverity::kInfo, message); }
             void LogWarning(std::string_view message) const { Log(LogSeverity::kWarning, message); }
@@ -54,10 +54,6 @@ namespace core {
         private:
             bool initialized_;
             RuntimeContextOptions options_;
-    };
+        };
 
-} // namespace core
-}
-
-
-#endif //RUNTIME_CORE_RUNTIME_CONTEXT_H_
+} // namespace ptk::core

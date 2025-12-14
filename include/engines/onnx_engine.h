@@ -16,9 +16,9 @@ namespace ptk::perception {
             explicit OnnxEngine(const EngineConfig& config);
             ~OnnxEngine() override;
 
-            bool Load(const std::string& model_path) override;
+            core::EngineStatus Load(const std::string& model_path) override;
 
-            bool Infer(const std::vector<data::TensorView>& inputs, std::vector<data::TensorView>& outputs) override;
+            core::EngineStatus Infer(const std::vector<data::TensorView>& inputs, std::vector<data::TensorView>& outputs) override;
 
             std::vector<std::string> InputNames() const override { return input_names_; }
             std::vector<std::string> OutputNames() const override { return output_names_; }
@@ -30,8 +30,14 @@ namespace ptk::perception {
             std::vector<std::string> input_names_;
             std::vector<std::string> output_names_;
             EngineConfig config_;
+            OnnxRuntimeExecutionProvider active_provider_;
 
-            // Helper: convert TensorView to Ort::Value (CPU zero-copy)
+            core::EngineStatus InitializeExecutionProviders();
+            bool TryInitializeCudaProvider();
+            bool TryInitializeTensorRtProvider();
+            bool TryInitializeCpuProvider();
+            core::EngineStatus InitializeProvider(OnnxRuntimeExecutionProvider provider);
+
             Ort::Value CreateOrtTensorFromPtk(const data::TensorView& tv);
     };
 }

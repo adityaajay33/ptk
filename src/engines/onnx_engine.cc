@@ -1,5 +1,6 @@
 #include "engines/onnx_engine.h"
 #include "engines/onnx_utils.h"
+#include "runtime/core/logger.h"
 
 #include <iostream>
 #include <cstring>
@@ -8,25 +9,42 @@
 namespace ptk::perception
 {
 
-    OnnxEngine::OnnxEngine(const EngineConfig &config) : Engine(), env_(ORT_LOGGING_LEVEL_WARNING, "ptk-onnx"), config_(config)
-    {
+    OnnxEngine::OnnxEngine(const EngineConfig &config)
+        : Engine(),
+          env_(ORT_LOGGING_LEVEL_WARNING, "ptk-onnx"),
+          config_(config),
+          active_provider_(OnnxRuntimeExecutionProvider::Cpu) {
         session_options_.SetIntraOpNumThreads(1);
         session_options_.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
+        
+        core::LoggerManager::Info("OnnxEngine", "Initialized with " + std::string(config.verbose ? "verbose" : "normal") + " logging");
     }
 
     OnnxEngine::~OnnxEngine() = default;
 
-    bool OnnxEngine::Load(const std::string &model_path)
+    core::EngineStatus OnnxEngine::Load(const std::string &model_path)
     {
+        core::LoggerManager::Info("OnnxEngine", "Loading model from: " + model_path);
+        
+        // Initialize execution providers based on config
+        auto ep_status = InitializeExecutionProviders();
+        if (!ep_status.ok()) {
+            core::LoggerManager::Error("OnnxEngine", ep_status.message());
+            return ep_status;
+        }
+
         try
         {
             session_ = std::make_unique<Ort::Session>(env_, model_path.c_str(), session_options_);
         }
         catch (const Ort::Exception &e)
         {
-            std::cerr << "ONNX Load Error: " << e.what() << "\n";
-            return false;
+            auto status = core::EngineStatus::ModelLoadFailed(e.what());
+            core::LoggerManager::Error("OnnxEngine", status.message());
+            return status;
         }
+
+        core::LoggerManager::Info("OnnxEngine", "Model loaded successfully");
 
         Ort::AllocatorWithDefaultOptions allocator;
 
@@ -54,7 +72,9 @@ namespace ptk::perception
             }
         }
 
-        return true;
+        core::LoggerManager::Info("OnnxEngine", "Loaded " + std::to_string(num_inputs) + 
+                                   " inputs and " + std::to_string(num_outputs) + " outputs");
+        return core::EngineStatus::Ok();
     }
 
     Ort::Value OnnxEngine::CreateOrtTensorFromPtk(const data::TensorView &tv)
@@ -69,13 +89,15 @@ namespace ptk::perception
         return Ort::Value::CreateTensor(mem_info, data_ptr, total_bytes, shape.data(), shape.size(), ptk::onnx::OnnxTypeFromPtkType(tv.dtype()));
     }
 
-    bool OnnxEngine::Infer(const std::vector<data::TensorView> &inputs,
+    core::EngineStatus OnnxEngine::Infer(const std::vector<data::TensorView> &inputs,
                            std::vector<data::TensorView> &outputs)
     {
         if (!session_)
         {
-            std::cerr << "OnnxEngine: Session not loaded\n";
-            return false;
+            auto status = core::EngineStatus(core::EngineErrorCode::kSessionNotLoaded,
+                                            "Session not loaded");
+            core::LoggerManager::Error("OnnxEngine", status.message());
+            return status;
         }
 
         std::vector<Ort::Value> ort_inputs;
@@ -101,8 +123,9 @@ namespace ptk::perception
         }
         catch (const Ort::Exception &e)
         {
-            std::cerr << "ONNX Infer Error: " << e.what() << "\n";
-            return false;
+            auto status = core::EngineStatus::InferenceFailed(e.what());
+            core::LoggerManager::Error("OnnxEngine", status.message());
+            return status;
         }
 
         outputs.clear();
@@ -141,8 +164,10 @@ namespace ptk::perception
             }
             else
             {
-                std::cerr << "OnnxEngine: Unsupported output element type\n";
-                return false;
+                auto status = core::EngineStatus(core::EngineErrorCode::kTypeMismatch,
+                                                "Unsupported output element type");
+                core::LoggerManager::Error("OnnxEngine", status.message());
+                return status;
             }
 
             size_t total_bytes = elem_count * bytes_per_elem;
@@ -150,8 +175,10 @@ namespace ptk::perception
             void *buf = std::malloc(total_bytes);
             if (!buf)
             {
-                std::cerr << "OnnxEngine: Failed to allocate output buffer\n";
-                return false;
+                auto status = core::EngineStatus(core::EngineErrorCode::kMemoryAllocationFailed,
+                                                "Failed to allocate output buffer");
+                core::LoggerManager::Error("OnnxEngine", status.message());
+                return status;
             }
 
             const void *ort_data = v.GetTensorRawData();
@@ -165,7 +192,136 @@ namespace ptk::perception
             outputs.push_back(tv);
         }
 
-        return true;
+        core::LoggerManager::Debug("OnnxEngine", "Inference completed successfully");
+        return core::EngineStatus::Ok();
+    }
+
+    core::EngineStatus OnnxEngine::InitializeExecutionProviders() {
+        core::LoggerManager::Info("OnnxEngine", "Initializing execution providers...");
+
+        switch (config_.onnx_execution_provider) {
+            case OnnxRuntimeExecutionProvider::Cuda:
+                if (TryInitializeCudaProvider()) {
+                    active_provider_ = OnnxRuntimeExecutionProvider::Cuda;
+                    core::LoggerManager::Info("OnnxEngine", "CUDA provider initialized successfully");
+                    return core::EngineStatus::Ok();
+                }
+                core::LoggerManager::Warn("OnnxEngine", "CUDA provider unavailable, falling back to CPU");
+                return core::EngineStatus::Ok();  // CPU fallback
+
+            case OnnxRuntimeExecutionProvider::TensorRTEP:
+                if (TryInitializeTensorRtProvider()) {
+                    active_provider_ = OnnxRuntimeExecutionProvider::TensorRTEP;
+                    core::LoggerManager::Info("OnnxEngine", "TensorRT EP initialized successfully");
+                    return core::EngineStatus::Ok();
+                }
+                core::LoggerManager::Warn("OnnxEngine", "TensorRT EP unavailable, trying CUDA");
+                if (TryInitializeCudaProvider()) {
+                    active_provider_ = OnnxRuntimeExecutionProvider::Cuda;
+                    core::LoggerManager::Info("OnnxEngine", "Fell back to CUDA provider");
+                    return core::EngineStatus::Ok();
+                }
+                core::LoggerManager::Warn("OnnxEngine", "Falling back to CPU");
+                return core::EngineStatus::Ok();  // CPU fallback
+
+            case OnnxRuntimeExecutionProvider::Cpu:
+            default:
+                return core::EngineStatus::Ok();  // CPU always available
+        }
+    }
+
+    bool OnnxEngine::TryInitializeCudaProvider() {
+#ifdef __APPLE__
+        if (config_.verbose) {
+            std::cout << "OnnxEngine: CUDA not available on macOS\n";
+        }
+        return false;
+#else
+        try {
+            // Configure CUDA provider options
+            OrtCUDAProviderOptions cuda_options;
+            cuda_options.device_id = config_.device_id;
+
+            // Append CUDA provider with fallback
+            session_options_.AppendExecutionProvider_CUDA(cuda_options);
+
+            if (config_.verbose) {
+                std::cout << "OnnxEngine: CUDA provider configured (device " << config_.device_id << ")\n";
+            }
+            return true;
+        } catch (const std::exception &e) {
+            if (config_.verbose) {
+                std::cout << "OnnxEngine: Failed to initialize CUDA provider: " << e.what() << "\n";
+            }
+            return false;
+        }
+#endif
+    }
+
+    bool OnnxEngine::TryInitializeTensorRtProvider() {
+#ifdef __APPLE__
+        if (config_.verbose) {
+            std::cout << "OnnxEngine: TensorRT EP not available on macOS\n";
+        }
+        return false;
+#else
+        try {
+            // Configure TensorRT provider options
+            OrtTensorRTProviderOptions trt_options;
+            trt_options.device_id = config_.device_id;
+
+            // Set precision mode
+            switch (config_.tensorrt_precision_mode) {
+                case TensorRTPrecisionMode::FP16:
+                    trt_options.fp16_enable = 1;
+                    break;
+                case TensorRTPrecisionMode::INT8:
+                    trt_options.int8_enable = 1;
+                    break;
+                case TensorRTPrecisionMode::FP32:
+                default:
+                    break;
+            }
+
+            // Set workspace size
+            trt_options.gpu_mem_limit_in_mb = static_cast<size_t>(config_.trt_workspace_size_mb);
+
+            // Append TensorRT provider with fallback to CUDA
+            session_options_.AppendExecutionProvider_TensorRT(trt_options);
+
+            if (config_.verbose) {
+                std::cout << "OnnxEngine: TensorRT EP configured (device " << config_.device_id << ", "
+                          << "workspace " << config_.trt_workspace_size_mb << "MB)\n";
+            }
+            return true;
+        } catch (const std::exception &e) {
+            if (config_.verbose) {
+                std::cout << "OnnxEngine: Failed to initialize TensorRT provider: " << e.what() << "\n";
+            }
+            return false;
+        }
+#endif
+    }
+
+    bool OnnxEngine::TryInitializeCpuProvider() {
+        try {
+            // CPU provider is always available, no explicit initialization needed
+            // It's the default fallback
+            active_provider_ = OnnxRuntimeExecutionProvider::Cpu;
+
+            if (config_.verbose) {
+                std::cout << "OnnxEngine: CPU provider initialized\n";
+            }
+            return true;
+        } catch (const std::exception &e) {
+            std::cerr << "OnnxEngine: Failed to initialize CPU provider: " << e.what() << "\n";
+            return false;
+        }
+    }
+
+    core::EngineStatus OnnxEngine::InitializeProvider(OnnxRuntimeExecutionProvider provider) {
+        config_.onnx_execution_provider = provider;
+        return InitializeExecutionProviders();
     }
 
 } // namespace ptk::perception

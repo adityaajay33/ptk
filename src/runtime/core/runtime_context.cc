@@ -53,10 +53,11 @@ namespace ptk::core
 
         void RuntimeContext::Shutdown()
         {
-            if (initialized_)
+            if (!initialized_)
             {
                 return;
             }
+            initialized_ = false;
         }
 
         std::int64_t RuntimeContext::NowNanoseconds() const

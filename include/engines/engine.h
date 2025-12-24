@@ -15,10 +15,8 @@ namespace ptk::perception {
         public:
             virtual ~Engine() = default;
 
-            // Load model with Status return
             virtual core::EngineStatus Load(const std::string& model_path) = 0;
 
-            // Run inference with Status return
             virtual core::EngineStatus Infer(const std::vector<data::TensorView>& inputs,
                                              std::vector<data::TensorView>& outputs) = 0;
 

@@ -96,8 +96,6 @@ namespace ptk::validation
                         bool verbose = true);
     };
 
-    // Benchmark Utilities
-
     class BenchmarkUtility
     {
     public:

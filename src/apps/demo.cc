@@ -16,51 +16,35 @@
 #include "runtime/core/types.h"
 #include "runtime/data/buffer.h"
 #include "runtime/data/tensor.h"
-#include "operators/add_batch_dim.h"
-#include "operators/bgr_to_rgb.h"
-#include "operators/cast_float32_to_uint8.h"
 #include "operators/cast_uint8_to_float32.h"
-#include "operators/center_crop.h"
-#include "operators/chw_to_hwc.h"
-#include "operators/hwc_to_chw.h"
-#include "operators/normalization_params.h"
-#include "operators/normalize.h"
-#include "operators/pad_to_size.h"
-#include "operators/preprocessor.h"
-#include "operators/rgb_to_bgr.h"
 #include "operators/rgb_to_gray.h"
+#include "operators/cast_float32_to_uint8.h"
+
 
 // Simple helper to check if a path is a directory.
-bool IsDirectory(const std::string &path)
-{
+bool IsDirectory(const std::string& path) {
   struct stat st;
-  if (stat(path.c_str(), &st) != 0)
-  {
+  if (stat(path.c_str(), &st) != 0) {
     return false;
   }
   return S_ISDIR(st.st_mode);
 }
 
 // Simple helper to check if a filename has a supported extension.
-bool HasSupportedExtension(const std::string &name)
-{
+bool HasSupportedExtension(const std::string& name) {
   std::size_t dot = name.find_last_of('.');
-  if (dot == std::string::npos)
-  {
+  if (dot == std::string::npos) {
     return false;
   }
   std::string ext = name.substr(dot);
-  for (char &c : ext)
-  {
+  for (char& c : ext) {
     c = static_cast<char>(std::tolower(c));
   }
   return ext == ".jpg" || ext == ".jpeg" || ext == ".png";
 }
 
-int main(int argc, char **argv)
-{
-  if (argc != 3)
-  {
+int main(int argc, char** argv) {
+  if (argc != 3) {
     std::cerr
         << "Usage: demo <input_dir> <output_dir>\n"
         << "Example: ./demo ./input_images ./output_gray\n";
@@ -70,54 +54,44 @@ int main(int argc, char **argv)
   std::string input_dir = argv[1];
   std::string output_dir = argv[2];
 
-  if (!IsDirectory(input_dir))
-  {
+  if (!IsDirectory(input_dir)) {
     std::cerr << "Input path is not a directory: " << input_dir << "\n";
     return 1;
   }
 
   // Create output directory if needed.
   struct stat st;
-  if (stat(output_dir.c_str(), &st) != 0)
-  {
+  if (stat(output_dir.c_str(), &st) != 0) {
     // Try to create directory.
     int res = mkdir(output_dir.c_str(), 0755);
-    if (res != 0)
-    {
+    if (res != 0) {
       std::cerr << "Failed to create output directory: " << output_dir << "\n";
       return 1;
     }
-  }
-  else if (!S_ISDIR(st.st_mode))
-  {
+  } else if (!S_ISDIR(st.st_mode)) {
     std::cerr << "Output path exists but is not a directory: "
               << output_dir << "\n";
     return 1;
   }
 
-  DIR *dir = opendir(input_dir.c_str());
-  if (dir == nullptr)
-  {
+  DIR* dir = opendir(input_dir.c_str());
+  if (dir == nullptr) {
     std::cerr << "Failed to open input directory: " << input_dir << "\n";
     return 1;
   }
 
-  while (true)
-  {
-    struct dirent *entry = readdir(dir);
-    if (entry == nullptr)
-    {
+  while (true) {
+    struct dirent* entry = readdir(dir);
+    if (entry == nullptr) {
       break;
     }
 
     std::string name = entry->d_name;
-    if (name == "." || name == "..")
-    {
+    if (name == "." || name == "..") {
       continue;
     }
 
-    if (!HasSupportedExtension(name))
-    {
+    if (!HasSupportedExtension(name)) {
       continue;
     }
 
@@ -131,10 +105,9 @@ int main(int argc, char **argv)
     int channels_in_file = 0;
 
     // Force 3 channels (RGB) on load.
-    unsigned char *pixels = stbi_load(
+    unsigned char* pixels = stbi_load(
         in_path.c_str(), &width, &height, &channels_in_file, 3);
-    if (pixels == nullptr)
-    {
+    if (pixels == nullptr) {
       std::cerr << "  Failed to load image\n";
       continue;
     }
@@ -177,8 +150,7 @@ int main(int argc, char **argv)
     {
       ptk::core::Status s =
           ptk::operators::CastUint8ToFloat32(rgb_u8_tensor, &rgb_float_tensor);
-      if (!s.ok())
-      {
+      if (!s.ok()) {
         std::cerr << "  CastUint8ToFloat32 failed: "
                   << s.message() << "\n";
         stbi_image_free(pixels);
@@ -206,8 +178,7 @@ int main(int argc, char **argv)
     {
       ptk::core::Status s =
           ptk::operators::RgbToGray(rgb_float_tensor, &gray_float_tensor);
-      if (!s.ok())
-      {
+      if (!s.ok()) {
         std::cerr << "  RgbToGray failed: "
                   << s.message() << "\n";
         stbi_image_free(pixels);
@@ -232,8 +203,7 @@ int main(int argc, char **argv)
     {
       ptk::core::Status s =
           ptk::operators::CastFloat32ToUint8(gray_float_tensor, &gray_u8_tensor);
-      if (!s.ok())
-      {
+      if (!s.ok()) {
         std::cerr << "  CastFloat32ToUint8 failed: "
                   << s.message() << "\n";
         stbi_image_free(pixels);
@@ -242,21 +212,18 @@ int main(int argc, char **argv)
     }
 
     // Write grayscale image to output folder.
-    int stride_in_bytes = width; // for 1 channel uint8
+    int stride_in_bytes = width;  // for 1 channel uint8
     int write_ok = stbi_write_png(
         out_path.c_str(),
         width,
         height,
-        1, // channels
+        1,  // channels
         gray_u8_storage.data(),
         stride_in_bytes);
 
-    if (!write_ok)
-    {
+    if (!write_ok) {
       std::cerr << "  Failed to write output image: " << out_path << "\n";
-    }
-    else
-    {
+    } else {
       std::cout << "  Wrote: " << out_path << "\n";
     }
 

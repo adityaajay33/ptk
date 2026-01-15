@@ -1,8 +1,11 @@
 tests
-data
 
 build
 
 src/apps
 
 .vscode
+
+memory_alloc.md
+
+sets/

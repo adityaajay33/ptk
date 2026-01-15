@@ -5,6 +5,8 @@
 #include <memory>
 
 #include "runtime/data/tensor.h"
+#include "runtime/core/status.h"
+#include "runtime/core/logger.h"
 #include "engine_config.h"
 
 namespace ptk::perception {
@@ -13,9 +15,10 @@ namespace ptk::perception {
         public:
             virtual ~Engine() = default;
 
-            virtual bool Load(const std::string& model_path) = 0;
+            virtual core::EngineStatus Load(const std::string& model_path) = 0;
 
-            virtual bool Infer(const std::vector<data::TensorView>& inputs,std::vector<data::TensorView>& outputs) = 0;
+            virtual core::EngineStatus Infer(const std::vector<data::TensorView>& inputs,
+                                             std::vector<data::TensorView>& outputs) = 0;
 
             virtual std::vector<std::string> InputNames() const = 0;
             virtual std::vector<std::string> OutputNames() const = 0;

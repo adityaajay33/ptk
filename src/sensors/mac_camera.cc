@@ -10,11 +10,19 @@ namespace ptk::sensors
             cv::VideoCapture cap;
         };
 
-        MacCamera::MacCamera(int device_index)
-            : device_index_(device_index),
+        MacCamera::MacCamera(int device_index, const rclcpp::NodeOptions &options)
+            : CameraInterface("mac_camera", options),
+              device_index_(device_index),
               is_running_(false),
               frame_index_(0),
-              impl_(new Impl()) {}
+              impl_(new Impl())
+        {
+            //create publisher for zero-copy frame transport
+            frame_publisher_ = this->create_publisher<data::FrameMsg>(
+                "camera/frames",
+                rclcpp::QoS(10).best_effort()  
+            );
+        }
 
         MacCamera::~MacCamera()
         {
@@ -112,8 +120,52 @@ namespace ptk::sensors
 
         void MacCamera::Tick()
         {
-            ptk::data::Frame frame;
-            GetFrame(&frame);
+            PublishFrame();
+        }
+        
+        void MacCamera::PublishFrame()
+        {
+            if (!is_running_)
+            {
+                return;
+            }
+
+            cv::Mat img;
+            if (!impl_->cap.read(img))
+            {
+                RCLCPP_ERROR(this->get_logger(), "Failed to read frame from camera");
+                return;
+            }
+
+            cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
+
+            int H = img.rows;
+            int W = img.cols;
+            int C = img.channels();
+            size_t num_bytes = static_cast<size_t>(H * W * C);
+
+            std::vector<uint8_t> buffer(num_bytes);
+            std::memcpy(buffer.data(), img.data, num_bytes);
+
+            // Create FrameMsg with owned data (zero-copy via unique_ptr)
+            auto frame_msg = data::FrameMsg::Create(
+                std::move(buffer),
+                core::DataType::kUint8,
+                data::TensorShape({H, W, C}),
+                core::PixelFormat::kRgb8,
+                core::TensorLayout::kHwc,
+                this->now().nanoseconds(),
+                frame_index_++,
+                device_index_
+            );
+
+            // Publish with zero-copy (ownership transfer)
+            frame_publisher_->publish(std::move(frame_msg));
+            
+            RCLCPP_DEBUG(this->get_logger(), "Published frame %d", frame_index_ - 1);
         }
 
 } // namespace ptk::sensors
+
+#include <rclcpp_components/register_node_macro.hpp>
+RCLCPP_COMPONENTS_REGISTER_NODE(ptk::sensors::MacCamera)

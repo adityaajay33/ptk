@@ -2,13 +2,19 @@
 
 #include "runtime/core/status.h"
 #include "runtime/data/frame.h"
+#include <rclcpp/rclcpp.hpp>
 
 namespace ptk::sensors
 {
 
-        class CameraInterface
+        class CameraInterface : public rclcpp::Node
         {
         public:
+            explicit CameraInterface(
+                const std::string &node_name,
+                const rclcpp::NodeOptions &options = rclcpp::NodeOptions())
+                : rclcpp::Node(node_name, options) {}
+
             virtual ~CameraInterface() {}
 
             virtual core::Status Init() = 0;

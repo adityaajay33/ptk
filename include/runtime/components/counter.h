@@ -8,7 +8,7 @@ namespace ptk::components
         class Counter : public ComponentInterface
         {
         public:
-            Counter();
+            explicit Counter(const rclcpp::NodeOptions &options = rclcpp::NodeOptions()); //passes config info for the node when initializing it
             ~Counter() override = default;
 
             core::Status Init(core::RuntimeContext *context) override;

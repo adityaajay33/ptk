@@ -6,7 +6,7 @@ namespace ptk::components
 {    class Heartbeat : public ComponentInterface
     {
     public:
-      Heartbeat();
+      explicit Heartbeat(const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
       ~Heartbeat() override = default;
 
       core::Status Init(core::RuntimeContext *context) override;

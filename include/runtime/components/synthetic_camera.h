@@ -11,7 +11,7 @@ namespace ptk::components
         {
 
         public:
-            SyntheticCamera();
+            explicit SyntheticCamera(const rclcpp::NodeOptions &options = rclcpp::NodeOptions()); //passes config info for the node when initializing it
             ~SyntheticCamera() override = default;
 
             // The pipeline or app calls this to connect a Frame sink.

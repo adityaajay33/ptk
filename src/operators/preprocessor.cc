@@ -6,30 +6,58 @@
 namespace ptk
 {
 
-    Preprocessor::Preprocessor(const PreprocessorConfig &config, const rclcpp::NodeOptions &options)
+    Preprocessor::Preprocessor(const rclcpp::NodeOptions &options)
         : ComponentInterface("preprocessor", options),
           context_(nullptr),
           input_(nullptr),
           output_(nullptr),
-          config_(config),
+          config_(),
           float_buffer_(),
           uint8_temp_(),
           output_frame_()
     {
-        // Create subscriber for zero-copy frame reception
-        frame_subscription_ = this->create_subscription<data::FrameMsg>(
-            "camera/frames",
-            rclcpp::QoS(10).best_effort(),
-            [this](std::unique_ptr<data::FrameMsg> msg) {
-                this->FrameCallback(std::move(msg));
-            }
-        );
+        // Declare ROS parameters for configuration
+        this->declare_parameter("target_height", 224);
+        this->declare_parameter("target_width", 224);
+        this->declare_parameter("normalize", true);
+        this->declare_parameter("add_batch_dimension", false);
+        this->declare_parameter("to_grayscale", false);
+        this->declare_parameter("convert_rgb_to_bgr", false);
         
-        // Create publisher for zero-copy processed frame output
-        processed_publisher_ = this->create_publisher<data::FrameMsg>(
-            "preprocessor/frames",
-            rclcpp::QoS(10).best_effort()
-        );
+        // Load configuration from ROS parameters
+        config_.target_height = this->get_parameter("target_height").as_int();
+        config_.target_width = this->get_parameter("target_width").as_int();
+        config_.normalize = this->get_parameter("normalize").as_bool();
+        config_.add_batch_dimension = this->get_parameter("add_batch_dimension").as_bool();
+        config_.to_grayscale = this->get_parameter("to_grayscale").as_bool();
+        config_.convert_rgb_to_bgr = this->get_parameter("convert_rgb_to_bgr").as_bool();
+        
+        // Set reasonable defaults for other config fields
+        config_.input_layout = core::TensorLayout::kHwc;
+        config_.input_format = core::PixelFormat::kRgb8;
+        config_.input_type = core::DataType::kUint8;
+        config_.output_layout = core::TensorLayout::kHwc;
+        config_.output_format = core::PixelFormat::kRgb8;
+        config_.output_type = core::DataType::kFloat32;
+        
+        // Default normalization params (ImageNet)
+        config_.norm.mean[0] = 0.485f;
+        config_.norm.mean[1] = 0.456f;
+        config_.norm.mean[2] = 0.406f;
+        config_.norm.std[0] = 0.229f;
+        config_.norm.std[1] = 0.224f;
+        config_.norm.std[2] = 0.225f;
+        config_.norm.num_channels = 3;
+    }
+
+    void Preprocessor::BindInput(core::InputPort<data::Frame>* in)
+    {
+        input_ = in;
+    }
+
+    void Preprocessor::BindOutput(core::OutputPort<data::Frame>* out)
+    {
+        output_ = out;
     }
 
     core::Status Preprocessor::Init(core::RuntimeContext *context)
@@ -114,56 +142,6 @@ namespace ptk
             context_->LogError("Preprocessor: CastUint8ToFloat32 failed");
             return;
         }
-    }
-
-    void Preprocessor::FrameCallback(std::unique_ptr<data::FrameMsg> msg)
-    {
-
-        auto processed = ProcessFrame(std::move(msg));
-        
-        if (processed) {
-            processed_publisher_->publish(std::move(processed));
-        }
-    }
-
-    std::unique_ptr<data::FrameMsg> Preprocessor::ProcessFrame(std::unique_ptr<data::FrameMsg> input)
-    {
-        if (!input || input->buffer_data.empty()) {
-            RCLCPP_ERROR(this->get_logger(), "Preprocessor: received empty frame");
-            return nullptr;
-        }
-
-        const data::TensorView src = input->GetTensorView();
-        
-        size_t num_elements = src.shape().num_elements();
-        std::vector<uint8_t> float_data(num_elements * sizeof(float));
-        
-        data::BufferView dst_buffer(
-            float_data.data(),
-            float_data.size(),
-            core::DeviceType::kCpu
-        );
-        
-        data::TensorView dst(dst_buffer, core::DataType::kFloat32, src.shape());
-        
-        core::Status s = operators::CastUint8ToFloat32(src, &dst);
-        if (!s.ok()) {
-            RCLCPP_ERROR(this->get_logger(), "Preprocessor: CastUint8ToFloat32 failed");
-            return nullptr;
-        }
-
-        auto output = data::FrameMsg::Create(
-            std::move(float_data),
-            core::DataType::kFloat32,
-            src.shape(),
-            input->pixel_format,
-            input->layout,
-            input->timestamp_ns,
-            input->frame_index,
-            input->camera_id
-        );
-        
-        return output;
     }
 
 } // namespace ptk

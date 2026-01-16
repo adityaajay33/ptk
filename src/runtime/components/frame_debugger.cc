@@ -17,14 +17,6 @@ namespace ptk::components
         input_(nullptr),
         tick_count_(0)
   {
-    // Create subscriber for zero-copy frame reception
-    frame_subscription_ = this->create_subscription<data::FrameMsg>(
-        "camera/frames",
-        rclcpp::QoS(10).best_effort(),
-        [this](std::unique_ptr<data::FrameMsg> msg)
-        {
-          this->FrameCallback(std::move(msg));
-        });
   }
 
   void FrameDebugger::BindInput(core::InputPort<data::Frame> *port)
@@ -104,28 +96,6 @@ namespace ptk::components
                       ", channels = " +
                       std::to_string(channels);
     context_->LogInfo(msg.c_str());
-  }
-
-  void FrameDebugger::FrameCallback(std::unique_ptr<data::FrameMsg> msg)
-  {
-    ++tick_count_;
-
-    const data::TensorView image = msg->GetTensorView();
-    const data::TensorShape &shape = image.shape();
-
-    if (shape.rank() != 3)
-    {
-      RCLCPP_ERROR(this->get_logger(), "FrameDebugger expected HxWxC image.");
-      return;
-    }
-
-    int64_t height = shape.dim(0);
-    int64_t width = shape.dim(1);
-    int64_t channels = shape.dim(2);
-
-    RCLCPP_INFO(this->get_logger(),
-                "Frame %ld: %ldx%ldx%ld, timestamp: %ld ns",
-                msg->frame_index, width, height, channels, msg->timestamp_ns);
   }
 
 } // namespace ptk::components

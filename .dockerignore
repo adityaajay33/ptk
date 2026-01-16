@@ -1,0 +1,15 @@
+build/
+.vscode/
+.git/
+*.md
+.gitignore
+sets/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.dylib
+*.log
+.DS_Store

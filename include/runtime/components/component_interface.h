@@ -1,6 +1,7 @@
 #pragma once
 
 #include "runtime/core/status.h"
+#include <rclcpp/rclcpp.hpp>
 
 namespace ptk::core
 {
@@ -10,10 +11,15 @@ namespace ptk::core
 namespace ptk::components
 {
 
-        class ComponentInterface
+        class ComponentInterface : public rclcpp::Node
         {
 
         public:
+            explicit ComponentInterface(
+                const std::string& node_name,
+                const rclcpp::NodeOptions& options = rclcpp::NodeOptions())
+                : rclcpp::Node(node_name, options) {}
+
             virtual ~ComponentInterface() = default;
 
             virtual core::Status Init(core::RuntimeContext *context) = 0; // called once before start

@@ -7,42 +7,50 @@
 namespace ptk::components
 {
 
-    Heartbeat::Heartbeat() : context_(nullptr), count_(0) {}
+    Heartbeat::Heartbeat(const rclcpp::NodeOptions &options)
+        : ComponentInterface("heartbeat", options),
+          context_(nullptr),
+          count_(0) {}
 
     core::Status Heartbeat::Init(core::RuntimeContext *context)
     {
       if (context == nullptr)
       {
         return core::Status(core::StatusCode::kInvalidArgument, "Context is null");
-      }
-      context_ = context;
+  }
+  context_ = context;
       return core::Status::Ok();
-    }
+}
 
     core::Status Heartbeat::Start()
     {
-      count_ = 0;
-      context_->LogInfo("Heartbeat started.");
+  count_ = 0;
+  context_->LogInfo("Heartbeat started.");
       return core::Status::Ok();
-    }
+}
 
     core::Status Heartbeat::Stop()
     {
-      std::string msg =
-          "Heartbeat stopped at count: " + std::to_string(count_);
-      context_->LogInfo(msg.c_str());
+      if (context_) {
+  std::string msg =
+      "Heartbeat stopped at count: " + std::to_string(count_);
+  context_->LogInfo(msg.c_str());
+      }
       return core::Status::Ok();
-    }
+}
 
     void Heartbeat::Tick()
     {
-      ++count_;
+  ++count_;
       if (count_ % 5 == 0)
       {
-        std::string msg =
-            "Heartbeat tick: " + std::to_string(count_);
-        context_->LogInfo(msg.c_str());
-      }
-    }
+    std::string msg =
+        "Heartbeat tick: " + std::to_string(count_);
+    context_->LogInfo(msg.c_str());
+  }
+}
 
 } // namespace ptk::components
+
+#include <rclcpp_components/register_node_macro.hpp>
+RCLCPP_COMPONENTS_REGISTER_NODE(ptk::components::Heartbeat)

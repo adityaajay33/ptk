@@ -1,7 +1,5 @@
 tests
 
-build
-
 src/apps
 
 .vscode
@@ -9,3 +7,29 @@ src/apps
 memory_alloc.md
 
 sets/
+
+*.json
+
+# Build artifacts
+build/
+install/
+log/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Compiled files
+*.o
+*.so
+*.a
+*.dylib
+
+# Test output files
+tensor_output.txt
+captured_frame.png

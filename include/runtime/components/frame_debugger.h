@@ -9,7 +9,7 @@ namespace ptk::components
 {    class FrameDebugger : public ComponentInterface
     {
     public:
-      FrameDebugger();
+      explicit FrameDebugger(const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
       ~FrameDebugger() override = default;
 
       // The pipeline or app calls this to connect a Frame source.

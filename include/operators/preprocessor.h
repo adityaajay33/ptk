@@ -29,7 +29,7 @@ namespace ptk {
 
     class Preprocessor : public components::ComponentInterface {
         public:
-            explicit Preprocessor(const PreprocessorConfig& config);
+            explicit Preprocessor(const rclcpp::NodeOptions& options = rclcpp::NodeOptions());
             ~Preprocessor() override = default;
 
             void BindInput(core::InputPort<data::Frame>* in);

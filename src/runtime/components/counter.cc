@@ -4,7 +4,10 @@
 namespace ptk::components
 {
 
-        Counter::Counter() : context_(nullptr), count_(0) {}
+        Counter::Counter(const rclcpp::NodeOptions &options)
+            : ComponentInterface("counter", options),
+              context_(nullptr),
+              count_(0) {}
 
         core::Status Counter::Init(core::RuntimeContext *context)
         {
@@ -25,7 +28,9 @@ namespace ptk::components
 
         core::Status Counter::Stop()
         {
-            context_->LogInfo("Counter stopped at count: " + std::to_string(count_));
+            if (context_) {
+                context_->LogInfo("Counter stopped at count: " + std::to_string(count_));
+            }
             return core::Status::Ok();
         }
 
@@ -41,3 +46,6 @@ namespace ptk::components
         }
 
 } // namespace ptk::components
+
+#include <rclcpp_components/register_node_macro.hpp>
+RCLCPP_COMPONENTS_REGISTER_NODE(ptk::components::Counter)

@@ -10,11 +10,18 @@ namespace ptk::sensors
             cv::VideoCapture cap;
         };
 
-        MacCamera::MacCamera(int device_index)
-            : device_index_(device_index),
+        MacCamera::MacCamera(const rclcpp::NodeOptions &options)
+            : CameraInterface("mac_camera", options),
+              device_index_(0),
               is_running_(false),
               frame_index_(0),
-              impl_(new Impl()) {}
+              impl_(new Impl()),
+              output_(nullptr)
+        {
+            // Load device index from ROS parameter
+            this->declare_parameter("device_index", 0);
+            device_index_ = this->get_parameter("device_index").as_int();
+        }
 
         MacCamera::~MacCamera()
         {
@@ -110,10 +117,51 @@ namespace ptk::sensors
             return core::Status::Ok();
         }
 
+        void MacCamera::BindOutput(core::OutputPort<data::Frame>* out)
+        {
+            output_ = out;
+        }
+
         void MacCamera::Tick()
         {
-            ptk::data::Frame frame;
-            GetFrame(&frame);
+            if (!is_running_ || output_ == nullptr || !output_->is_bound()) {
+                return;
+            }
+            
+            data::Frame* out = output_->get();
+            if (out == nullptr) {
+                return;
+            }
+            
+            cv::Mat img;
+            if (!impl_->cap.read(img)) {
+                return;
+            }
+            
+            cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
+            
+            int H = img.rows;
+            int W = img.cols;
+            int C = img.channels();
+            size_t num_bytes = static_cast<size_t>(H * W * C);
+            
+            frame_buffer_.resize(num_bytes);
+            std::memcpy(frame_buffer_.data(), img.data, num_bytes);
+            
+            out->image = ptk::data::TensorView(
+                ptk::data::BufferView(frame_buffer_.data(), num_bytes, core::DeviceType::kCpu),
+                core::DataType::kUint8,
+                ptk::data::TensorShape({H, W, C})
+            );
+            
+            out->pixel_format = core::PixelFormat::kRgb8;
+            out->layout = core::TensorLayout::kHwc;
+            out->frame_index = frame_index_++;
+            out->timestamp_ns = 0;
+            out->camera_id = device_index_;
         }
 
 } // namespace ptk::sensors
+
+#include <rclcpp_components/register_node_macro.hpp>
+RCLCPP_COMPONENTS_REGISTER_NODE(ptk::sensors::MacCamera)

@@ -1,100 +1,150 @@
 #include "operators/preprocessor.h"
-#include "operators/hwc_to_chw.h"
-#include "operators/chw_to_hwc.h"
 #include "operators/cast_uint8_to_float32.h"
-#include "operators/cast_float32_to_uint8.h"
-#include "operators/normalize.h"
-#include "operators/rgb_to_gray.h"
-#include "operators/rgb_to_bgr.h"
-#include "operators/bgr_to_rgb.h"
-#include "operators/pad_to_size.h"
-#include "operators/center_crop.h"
-#include "operators/add_batch_dim.h"
 #include "runtime/core/runtime_context.h"
 #include "runtime/core/status.h"
 
-namespace ptk {
+namespace ptk
+{
 
-Preprocessor::Preprocessor(const PreprocessorConfig& config)
-    : context_(nullptr),
-      input_(nullptr),
-      output_(nullptr),
-      config_(config),
-      float_buffer_(),
-      uint8_temp_(),
-      output_frame_() {}
+    Preprocessor::Preprocessor(const rclcpp::NodeOptions &options)
+        : ComponentInterface("preprocessor", options),
+          context_(nullptr),
+          input_(nullptr),
+          output_(nullptr),
+          config_(),
+          float_buffer_(),
+          uint8_temp_(),
+          output_frame_()
+    {
+        // Declare ROS parameters for configuration
+        this->declare_parameter("target_height", 224);
+        this->declare_parameter("target_width", 224);
+        this->declare_parameter("normalize", true);
+        this->declare_parameter("add_batch_dimension", false);
+        this->declare_parameter("to_grayscale", false);
+        this->declare_parameter("convert_rgb_to_bgr", false);
+        
+        // Load configuration from ROS parameters
+        config_.target_height = this->get_parameter("target_height").as_int();
+        config_.target_width = this->get_parameter("target_width").as_int();
+        config_.normalize = this->get_parameter("normalize").as_bool();
+        config_.add_batch_dimension = this->get_parameter("add_batch_dimension").as_bool();
+        config_.to_grayscale = this->get_parameter("to_grayscale").as_bool();
+        config_.convert_rgb_to_bgr = this->get_parameter("convert_rgb_to_bgr").as_bool();
+        
+        // Set reasonable defaults for other config fields
+        config_.input_layout = core::TensorLayout::kHwc;
+        config_.input_format = core::PixelFormat::kRgb8;
+        config_.input_type = core::DataType::kUint8;
+        config_.output_layout = core::TensorLayout::kHwc;
+        config_.output_format = core::PixelFormat::kRgb8;
+        config_.output_type = core::DataType::kFloat32;
+        
+        // Default normalization params (ImageNet)
+        config_.norm.mean[0] = 0.485f;
+        config_.norm.mean[1] = 0.456f;
+        config_.norm.mean[2] = 0.406f;
+        config_.norm.std[0] = 0.229f;
+        config_.norm.std[1] = 0.224f;
+        config_.norm.std[2] = 0.225f;
+        config_.norm.num_channels = 3;
+    }
 
-core::Status Preprocessor::Init(core::RuntimeContext* context) {
-  if (context == nullptr) {
-    return core::Status(core::StatusCode::kInvalidArgument, "Context is null");
-  }
-  context_ = context;
-  return core::Status::Ok();
-}
+    void Preprocessor::BindInput(core::InputPort<data::Frame>* in)
+    {
+        input_ = in;
+    }
 
-core::Status Preprocessor::Start() {
-  if (input_ == nullptr || !input_->is_bound() ||
-      output_ == nullptr || !output_->is_bound()) {
-    return core::Status(
-        core::StatusCode::kFailedPrecondition,
-        "Preprocessor ports not bound");
-  }
-  return core::Status::Ok();
-}
+    void Preprocessor::BindOutput(core::OutputPort<data::Frame>* out)
+    {
+        output_ = out;
+    }
 
-core::Status Preprocessor::Stop() {
-  return core::Status::Ok();
-}
+    core::Status Preprocessor::Init(core::RuntimeContext *context)
+    {
+        if (context == nullptr)
+        {
+            return core::Status(core::StatusCode::kInvalidArgument, "Context is null");
+        }
+        context_ = context;
+        return core::Status::Ok();
+    }
 
-void Preprocessor::Tick() {
-  if (context_ == nullptr) {
-    return;
-  }
-  if (input_ == nullptr || !input_->is_bound()) {
-    context_->LogError("Preprocessor: input port not bound");
-    return;
-  }
-  if (output_ == nullptr || !output_->is_bound()) {
-    context_->LogError("Preprocessor: output port not bound");
-    return;
-  }
+    core::Status Preprocessor::Start()
+    {
+        if (input_ == nullptr || !input_->is_bound() ||
+            output_ == nullptr || !output_->is_bound())
+        {
+            return core::Status(
+                core::StatusCode::kFailedPrecondition,
+                "Preprocessor ports not bound");
+        }
+        return core::Status::Ok();
+    }
 
-  const data::Frame* in = input_->get();
-  data::Frame* out = output_->get();
+    core::Status Preprocessor::Stop()
+    {
+        return core::Status::Ok();
+    }
 
-  if (in == nullptr || out == nullptr) {
-    context_->LogError("Preprocessor: null frame from port");
-    return;
-  }
+    void Preprocessor::Tick()
+    {
+        if (context_ == nullptr)
+        {
+            return;
+        }
+        if (input_ == nullptr || !input_->is_bound())
+        {
+            context_->LogError("Preprocessor: input port not bound");
+            return;
+        }
+        if (output_ == nullptr || !output_->is_bound())
+        {
+            context_->LogError("Preprocessor: output port not bound");
+            return;
+        }
 
-  // Copy basic metadata.
-  out->frame_index = in->frame_index;
-  out->timestamp_ns = in->timestamp_ns;
-  out->camera_id = in->camera_id;
-  out->pixel_format = in->pixel_format;
+        const data::Frame *in = input_->get();
+        data::Frame *out = output_->get();
 
-  // Your Frame::image is a plain TensorView, not optional.
-  // Use TensorView::empty() to check validity.
-  if (in->image.empty()) {
-    context_->LogError("Preprocessor: input frame has empty image tensor");
-    return;
-  }
-  if (out->image.empty()) {
-    context_->LogError("Preprocessor: output frame has empty image tensor");
-    return;
-  }
+        if (in == nullptr || out == nullptr)
+        {
+            context_->LogError("Preprocessor: null frame from port");
+            return;
+        }
 
-  const data::TensorView& src = in->image;
-  data::TensorView& dst = out->image;
+        // Copy basic metadata.
+        out->frame_index = in->frame_index;
+        out->timestamp_ns = in->timestamp_ns;
+        out->camera_id = in->camera_id;
+        out->pixel_format = in->pixel_format;
 
-  // For now: simple uint8 -> float32 cast.
-  core::Status s = operators::CastUint8ToFloat32(src, &dst);
-  if (!s.ok()) {
-    context_->LogError("Preprocessor: CastUint8ToFloat32 failed");
-    return;
-  }
+        // Your Frame::image is a plain TensorView, not optional.
+        // Use TensorView::empty() to check validity.
+        if (in->image.empty())
+        {
+            context_->LogError("Preprocessor: input frame has empty image tensor");
+            return;
+        }
+        if (out->image.empty())
+        {
+            context_->LogError("Preprocessor: output frame has empty image tensor");
+            return;
+        }
 
-}
+        const data::TensorView &src = in->image;
+        data::TensorView &dst = out->image;
 
-}  // namespace ptk
+        // For now: simple uint8 -> float32 cast.
+        core::Status s = operators::CastUint8ToFloat32(src, &dst);
+        if (!s.ok())
+        {
+            context_->LogError("Preprocessor: CastUint8ToFloat32 failed");
+            return;
+        }
+    }
 
+} // namespace ptk
+
+#include <rclcpp_components/register_node_macro.hpp>
+RCLCPP_COMPONENTS_REGISTER_NODE(ptk::Preprocessor)

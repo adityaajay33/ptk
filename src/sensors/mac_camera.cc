@@ -15,7 +15,8 @@ namespace ptk::sensors
               device_index_(0),
               is_running_(false),
               frame_index_(0),
-              impl_(new Impl())
+              impl_(new Impl()),
+              output_(nullptr)
         {
             // Load device index from ROS parameter
             this->declare_parameter("device_index", 0);
@@ -116,11 +117,48 @@ namespace ptk::sensors
             return core::Status::Ok();
         }
 
+        void MacCamera::BindOutput(core::OutputPort<data::Frame>* out)
+        {
+            output_ = out;
+        }
+
         void MacCamera::Tick()
         {
-            // Tick method for scheduler integration
-            // In a real implementation, this could trigger frame capture
-            // or other periodic operations
+            if (!is_running_ || output_ == nullptr || !output_->is_bound()) {
+                return;
+            }
+            
+            data::Frame* out = output_->get();
+            if (out == nullptr) {
+                return;
+            }
+            
+            cv::Mat img;
+            if (!impl_->cap.read(img)) {
+                return;
+            }
+            
+            cv::cvtColor(img, img, cv::COLOR_BGR2RGB);
+            
+            int H = img.rows;
+            int W = img.cols;
+            int C = img.channels();
+            size_t num_bytes = static_cast<size_t>(H * W * C);
+            
+            frame_buffer_.resize(num_bytes);
+            std::memcpy(frame_buffer_.data(), img.data, num_bytes);
+            
+            out->image = ptk::data::TensorView(
+                ptk::data::BufferView(frame_buffer_.data(), num_bytes, core::DeviceType::kCpu),
+                core::DataType::kUint8,
+                ptk::data::TensorShape({H, W, C})
+            );
+            
+            out->pixel_format = core::PixelFormat::kRgb8;
+            out->layout = core::TensorLayout::kHwc;
+            out->frame_index = frame_index_++;
+            out->timestamp_ns = 0;
+            out->camera_id = device_index_;
         }
 
 } // namespace ptk::sensors

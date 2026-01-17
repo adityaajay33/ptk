@@ -91,10 +91,18 @@ rclcpp_components_register_node(ptk
     EXECUTABLE preprocessor_node
 )
 
-# Build test app
+# Build test apps
 add_executable(test_camera src/apps/test_camera.cc)
 target_link_libraries(test_camera ptk ${OpenCV_LIBS})
 ament_target_dependencies(test_camera rclcpp)
+
+add_executable(test_pipeline src/apps/test_pipeline.cc)
+target_link_libraries(test_pipeline ptk ${OpenCV_LIBS})
+ament_target_dependencies(test_pipeline rclcpp)
+
+add_executable(test_pipeline_synthetic src/apps/test_pipeline_synthetic.cc)
+target_link_libraries(test_pipeline_synthetic ptk ${OpenCV_LIBS})
+ament_target_dependencies(test_pipeline_synthetic rclcpp)
 
 # Install
 install(TARGETS ptk
@@ -103,7 +111,7 @@ install(TARGETS ptk
     RUNTIME DESTINATION bin
 )
 
-install(TARGETS test_camera
+install(TARGETS test_camera test_pipeline test_pipeline_synthetic
     DESTINATION lib/${PROJECT_NAME}
 )
 

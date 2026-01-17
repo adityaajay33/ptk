@@ -29,3 +29,7 @@ Thumbs.db
 *.so
 *.a
 *.dylib
+
+# Test output files
+tensor_output.txt
+captured_frame.png

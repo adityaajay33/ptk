@@ -65,8 +65,37 @@ namespace ptk::components
             return;
         }
 
+        // Generate synthetic 640x480 RGB image
+        const int H = 480;
+        const int W = 640;
+        const int C = 3;
+        const size_t num_bytes = H * W * C;
+        
+        // Resize buffer if needed
+        frame_buffer_.resize(num_bytes);
+        
+        // Generate test pattern (gradient + frame counter)
+        for (int y = 0; y < H; y++) {
+            for (int x = 0; x < W; x++) {
+                int idx = (y * W + x) * C;
+                frame_buffer_[idx + 0] = (x * 255) / W;  // R gradient horizontal
+                frame_buffer_[idx + 1] = (y * 255) / H;  // G gradient vertical
+                frame_buffer_[idx + 2] = (frame_index_ * 10) % 256;  // B changes with frame
+            }
+        }
+        
+        // Create TensorView pointing to persistent buffer
+        frame->image = data::TensorView(
+            data::BufferView(frame_buffer_.data(), num_bytes, core::DeviceType::kCpu),
+            core::DataType::kUint8,
+            data::TensorShape({H, W, C})
+        );
+        
+        frame->pixel_format = core::PixelFormat::kRgb8;
+        frame->layout = core::TensorLayout::kHwc;
         frame->frame_index = frame_index_++;
         frame->timestamp_ns = context_->NowNanoseconds();
+        frame->camera_id = -1;  // Synthetic camera
     }
 
 } // namespace ptk::components

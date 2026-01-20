@@ -37,6 +37,7 @@ cd ptk
 docker-compose build
 
 # Run synthetic camera test
+```bash
 docker-compose run --rm -v $(pwd):/output ptk bash -c \
   "cd /ros2_ws && source install/setup.bash && \
    ros2 run ptk test_pipeline_synthetic && \

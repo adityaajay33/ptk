@@ -12,24 +12,20 @@
 namespace ptk::engine
 {
 
-    // Tensor metadata for engine operations
     struct TensorMetadata
     {
-        std::string name;              // Tensor name (e.g., "input_ids")
-        size_t binding_index = 0;      // Backend-specific binding index
-        bool is_input = false;         // Is this an input tensor?
-        bool is_output = false;        // Is this an output tensor?
-        bool is_dynamic_shape = false; // Does shape change at runtime?
-        std::vector<size_t> min_dims;  // Minimum dimensions (for dynamic shapes)
-        std::vector<size_t> max_dims;  // Maximum dimensions (for dynamic shapes)
+        std::string name;          
+        size_t binding_index = 0;     
+        bool is_input = false;        
+        bool is_output = false;       
+        bool is_dynamic_shape = false; 
+        std::vector<size_t> min_dims;  
+        std::vector<size_t> max_dims;  
     };
 
-    // Unified engine tensor abstraction
-    // Wraps TensorView with engine-specific metadata and utilities
     class EngineTensor
     {
     public:
-        // Constructors
         EngineTensor() = default;
 
         explicit EngineTensor(const data::TensorView &tensor_view);
@@ -37,7 +33,6 @@ namespace ptk::engine
         EngineTensor(const data::TensorView &tensor_view,
                      const TensorMetadata &metadata);
 
-        // Copy and move
         EngineTensor(const EngineTensor &) = default;
         EngineTensor &operator=(const EngineTensor &) = default;
         EngineTensor(EngineTensor &&) = default;
@@ -45,14 +40,12 @@ namespace ptk::engine
 
         ~EngineTensor() = default;
 
-        // Accessors
         const data::TensorView &GetTensorView() const { return tensor_view_; }
         data::TensorView &GetTensorView() { return tensor_view_; }
 
         const TensorMetadata &GetMetadata() const { return metadata_; }
         TensorMetadata &GetMetadata() { return metadata_; }
 
-        // Tensor properties
         const std::string &GetName() const { return metadata_.name; }
         core::DataType GetDataType() const { return tensor_view_.dtype(); }
         const data::TensorShape &GetShape() const { return tensor_view_.shape(); }
@@ -63,36 +56,28 @@ namespace ptk::engine
             return tensor_view_.buffer().device_type();
         }
 
-        // Data access
         void *GetData() { return tensor_view_.buffer().data(); }
         const void *GetData() const { return tensor_view_.buffer().data(); }
 
-        // Metadata checks
         bool IsInput() const { return metadata_.is_input; }
         bool IsOutput() const { return metadata_.is_output; }
         bool HasDynamicShape() const { return metadata_.is_dynamic_shape; }
         size_t GetBindingIndex() const { return metadata_.binding_index; }
 
-        // Shape operations
         core::Status ValidateShape(const data::TensorShape &expected_shape) const;
         core::Status ValidateShape(const std::vector<int64_t> &expected_dims) const;
 
-        // Dynamic shape handling
         core::Status SetDynamicShapeBounds(const std::vector<size_t> &min_dims,
                                            const std::vector<size_t> &max_dims);
 
         core::Status ValidateDynamicShape() const;
 
-        // Type validation
         core::Status ValidateDataType(core::DataType expected_dtype) const;
 
-        // Device validation
         core::Status ValidateDevice(core::DeviceType expected_device) const;
 
-        // Full validation
         core::Status Validate() const;
 
-        // String representation for debugging
         std::string ToString() const;
 
     private:
@@ -100,11 +85,8 @@ namespace ptk::engine
         TensorMetadata metadata_;
     };
 
-    // Type Mapping Utilities
     namespace type_mapping
     {
-
-// ONNX type conversions
 #ifndef __APPLE__
 #include <onnxruntime_cxx_api.h>
 
@@ -147,8 +129,6 @@ namespace ptk::engine
         }
 
 #endif
-
-// TensorRT type conversions
 #ifndef __APPLE__
 #include <NvInfer.h>
 
@@ -195,73 +175,56 @@ namespace ptk::engine
 
     } // namespace type_mapping
 
-    // Shape Inference Helpers
-
     namespace shape_inference
     {
-
-        // Calculate output shape for common operations
         class ShapeCalculator
         {
         public:
-            // Element-wise operation (output shape = input shape)
             static data::TensorShape ElementWise(const data::TensorShape &input);
 
-            // Reshape operation
             static data::TensorShape Reshape(const data::TensorShape &input,
                                              const std::vector<int64_t> &new_shape);
 
-            // Transpose operation
             static data::TensorShape Transpose(const data::TensorShape &input,
                                                const std::vector<int> &perm);
 
-            // Reduce operation (e.g., reduce_mean, reduce_sum)
             static data::TensorShape Reduce(const data::TensorShape &input,
                                             const std::vector<int> &axes,
                                             bool keep_dims = false);
 
-            // Concatenate operation
             static core::Status Concatenate(const std::vector<data::TensorShape> &inputs,
                                             int axis,
                                             data::TensorShape *output);
 
-            // Matrix multiplication
             static core::Status MatMul(const data::TensorShape &lhs,
                                        const data::TensorShape &rhs,
                                        data::TensorShape *output);
 
-            // Broadcasting binary operation
             static core::Status BroadcastBinary(const data::TensorShape &lhs,
                                                 const data::TensorShape &rhs,
                                                 data::TensorShape *output);
 
-            // Flatten operation
             static data::TensorShape Flatten(const data::TensorShape &input,
                                              int start_axis = 0,
                                              int end_axis = -1);
 
-            // Squeeze operation (remove dims of size 1)
             static core::Status Squeeze(const data::TensorShape &input,
                                         const std::vector<int> &axes,
                                         data::TensorShape *output);
 
-            // Unsqueeze operation (add dims of size 1)
             static core::Status Unsqueeze(const data::TensorShape &input,
                                           const std::vector<int> &axes,
                                           data::TensorShape *output);
 
-            // Slice operation
             static data::TensorShape Slice(const data::TensorShape &input,
                                            const std::vector<int> &starts,
                                            const std::vector<int> &ends);
 
-            // Broadcast shape
             static core::Status BroadcastShapes(const data::TensorShape &shape1,
                                                 const data::TensorShape &shape2,
                                                 data::TensorShape *output);
         };
 
-        // Batch size utilities
         inline int GetBatchSize(const data::TensorShape &shape)
         {
             if (shape.rank() > 0)
@@ -284,7 +247,6 @@ namespace ptk::engine
             return 0;
         }
 
-        // Shape validation
         inline bool IsScalar(const data::TensorShape &shape)
         {
             return shape.rank() == 0;
@@ -312,8 +274,6 @@ namespace ptk::engine
 
     } // namespace shape_inference
 
-    // Tensor Batch Operations
-
     class EngineTensorBatch
     {
     public:
@@ -332,13 +292,10 @@ namespace ptk::engine
 
         void Clear() { tensors_.clear(); }
 
-        // Validate all tensors
         core::Status ValidateAll() const;
 
-        // Get all tensor names
         std::vector<std::string> GetNames() const;
 
-        // Get all data types
         std::vector<core::DataType> GetDataTypes() const;
 
     private:

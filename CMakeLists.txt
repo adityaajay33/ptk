@@ -19,6 +19,15 @@ endif()
 
 find_package(OpenCV REQUIRED)
 
+# Find ONNX Runtime (optional for inference)
+find_package(onnxruntime QUIET)
+if(onnxruntime_FOUND)
+    message(STATUS "ONNX Runtime found, enabling inference support")
+    add_definitions(-DPTK_ENABLE_ONNX)
+else()
+    message(STATUS "ONNX Runtime not found, inference will be limited")
+endif()
+
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${OpenCV_INCLUDE_DIRS}
@@ -40,6 +49,8 @@ file(GLOB PTK_SOURCES
     ${PROJECT_SOURCE_DIR}/src/runtime/core/*.cc
     ${PROJECT_SOURCE_DIR}/src/runtime/components/*.cc
     ${PROJECT_SOURCE_DIR}/src/operators/*.cc
+    ${PROJECT_SOURCE_DIR}/src/engines/*.cc
+    ${PROJECT_SOURCE_DIR}/src/tasks/*.cc
 )
 
 # Add memory sources only if CUDA is available
@@ -91,6 +102,11 @@ rclcpp_components_register_node(ptk
     EXECUTABLE preprocessor_node
 )
 
+rclcpp_components_register_node(ptk
+    PLUGIN "ptk::components::InferenceNode"
+    EXECUTABLE inference_node
+)
+
 # Build test apps
 add_executable(test_camera src/apps/test_camera.cc)
 target_link_libraries(test_camera ptk ${OpenCV_LIBS})
@@ -104,6 +120,10 @@ add_executable(test_pipeline_synthetic src/apps/test_pipeline_synthetic.cc)
 target_link_libraries(test_pipeline_synthetic ptk ${OpenCV_LIBS})
 ament_target_dependencies(test_pipeline_synthetic rclcpp)
 
+add_executable(test_inference src/apps/test_inference.cc)
+target_link_libraries(test_inference ptk ${OpenCV_LIBS})
+ament_target_dependencies(test_inference rclcpp)
+
 # Install
 install(TARGETS ptk
     ARCHIVE DESTINATION lib
@@ -111,7 +131,7 @@ install(TARGETS ptk
     RUNTIME DESTINATION bin
 )
 
-install(TARGETS test_camera test_pipeline test_pipeline_synthetic
+install(TARGETS test_camera test_pipeline test_pipeline_synthetic test_inference
     DESTINATION lib/${PROJECT_NAME}
 )
 

@@ -53,7 +53,6 @@ namespace ptk::validation
             }
         }
 
-        // Check output names
         if (actual_outputs.size() != expected_output_names.size())
         {
             return core::Status(core::StatusCode::kInvalidArgument,
@@ -168,9 +167,6 @@ namespace ptk::validation
         return oss.str();
     }
 
-    // ============================================================================
-    // ConfigLogger Implementation
-    // ============================================================================
 
     std::string ConfigLogger::FormatEngineConfig(
         const ptk::perception::EngineConfig &config)
@@ -259,10 +255,6 @@ namespace ptk::validation
         std::cout << FormatEngineConfig(config) << std::flush;
     }
 
-    // ============================================================================
-    // BenchmarkUtility Implementation
-    // ============================================================================
-
     BenchmarkResult BenchmarkUtility::MeasureLatency(
         ptk::perception::Engine *engine,
         const std::vector<data::TensorView> &inputs,
@@ -279,7 +271,6 @@ namespace ptk::validation
 
         std::vector<data::TensorView> outputs;
 
-        // Warmup iterations (not counted)
         for (size_t w = 0; w < warmup_iterations; ++w)
         {
             engine->Infer(inputs, outputs);
@@ -288,7 +279,6 @@ namespace ptk::validation
         std::vector<double> latencies_ms;
         latencies_ms.reserve(num_iterations);
 
-        // Timed iterations
         for (size_t i = 0; i < num_iterations; ++i)
         {
             auto start = std::chrono::high_resolution_clock::now();
@@ -300,7 +290,6 @@ namespace ptk::validation
             latencies_ms.push_back(latency_ms);
         }
 
-        // Calculate statistics
         if (!latencies_ms.empty())
         {
             result.min_latency_ms =

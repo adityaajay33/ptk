@@ -9,7 +9,7 @@ namespace ptk::components
     inline rclcpp::NodeOptions CreateZeroCopyNodeOptions()
     {
         rclcpp::NodeOptions options;
-        options.use_intra_process_comms(true); // Enable zero-copy intra-process
+        options.use_intra_process_comms(true);  // Enable intra-process communication
         return options;
     }
 

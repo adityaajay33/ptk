@@ -34,19 +34,13 @@ namespace ptk::components
     {
         if (output_ == nullptr || !output_->is_bound())
         {
-            return core::Status(core::StatusCode::kFailedPrecondition,
-                        "SyntheticCamera output not bound");
+            return core::Status(core::StatusCode::kFailedPrecondition, "Output not bound");
         }
-        context_->LogInfo("SyntheticCamera started.");
         return core::Status::Ok();
     }
 
     core::Status SyntheticCamera::Stop()
     {
-        if (context_)
-        {
-        context_->LogInfo("SyntheticCamera stopped.");
-    }
         return core::Status::Ok();
     }
 
@@ -54,14 +48,14 @@ namespace ptk::components
     {
         if (output_ == nullptr || !output_->is_bound())
         {
-            context_->LogError("SyntheticCamera Tick with unbound output.");
+            context_->LogError("Unbound output");
             return;
         }
 
         data::Frame *frame = output_->get();
         if (frame == nullptr)
         {
-            context_->LogError("SyntheticCamera Tick with null frame.");
+            context_->LogError("Null frame");
             return;
         }
 

@@ -22,27 +22,17 @@ namespace ptk::components
         core::Status Counter::Start()
         {
             count_ = 0;
-            context_->LogInfo("Counter started.");
             return core::Status::Ok();
         }
 
         core::Status Counter::Stop()
         {
-            if (context_) {
-                context_->LogInfo("Counter stopped at count: " + std::to_string(count_));
-            }
             return core::Status::Ok();
         }
 
         void Counter::Tick()
         {
             ++count_;
-            if (count_ % 10 == 0)
-            {
-                const std::string msg =
-                    "Counter reached " + std::to_string(count_) + " ticks.";
-                context_->LogInfo(msg.c_str());
-            }
         }
 
 } // namespace ptk::components

@@ -9,6 +9,8 @@
 #include "runtime/core/status.h"
 #include "runtime/data/tensor.h"
 
+//primarily used for cuda operations - save for now
+
 namespace ptk::memory
 {
 

@@ -7,215 +7,201 @@
 #include <chrono>
 #include <memory>
 
-namespace ptk::core {
+namespace ptk::core
+{
 
-// ============================================================================
-// Extended Status Codes for Inference Engines
-// ============================================================================
+    enum class EngineErrorCode
+    {
+        kOk = 0,
 
-enum class EngineErrorCode {
-    // Success
-    kOk = 0,
-    
-    // Model Loading Errors
-    kModelNotFound = 100,
-    kModelLoadFailed = 101,
-    kModelInvalid = 102,
-    kUnsupportedModelFormat = 103,
-    
-    // Execution Provider Errors
-    kExecutionProviderNotAvailable = 200,
-    kExecutionProviderInitFailed = 201,
-    kCudaNotAvailable = 202,
-    kTensorRTNotAvailable = 203,
-    
-    // Tensor/Shape Errors
-    kShapeMismatch = 300,
-    kNameMismatch = 301,
-    kTypeMismatch = 302,
-    kDimensionMismatch = 303,
-    
-    // Inference Errors
-    kInferenceFailed = 400,
-    kInferenceTimeout = 401,
-    kMemoryAllocationFailed = 402,
-    kDeviceMemoryFull = 403,
-    kSessionNotLoaded = 404,
-    
-    // Configuration Errors
-    kInvalidConfig = 500,
-    kConfigConflict = 501,
-    kUnsupportedConfig = 502,
-    
-    // Generic/Unknown
-    kInternalError = 600,
-    kUnknownError = 601
-};
+        kModelNotFound = 100,
+        kModelLoadFailed = 101,
+        kModelInvalid = 102,
+        kUnsupportedModelFormat = 103,
 
-// ============================================================================
-// Log Levels
-// ============================================================================
+        kExecutionProviderNotAvailable = 200,
+        kExecutionProviderInitFailed = 201,
+        kCudaNotAvailable = 202,
+        kTensorRTNotAvailable = 203,
 
-enum class LogLevel {
-    kDebug = 0,
-    kInfo = 1,
-    kWarn = 2,
-    kError = 3,
-    kCritical = 4,
-    kSilent = 5
-};
+        kShapeMismatch = 300,
+        kNameMismatch = 301,
+        kTypeMismatch = 302,
+        kDimensionMismatch = 303,
 
-// ============================================================================
-// Logger Interface
-// ============================================================================
+        kInferenceFailed = 400,
+        kInferenceTimeout = 401,
+        kMemoryAllocationFailed = 402,
+        kDeviceMemoryFull = 403,
+        kSessionNotLoaded = 404,
 
-class Logger {
-public:
-    virtual ~Logger() = default;
+        kInvalidConfig = 500,
+        kConfigConflict = 501,
+        kUnsupportedConfig = 502,
 
-    // Log a message with level
-    virtual void Log(LogLevel level, const std::string& category,
-                     const std::string& message) = 0;
+        kInternalError = 600,
+        kUnknownError = 601
+    };
 
-    // Convenience methods
-    void Debug(const std::string& category, const std::string& msg) {
-        Log(LogLevel::kDebug, category, msg);
-    }
-    void Info(const std::string& category, const std::string& msg) {
-        Log(LogLevel::kInfo, category, msg);
-    }
-    void Warn(const std::string& category, const std::string& msg) {
-        Log(LogLevel::kWarn, category, msg);
-    }
-    void Error(const std::string& category, const std::string& msg) {
-        Log(LogLevel::kError, category, msg);
-    }
-    void Critical(const std::string& category, const std::string& msg) {
-        Log(LogLevel::kCritical, category, msg);
-    }
+    enum class LogLevel
+    {
+        kDebug = 0,
+        kInfo = 1,
+        kWarn = 2,
+        kError = 3,
+        kCritical = 4,
+        kSilent = 5
+    };
 
-    // Set log level
-    virtual void SetLogLevel(LogLevel level) = 0;
-    virtual LogLevel GetLogLevel() const = 0;
+    class Logger
+    {
+    public:
+        virtual ~Logger() = default;
 
-    // Enable/disable colors (for console output)
-    virtual void SetColorEnabled(bool enabled) = 0;
-};
+        // Log a message with level
+        virtual void Log(LogLevel level, const std::string &category,
+                         const std::string &message) = 0;
 
-// ============================================================================
-// Console Logger Implementation
-// ============================================================================
+        // Convenience methods
+        void Debug(const std::string &category, const std::string &msg)
+        {
+            Log(LogLevel::kDebug, category, msg);
+        }
+        void Info(const std::string &category, const std::string &msg)
+        {
+            Log(LogLevel::kInfo, category, msg);
+        }
+        void Warn(const std::string &category, const std::string &msg)
+        {
+            Log(LogLevel::kWarn, category, msg);
+        }
+        void Error(const std::string &category, const std::string &msg)
+        {
+            Log(LogLevel::kError, category, msg);
+        }
+        void Critical(const std::string &category, const std::string &msg)
+        {
+            Log(LogLevel::kCritical, category, msg);
+        }
 
-class ConsoleLogger : public Logger {
-public:
-    explicit ConsoleLogger(LogLevel min_level = LogLevel::kInfo);
-    ~ConsoleLogger() override = default;
+        // Set log level
+        virtual void SetLogLevel(LogLevel level) = 0;
+        virtual LogLevel GetLogLevel() const = 0;
 
-    void Log(LogLevel level, const std::string& category,
-             const std::string& message) override;
+        // Enable/disable colors (for console output)
+        virtual void SetColorEnabled(bool enabled) = 0;
+    };
 
-    void SetLogLevel(LogLevel level) override { min_level_ = level; }
-    LogLevel GetLogLevel() const override { return min_level_; }
+    class ConsoleLogger : public Logger
+    {
+    public:
+        explicit ConsoleLogger(LogLevel min_level = LogLevel::kInfo);
+        ~ConsoleLogger() override = default;
 
-    void SetColorEnabled(bool enabled) override { use_colors_ = enabled; }
+        void Log(LogLevel level, const std::string &category,
+                 const std::string &message) override;
 
-private:
-    LogLevel min_level_;
-    bool use_colors_;
+        void SetLogLevel(LogLevel level) override { min_level_ = level; }
+        LogLevel GetLogLevel() const override { return min_level_; }
 
-    std::string GetLevelString(LogLevel level) const;
-    std::string GetColorCode(LogLevel level) const;
-    std::string GetResetCode() const;
-    std::string GetTimestamp() const;
-};
+        void SetColorEnabled(bool enabled) override { use_colors_ = enabled; }
 
-// ============================================================================
-// Global Logger Management
-// ============================================================================
+    private:
+        LogLevel min_level_;
+        bool use_colors_;
 
-class LoggerManager {
-public:
-    static LoggerManager& GetInstance();
+        std::string GetLevelString(LogLevel level) const;
+        std::string GetColorCode(LogLevel level) const;
+        std::string GetResetCode() const;
+        std::string GetTimestamp() const;
+    };
 
-    // Set the global logger
-    static void SetLogger(std::shared_ptr<Logger> logger);
+    class LoggerManager
+    {
+    public:
+        static LoggerManager &GetInstance();
 
-    // Get the global logger
-    static std::shared_ptr<Logger> GetLogger();
+        // Set the global logger
+        static void SetLogger(std::shared_ptr<Logger> logger);
 
-    // Quick logging
-    static void Log(LogLevel level, const std::string& category,
-                    const std::string& message);
+        // Get the global logger
+        static std::shared_ptr<Logger> GetLogger();
 
-    static void Debug(const std::string& category, const std::string& msg);
-    static void Info(const std::string& category, const std::string& msg);
-    static void Warn(const std::string& category, const std::string& msg);
-    static void Error(const std::string& category, const std::string& msg);
-    static void Critical(const std::string& category, const std::string& msg);
+        // Quick logging
+        static void Log(LogLevel level, const std::string &category,
+                        const std::string &message);
 
-    // Set global minimum log level
-    static void SetGlobalLogLevel(LogLevel level);
+        static void Debug(const std::string &category, const std::string &msg);
+        static void Info(const std::string &category, const std::string &msg);
+        static void Warn(const std::string &category, const std::string &msg);
+        static void Error(const std::string &category, const std::string &msg);
+        static void Critical(const std::string &category, const std::string &msg);
 
-private:
-    LoggerManager();
-    static std::shared_ptr<Logger> global_logger_;
-};
+        // Set global minimum log level
+        static void SetGlobalLogLevel(LogLevel level);
 
-// ============================================================================
-// Extended Status Class with Error Codes
-// ============================================================================
+    private:
+        LoggerManager();
+        static std::shared_ptr<Logger> global_logger_;
+    };
 
-class EngineStatus {
-public:
-    EngineStatus() : code_(StatusCode::kOk), error_code_(EngineErrorCode::kOk) {}
-    
-    EngineStatus(StatusCode code, const std::string& message)
-        : code_(code), message_(message), error_code_(EngineErrorCode::kOk) {}
-    
-    EngineStatus(EngineErrorCode error_code, const std::string& message)
-        : code_(error_code == EngineErrorCode::kOk ? StatusCode::kOk
-                                                      : StatusCode::kInternal),
-          message_(message),
-          error_code_(error_code) {}
+    class EngineStatus
+    {
+    public:
+        EngineStatus() : code_(StatusCode::kOk), error_code_(EngineErrorCode::kOk) {}
 
-    static EngineStatus Ok() { return EngineStatus(); }
-    
-    static EngineStatus ModelNotFound(const std::string& path) {
-        return EngineStatus(EngineErrorCode::kModelNotFound,
-                           "Model not found: " + path);
-    }
-    
-    static EngineStatus ModelLoadFailed(const std::string& reason) {
-        return EngineStatus(EngineErrorCode::kModelLoadFailed,
-                           "Failed to load model: " + reason);
-    }
-    
-    static EngineStatus ShapeMismatch(const std::string& expected,
-                                      const std::string& actual) {
-        return EngineStatus(EngineErrorCode::kShapeMismatch,
-                           "Shape mismatch - expected: " + expected +
-                               ", got: " + actual);
-    }
-    
-    static EngineStatus ExecutionProviderNotAvailable(const std::string& ep) {
-        return EngineStatus(EngineErrorCode::kExecutionProviderNotAvailable,
-                           "Execution provider not available: " + ep);
-    }
-    
-    static EngineStatus InferenceFailed(const std::string& reason) {
-        return EngineStatus(EngineErrorCode::kInferenceFailed,
-                           "Inference failed: " + reason);
-    }
+        EngineStatus(StatusCode code, const std::string &message)
+            : code_(code), message_(message), error_code_(EngineErrorCode::kOk) {}
 
-    bool ok() const { return code_ == StatusCode::kOk; }
-    StatusCode code() const { return code_; }
-    EngineErrorCode error_code() const { return error_code_; }
-    const std::string& message() const { return message_; }
+        EngineStatus(EngineErrorCode error_code, const std::string &message)
+            : code_(error_code == EngineErrorCode::kOk ? StatusCode::kOk
+                                                       : StatusCode::kInternal),
+              message_(message),
+              error_code_(error_code) {}
 
-private:
-    StatusCode code_;
-    std::string message_;
-    EngineErrorCode error_code_;
-};
+        static EngineStatus Ok() { return EngineStatus(); }
 
-}  // namespace ptk::core
+        static EngineStatus ModelNotFound(const std::string &path)
+        {
+            return EngineStatus(EngineErrorCode::kModelNotFound,
+                                "Model not found: " + path);
+        }
+
+        static EngineStatus ModelLoadFailed(const std::string &reason)
+        {
+            return EngineStatus(EngineErrorCode::kModelLoadFailed,
+                                "Failed to load model: " + reason);
+        }
+
+        static EngineStatus ShapeMismatch(const std::string &expected,
+                                          const std::string &actual)
+        {
+            return EngineStatus(EngineErrorCode::kShapeMismatch,
+                                "Shape mismatch - expected: " + expected +
+                                    ", got: " + actual);
+        }
+
+        static EngineStatus ExecutionProviderNotAvailable(const std::string &ep)
+        {
+            return EngineStatus(EngineErrorCode::kExecutionProviderNotAvailable,
+                                "Execution provider not available: " + ep);
+        }
+
+        static EngineStatus InferenceFailed(const std::string &reason)
+        {
+            return EngineStatus(EngineErrorCode::kInferenceFailed,
+                                "Inference failed: " + reason);
+        }
+
+        bool ok() const { return code_ == StatusCode::kOk; }
+        StatusCode code() const { return code_; }
+        EngineErrorCode error_code() const { return error_code_; }
+        const std::string &message() const { return message_; }
+
+    private:
+        StatusCode code_;
+        std::string message_;
+        EngineErrorCode error_code_;
+    };
+
+} // namespace ptk::core

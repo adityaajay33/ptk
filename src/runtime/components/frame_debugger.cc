@@ -40,20 +40,13 @@ namespace ptk::components
     if (input_ == nullptr || !input_->is_bound())
     {
       return core::Status(core::StatusCode::kFailedPrecondition,
-                          "FrameDebugger input not bound");
+                          "Input not bound");
     }
-    context_->LogInfo("FrameDebugger started.");
     return core::Status::Ok();
   }
 
   core::Status FrameDebugger::Stop()
   {
-    if (context_)
-    {
-      std::string msg = "FrameDebugger stopped after " +
-                        std::to_string(tick_count_) + " ticks.";
-      context_->LogInfo(msg.c_str());
-    }
     return core::Status::Ok();
   }
 
@@ -63,39 +56,25 @@ namespace ptk::components
 
     if (input_ == nullptr || !input_->is_bound())
     {
-      context_->LogError("FrameDebugger Tick with unbound input.");
+      context_->LogError("Unbound input");
       return;
     }
 
     const data::Frame *frame = input_->get();
     if (frame == nullptr)
     {
-      context_->LogError("FrameDebugger Tick with null frame.");
+      context_->LogError("Null frame");
       return;
     }
 
-    // Direct member access, since Frame is a struct.
     const data::TensorView &image = frame->image;
     const data::TensorShape &shape = image.shape();
 
     if (shape.rank() != 3)
     {
-      context_->LogError("FrameDebugger expected HxWxC image.");
+      context_->LogError("Invalid image shape");
       return;
     }
-
-    int64_t height = shape.dim(0);
-    int64_t width = shape.dim(1);
-    int64_t channels = shape.dim(2);
-
-    std::string msg = "FrameDebugger tick " +
-                      std::to_string(tick_count_) +
-                      ", size = " +
-                      std::to_string(width) + "x" +
-                      std::to_string(height) +
-                      ", channels = " +
-                      std::to_string(channels);
-    context_->LogInfo(msg.c_str());
   }
 
 } // namespace ptk::components

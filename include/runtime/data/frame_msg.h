@@ -14,11 +14,9 @@ struct FrameMsg {
     // Owned buffer data (for zero-copy transfer)
     std::vector<uint8_t> buffer_data;
     
-    // Tensor metadata
     TensorShape shape;
     core::DataType dtype;
     
-    // Frame metadata
     core::PixelFormat pixel_format;
     core::TensorLayout layout;
     int64_t timestamp_ns;

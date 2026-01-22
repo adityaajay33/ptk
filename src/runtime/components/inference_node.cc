@@ -166,13 +166,9 @@ namespace ptk::components
                 class_labels,
                 tasks::CoordinateSystem::kImagePixels);
         }
-        else if (task_type_ == "segmentation")
-        {
-            return core::Status(core::StatusCode::kUnimplemented,
-                                "Segmentation task not yet implemented");
-        }
         else
         {
+            // segmentation currenlty invalid
             return core::Status(core::StatusCode::kInvalidArgument,
                                 "Unsupported task type: " + task_type_);
         }
@@ -188,11 +184,11 @@ namespace ptk::components
                                 "Engine not created. Call CreateEngine() first.");
         }
 
-        auto status = engine_->Load(model_path_);
-        if (!status.ok())
+        auto engine_status = engine_->Load(model_path_);
+        if (!engine_status.ok())
         {
-            RCLCPP_ERROR(this->get_logger(), "Model load failed: %s", status.message().c_str());
-            return status;
+            RCLCPP_ERROR(this->get_logger(), "Model load failed: %s", engine_status.message().c_str());
+            return core::Status(engine_status.code(), engine_status.message());
         }
 
         return core::Status::Ok();
@@ -259,12 +255,18 @@ namespace ptk::components
     void InferenceNode::Tick()
     {
         // Read input frame from port
-        if (!input_ || !input_->HasData())
+        if (!input_ || !input_->is_bound())
         {
             return;
         }
 
-        const data::Frame &input_frame = input_->Read();
+        const data::Frame *frame_ptr = input_->get();
+        if (!frame_ptr)
+        {
+            return;
+        }
+
+        const data::Frame &input_frame = *frame_ptr;
 
         // Prepare task input
         tasks::TaskInput task_input;
@@ -291,10 +293,10 @@ namespace ptk::components
         auto start_time = std::chrono::high_resolution_clock::now();
 
         std::vector<data::TensorView> raw_outputs;
-        status = engine_->Infer(raw_inputs, raw_outputs);
-        if (!status.ok())
+        auto engine_status = engine_->Infer(raw_inputs, raw_outputs);
+        if (!engine_status.ok())
         {
-            RCLCPP_ERROR(this->get_logger(), "Inference failed: %s", status.message().c_str());
+            RCLCPP_ERROR(this->get_logger(), "Inference failed: %s", engine_status.message().c_str());
             return;
         }
 
@@ -307,8 +309,8 @@ namespace ptk::components
         output_result_.timestamp_ns = input_frame.timestamp_ns;
         output_result_.frame_index = input_frame.frame_index;
         output_result_.inference_time_ms = inference_time_ms;
-        output_result_.original_width = input_frame.image.shape().dims[1];
-        output_result_.original_height = input_frame.image.shape().dims[0];
+        output_result_.original_width = input_frame.image.shape().dims()[1];
+        output_result_.original_height = input_frame.image.shape().dims()[0];
 
         status = task_contract_->PostProcess(raw_outputs, task_input, &output_result_);
         if (!status.ok())
@@ -329,9 +331,9 @@ namespace ptk::components
         total_inferences_++;
         total_inference_time_ms_ += inference_time_ms;
 
-        if (output_)
+        if (output_ && output_->is_bound())
         {
-            output_->Write(output_result_);
+            output_->Bind(&output_result_);
         }
     }
 

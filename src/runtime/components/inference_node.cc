@@ -1,6 +1,9 @@
 #include "runtime/components/inference_node.h"
 #include "runtime/core/logger.h"
 #include "engines/onnx_engine.h"
+#ifdef PTK_ENABLE_CUDA
+#include "engines/trt_engine.h"
+#endif
 #include "tasks/detection_contract.h"
 #include "tasks/segmentation_contract.h"
 #include <rclcpp_components/register_node_macro.hpp>
@@ -136,7 +139,7 @@ namespace ptk::components
         {
             engine_ = std::make_unique<perception::OnnxEngine>(engine_config_);
         }
-#ifndef __APPLE__
+#ifdef PTK_ENABLE_CUDA
         else if (engine_config_.backend == perception::EngineBackend::TensorRTNative)
         {
             engine_ = std::make_unique<perception::TrtEngine>(engine_config_);

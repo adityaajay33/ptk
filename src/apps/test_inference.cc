@@ -67,27 +67,27 @@ public:
 
     void Tick() override
     {
-        if (!input_ || !input_->HasData())
+        if (!input_ || !input_->is_bound())
         {
             return;
         }
 
-        const tasks::TaskOutput &result = input_->Read();
+        const tasks::TaskOutput *result = input_->get();
 
-        if (!result.success)
+        if (!result->success)
         {
             RCLCPP_WARN(this->get_logger(), "Received failed inference result");
             return;
         }
 
         // Write frame info
-        file_ << "Frame " << result.frame_index
-              << " | Detections: " << result.detections.size()
-              << " | Time: " << result.inference_time_ms << " ms"
+        file_ << "Frame " << result->frame_index
+              << " | Detections: " << result->detections.size()
+              << " | Time: " << result->inference_time_ms << " ms"
               << std::endl;
 
         // Write each detection
-        for (const auto &det : result.detections)
+        for (const auto &det : result->detections)
         {
             file_ << "  " << det.class_name
                   << " (conf=" << det.confidence << ")"

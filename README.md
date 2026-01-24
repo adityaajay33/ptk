@@ -21,7 +21,7 @@ PTK is a modular perception toolkit that combines:
 - **Docker support** for reproducible builds
 - **Camera abstraction** with real and synthetic sources
 
-## Quick Start (Docker - Recommended)
+## Quick Start
 
 ### Prerequisites
 - Docker Desktop installed

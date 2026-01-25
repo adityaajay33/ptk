@@ -2,6 +2,11 @@
 
 #include "runtime/core/runtime_context.h"
 #include "runtime/data/frame.h"
+#include "runtime/core/scheduler.h"
+#include <thread>
+#include <sstream>
+#include <mutex>
+#include <iostream>
 
 namespace ptk::components
 {
@@ -59,6 +64,11 @@ namespace ptk::components
             return;
         }
 
+        // Lock the mutex for this frame instance
+        std::unique_lock<std::mutex> lock(scheduler_->GetDataMutex(frame));
+
+        std::cout << "[CAMERA][THREAD " << std::this_thread::get_id() << "] Generating Frame " << frame_index_ << "\n";
+
         // Generate synthetic 640x480 RGB image
         const int H = 480;
         const int W = 640;
@@ -90,6 +100,9 @@ namespace ptk::components
         frame->frame_index = frame_index_++;
         frame->timestamp_ns = context_->NowNanoseconds();
         frame->camera_id = -1;  // Synthetic camera
+
+        // Pacing: 30 FPS
+        std::this_thread::sleep_for(std::chrono::milliseconds(33));
     }
 
 } // namespace ptk::components

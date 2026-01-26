@@ -4,6 +4,7 @@
 #include <thread>
 #include <chrono>
 #include <mutex>
+#include <cstring>
 #include "runtime/components/synthetic_camera.h"
 #include "runtime/core/runtime_context.h"
 #include "runtime/core/scheduler.h"
@@ -79,14 +80,18 @@ int main(int argc, char** argv) {
         static int64_t last_frame_index = -1;
         const ptk::data::Frame* frame = camera_output.get();
         if (frame && frame->frame_index > last_frame_index && !frame->image.empty()) {
-            
-            // Lock the mutex for this frame instance before reading
+            //mutex lock
             std::unique_lock<std::mutex> lock(scheduler.GetDataMutex((void*)frame));
+
+            //check again after acquiring lock
+            if (frame->frame_index <= last_frame_index || frame->image.empty()) {
+                continue;
+            }
 
             last_frame_index = frame->frame_index;
             frames_collected++;
 
-             // Get tensor info
+            // Get tensor info (inside lock)
             const auto& shape = frame->image.shape();
             int H = shape.dim(0);
             int W = shape.dim(1);
@@ -94,41 +99,51 @@ int main(int argc, char** argv) {
             
             const uint8_t* data = static_cast<const uint8_t*>(frame->image.buffer().data());
 
-            // Write frame metadata to file
-            outfile << "=== Frame " << frame->frame_index << " ===\n";
+            std::vector<uint8_t> data_copy(H * W * C);
+            std::memcpy(data_copy.data(), data, H * W * C);
+            
+            int64_t frame_idx = frame->frame_index;
+            int pixel_format = static_cast<int>(frame->pixel_format);
+            int layout = static_cast<int>(frame->layout);
+            int camera_id = frame->camera_id;
+            int64_t timestamp_ns = frame->timestamp_ns;
+            
+            lock.unlock();
+
+            outfile << "=== Frame " << frame_idx << " ===\n";
             outfile << "Dimensions: " << H << "x" << W << "x" << C << "\n";
-            outfile << "Pixel Format: " << static_cast<int>(frame->pixel_format) << "\n";
-            outfile << "Layout: " << static_cast<int>(frame->layout) << "\n";
-            outfile << "Camera ID: " << frame->camera_id << " (synthetic)\n";
-            outfile << "Timestamp: " << frame->timestamp_ns << " ns\n";
+            outfile << "Pixel Format: " << pixel_format << "\n";
+            outfile << "Layout: " << layout << "\n";
+            outfile << "Camera ID: " << camera_id << " (synthetic)\n";
+            outfile << "Timestamp: " << timestamp_ns << " ns\n";
             
             // Write first 100 pixel values as sample
             outfile << "First 100 pixel values: ";
             for (int j = 0; j < std::min(100, H * W * C); j++) {
-                outfile << static_cast<int>(data[j]) << " ";
+                outfile << static_cast<int>(data_copy[j]) << " ";
             }
             outfile << "\n";
             
             // Write corner pixels to show the test pattern
             outfile << "Top-left corner (R,G,B): " 
-                    << static_cast<int>(data[0]) << "," 
-                    << static_cast<int>(data[1]) << "," 
-                    << static_cast<int>(data[2]) << "\n";
+                    << static_cast<int>(data_copy[0]) << "," 
+                    << static_cast<int>(data_copy[1]) << "," 
+                    << static_cast<int>(data_copy[2]) << "\n";
             
             int bottom_right_idx = (H-1) * W * C + (W-1) * C;
             outfile << "Bottom-right corner (R,G,B): " 
-                    << static_cast<int>(data[bottom_right_idx]) << "," 
-                    << static_cast<int>(data[bottom_right_idx + 1]) << "," 
-                    << static_cast<int>(data[bottom_right_idx + 2]) << "\n";
+                    << static_cast<int>(data_copy[bottom_right_idx]) << "," 
+                    << static_cast<int>(data_copy[bottom_right_idx + 1]) << "," 
+                    << static_cast<int>(data_copy[bottom_right_idx + 2]) << "\n";
             outfile << "\n";
             
             // Console output
-            std::cout << "[OBSERVER][THREAD " << std::this_thread::get_id() << "] Received Frame " << frame->frame_index 
+            std::cout << "[OBSERVER][THREAD " << std::this_thread::get_id() << "] Received Frame " << frame_idx 
                       << " (" << H << "x" << W << "x" << C << ") "
                       << "Top-left RGB: (" 
-                      << static_cast<int>(data[0]) << "," 
-                      << static_cast<int>(data[1]) << "," 
-                      << static_cast<int>(data[2]) << ")"
+                      << static_cast<int>(data_copy[0]) << "," 
+                      << static_cast<int>(data_copy[1]) << "," 
+                      << static_cast<int>(data_copy[2]) << ")"
                       << " (wrote to file)\n";
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));

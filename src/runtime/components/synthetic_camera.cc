@@ -15,7 +15,8 @@ namespace ptk::components
         : ComponentInterface("synthetic_camera", options),
           context_(nullptr),
           output_(nullptr),
-          frame_index_(0)
+          frame_index_(0),
+          current_buffer_index_(0)
     {
     }
 
@@ -64,6 +65,10 @@ namespace ptk::components
             return;
         }
 
+        // swap to alternate buffer before writing
+        current_buffer_index_ = 1 - current_buffer_index_;
+        std::vector<uint8_t>& active_buffer = frame_buffer_[current_buffer_index_];
+
         // Lock the mutex for this frame instance
         std::unique_lock<std::mutex> lock(scheduler_->GetDataMutex(frame));
 
@@ -75,22 +80,21 @@ namespace ptk::components
         const int C = 3;
         const size_t num_bytes = H * W * C;
         
-        // Resize buffer if needed
-        frame_buffer_.resize(num_bytes);
+        // resize buffer - already alternated
+        active_buffer.resize(num_bytes);
         
         // Generate test pattern (gradient + frame counter)
         for (int y = 0; y < H; y++) {
             for (int x = 0; x < W; x++) {
                 int idx = (y * W + x) * C;
-                frame_buffer_[idx + 0] = (x * 255) / W;  // R gradient horizontal
-                frame_buffer_[idx + 1] = (y * 255) / H;  // G gradient vertical
-                frame_buffer_[idx + 2] = (frame_index_ * 10) % 256;  // B changes with frame
+                active_buffer[idx + 0] = (x * 255) / W;  // R gradient horizontal
+                active_buffer[idx + 1] = (y * 255) / H;  // G gradient vertical
+                active_buffer[idx + 2] = (frame_index_ * 10) % 256;  // B changes with frame
             }
         }
         
-        // Create TensorView pointing to persistent buffer
         frame->image = data::TensorView(
-            data::BufferView(frame_buffer_.data(), num_bytes, core::DeviceType::kCpu),
+            data::BufferView(active_buffer.data(), num_bytes, core::DeviceType::kCpu),
             core::DataType::kUint8,
             data::TensorShape({H, W, C})
         );

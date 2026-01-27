@@ -15,10 +15,10 @@ namespace ptk::perception
 
         if (config.backend == EngineBackend::TensorRTNative)
         {
-            #ifndef __APPLE__
+            #ifdef PTK_ENABLE_CUDA
             return std::make_unique<TrtEngine>(config);
             #else
-            return nullptr; // TensorRT not supported on macOS
+            return nullptr; // TensorRT requires CUDA
             #endif
         }
 

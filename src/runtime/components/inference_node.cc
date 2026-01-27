@@ -1,10 +1,15 @@
 #include "runtime/components/inference_node.h"
 #include "runtime/core/logger.h"
 #include "engines/onnx_engine.h"
+#ifdef PTK_ENABLE_CUDA
+#include "engines/trt_engine.h"
+#endif
 #include "tasks/detection_contract.h"
 #include "tasks/segmentation_contract.h"
+#include "runtime/core/scheduler.h"
 #include <rclcpp_components/register_node_macro.hpp>
 #include <chrono>
+#include <mutex>
 
 namespace ptk::components
 {
@@ -136,7 +141,7 @@ namespace ptk::components
         {
             engine_ = std::make_unique<perception::OnnxEngine>(engine_config_);
         }
-#ifndef __APPLE__
+#ifdef PTK_ENABLE_CUDA
         else if (engine_config_.backend == perception::EngineBackend::TensorRTNative)
         {
             engine_ = std::make_unique<perception::TrtEngine>(engine_config_);
@@ -266,6 +271,9 @@ namespace ptk::components
             return;
         }
 
+        // Lock the mutex for the input frame
+        std::unique_lock<std::mutex> lock(scheduler_->GetDataMutex((void*)frame_ptr));
+
         const data::Frame &input_frame = *frame_ptr;
 
         // Prepare task input
@@ -333,8 +341,13 @@ namespace ptk::components
 
         if (output_ && output_->is_bound())
         {
+            // Lock the mutex for the output data instance
+            std::unique_lock<std::mutex> out_lock(scheduler_->GetDataMutex(&output_result_));
             output_->Bind(&output_result_);
         }
+
+        // Pacing: roughly 30 FPS or as fast as possible
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
     void InferenceNode::PublishStatistics()

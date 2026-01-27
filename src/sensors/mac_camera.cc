@@ -16,6 +16,7 @@ namespace ptk::sensors
               is_running_(false),
               frame_index_(0),
               impl_(new Impl()),
+              current_buffer_index_(0),
               output_(nullptr)
         {
             // Load device index from ROS parameter
@@ -145,11 +146,17 @@ namespace ptk::sensors
             int C = img.channels();
             size_t num_bytes = static_cast<size_t>(H * W * C);
             
-            frame_buffer_.resize(num_bytes);
-            std::memcpy(frame_buffer_.data(), img.data, num_bytes);
+            current_buffer_index_ = 1 - current_buffer_index_;
+            std::vector<uint8_t>& active_buffer = frame_buffer_[current_buffer_index_];
+            
+            // mutex lock
+            std::unique_lock<std::mutex> lock(scheduler_->GetDataMutex(out));
+            
+            active_buffer.resize(num_bytes);
+            std::memcpy(active_buffer.data(), img.data, num_bytes);
             
             out->image = ptk::data::TensorView(
-                ptk::data::BufferView(frame_buffer_.data(), num_bytes, core::DeviceType::kCpu),
+                ptk::data::BufferView(active_buffer.data(), num_bytes, core::DeviceType::kCpu),
                 core::DataType::kUint8,
                 ptk::data::TensorShape({H, W, C})
             );

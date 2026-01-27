@@ -273,18 +273,18 @@ namespace ptk::perception
             // Set precision mode
             switch (config_.tensorrt_precision_mode) {
                 case TensorRTPrecisionMode::FP16:
-                    trt_options.fp16_enable = 1;
+                    trt_options.trt_fp16_enable = 1;
                     break;
                 case TensorRTPrecisionMode::INT8:
-                    trt_options.int8_enable = 1;
+                    trt_options.trt_int8_enable = 1;
                     break;
                 case TensorRTPrecisionMode::FP32:
                 default:
                     break;
             }
 
-            // Set workspace size
-            trt_options.gpu_mem_limit_in_mb = static_cast<size_t>(config_.trt_workspace_size_mb);
+            // Set workspace size (in bytes)
+            trt_options.trt_max_workspace_size = static_cast<size_t>(config_.trt_workspace_size_mb) * 1024 * 1024;
 
             // Append TensorRT provider with fallback to CUDA
             session_options_.AppendExecutionProvider_TensorRT(trt_options);

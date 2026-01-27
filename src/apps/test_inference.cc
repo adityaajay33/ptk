@@ -67,27 +67,42 @@ public:
 
     void Tick() override
     {
-        if (!input_ || !input_->HasData())
+        if (!input_ || !input_->is_bound())
         {
             return;
         }
 
-        const tasks::TaskOutput &result = input_->Read();
+        const tasks::TaskOutput *result = input_->get();
+        if (!result)
+        {
+            return;
+        }
 
-        if (!result.success)
+        // Lock the mutex for the result instance
+        std::unique_lock<std::mutex> lock(scheduler_->GetDataMutex((void*)result));
+
+        if (!result->success)
         {
             RCLCPP_WARN(this->get_logger(), "Received failed inference result");
             return;
         }
 
-        // Write frame info
-        file_ << "Frame " << result.frame_index
-              << " | Detections: " << result.detections.size()
-              << " | Time: " << result.inference_time_ms << " ms"
+        // Copy result data to local variables while holding lock
+        int64_t frame_idx = result->frame_index;
+        float inference_time = result->inference_time_ms;
+        std::vector<tasks::Detection> detections_copy = result->detections;
+        
+        // Release lock before file I/O
+        lock.unlock();
+
+        // Write frame info (using local copies)
+        file_ << "Frame " << frame_idx
+              << " | Detections: " << detections_copy.size()
+              << " | Time: " << inference_time << " ms"
               << std::endl;
 
         // Write each detection
-        for (const auto &det : result.detections)
+        for (const auto &det : detections_copy)
         {
             file_ << "  " << det.class_name
                   << " (conf=" << det.confidence << ")"

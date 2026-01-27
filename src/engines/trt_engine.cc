@@ -1,6 +1,6 @@
 #include "engines/trt_engine.h"
 
-#ifndef __APPLE__
+#ifdef PTK_ENABLE_CUDA
 
 #include "engines/tensorrt_utils.h"
 #include <cuda_runtime.h>
@@ -417,4 +417,4 @@ namespace ptk::perception
 
 } // namespace ptk::perception
 
-#endif // !__APPLE__
+#endif // PTK_ENABLE_CUDA

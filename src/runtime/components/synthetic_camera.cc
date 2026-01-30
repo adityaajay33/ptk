@@ -16,7 +16,8 @@ namespace ptk::components
           context_(nullptr),
           output_(nullptr),
           frame_index_(0),
-          current_buffer_index_(0)
+          total_frames_generated_(0),
+          frames_dropped_(0)
     {
     }
 
@@ -47,6 +48,11 @@ namespace ptk::components
 
     core::Status SyntheticCamera::Stop()
     {
+        // Log statistics
+        auto stats = output_->GetStats();
+        RCLCPP_INFO(this->get_logger(), 
+                    "Camera Statistics: Generated=%zu, Pushed=%zu, Dropped=%zu (queue policy=%zu)",
+                    total_frames_generated_, stats.total_pushed, frames_dropped_, stats.total_dropped);
         return core::Status::Ok();
     }
 
@@ -58,52 +64,50 @@ namespace ptk::components
             return;
         }
 
-        data::Frame *frame = output_->get();
-        if (frame == nullptr)
-        {
-            context_->LogError("Null frame");
-            return;
-        }
-
-        // swap to alternate buffer before writing
-        current_buffer_index_ = 1 - current_buffer_index_;
-        std::vector<uint8_t>& active_buffer = frame_buffer_[current_buffer_index_];
-
-        // Lock the mutex for this frame instance
-        std::unique_lock<std::mutex> lock(scheduler_->GetDataMutex(frame));
-
-        std::cout << "[CAMERA][THREAD " << std::this_thread::get_id() << "] Generating Frame " << frame_index_ << "\n";
-
-        // Generate synthetic 640x480 RGB image
+        // Generate synthetic 640x480 RGB image dimensions
         const int H = 480;
         const int W = 640;
         const int C = 3;
-        const size_t num_bytes = H * W * C;
+
+        // Create a new frame with owned data (no shared state!)
+        data::Frame frame = data::Frame::CreateOwned(H, W, C, 
+                                                     core::PixelFormat::kRgb8,
+                                                     core::TensorLayout::kHwc);
         
-        // resize buffer - already alternated
-        active_buffer.resize(num_bytes);
+        frame.frame_index = frame_index_;
+        frame.timestamp_ns = context_->NowNanoseconds();
+        frame.camera_id = -1;  // Synthetic camera
+
+        // Get pointer to the owned pixel data
+        uint8_t* pixel_data = frame.owned_data->data();
         
         // Generate test pattern (gradient + frame counter)
         for (int y = 0; y < H; y++) {
             for (int x = 0; x < W; x++) {
                 int idx = (y * W + x) * C;
-                active_buffer[idx + 0] = (x * 255) / W;  // R gradient horizontal
-                active_buffer[idx + 1] = (y * 255) / H;  // G gradient vertical
-                active_buffer[idx + 2] = (frame_index_ * 10) % 256;  // B changes with frame
+                pixel_data[idx + 0] = (x * 255) / W;  // R gradient horizontal
+                pixel_data[idx + 1] = (y * 255) / H;  // G gradient vertical
+                pixel_data[idx + 2] = (frame_index_ * 10) % 256;  // B changes with frame
             }
         }
-        
-        frame->image = data::TensorView(
-            data::BufferView(active_buffer.data(), num_bytes, core::DeviceType::kCpu),
-            core::DataType::kUint8,
-            data::TensorShape({H, W, C})
-        );
-        
-        frame->pixel_format = core::PixelFormat::kRgb8;
-        frame->layout = core::TensorLayout::kHwc;
-        frame->frame_index = frame_index_++;
-        frame->timestamp_ns = context_->NowNanoseconds();
-        frame->camera_id = -1;  // Synthetic camera
+
+        total_frames_generated_++;
+
+        RCLCPP_DEBUG(this->get_logger(), 
+                     "[CAMERA][THREAD %lu] Generating Frame %d", 
+                     std::hash<std::thread::id>{}(std::this_thread::get_id()), 
+                     frame_index_);
+
+        // Push to queue - non-blocking, queue policy handles drops
+        if (!output_->Push(std::move(frame)))
+        {
+            frames_dropped_++;
+            RCLCPP_DEBUG_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
+                                  "Frame %d dropped by queue policy (total dropped: %zu)",
+                                  frame_index_, frames_dropped_);
+        }
+
+        frame_index_++;
 
         // Pacing: 30 FPS
         std::this_thread::sleep_for(std::chrono::milliseconds(33));

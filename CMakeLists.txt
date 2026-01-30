@@ -128,6 +128,10 @@ add_executable(test_inference src/apps/test_inference.cc)
 target_link_libraries(test_inference ptk ${OpenCV_LIBS})
 ament_target_dependencies(test_inference rclcpp)
 
+add_executable(test_queue_pipeline src/apps/test_queue_pipeline.cc)
+target_link_libraries(test_queue_pipeline ptk ${OpenCV_LIBS})
+ament_target_dependencies(test_queue_pipeline rclcpp)
+
 # Install
 install(TARGETS ptk
     ARCHIVE DESTINATION lib
@@ -135,7 +139,7 @@ install(TARGETS ptk
     RUNTIME DESTINATION bin
 )
 
-install(TARGETS test_camera test_pipeline test_pipeline_synthetic test_inference
+install(TARGETS test_camera test_pipeline test_pipeline_synthetic test_inference test_queue_pipeline
     DESTINATION lib/${PROJECT_NAME}
 )
 

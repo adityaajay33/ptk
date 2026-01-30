@@ -3,17 +3,17 @@
 #include <fstream>
 #include <thread>
 #include <chrono>
-#include <mutex>
 #include <cstring>
 #include "runtime/components/synthetic_camera.h"
 #include "runtime/core/runtime_context.h"
 #include "runtime/core/scheduler.h"
+#include "runtime/core/queue_policy.h"
 
 int main(int argc, char** argv) {
     // Initialize ROS
     rclcpp::init(argc, argv);
     
-    std::cout << "Starting SyntheticCamera -> TensorWriter pipeline test (Multi-threaded Scheduler)...\n";
+    std::cout << "Queue-Based Pipeline Test with Latest-Only Policy\n";
     std::cout << "Main Thread ID: " << std::this_thread::get_id() << "\n\n";
     
     // Create runtime context for logging
@@ -32,10 +32,19 @@ int main(int argc, char** argv) {
     rclcpp::NodeOptions cam_options;
     auto camera = std::make_shared<ptk::components::SyntheticCamera>(cam_options);
     
-    // Setup data frame and output port
-    ptk::data::Frame camera_frame;
+    auto frame_queue = std::make_shared<ptk::core::BoundedQueue<ptk::data::Frame>>(
+        1,  // Capacity: single slot
+        ptk::core::QueuePolicy::kLatestOnly  // Always overwrite with newest
+    );
+    
+    std::cout << "Queue Configuration:\n";
+    std::cout << "  Policy: Latest-Only (single slot, always fresh)\n";
+    std::cout << "  Capacity: 1 frame\n";
+    std::cout << "  Behavior: Old frames overwritten by new ones\n\n";
+    
+    // Setup queue-based output port
     ptk::core::OutputPort<ptk::data::Frame> camera_output;
-    camera_output.Bind(&camera_frame);
+    camera_output.Bind(frame_queue);
     
     // Connect camera to output port
     camera->BindOutput(&camera_output);
@@ -50,14 +59,14 @@ int main(int argc, char** argv) {
         return 1;
     }
     
-    std::cout << "Scheduler started! Each component pinned to its own thread.\n";
+    std::cout << "Scheduler started! Camera running at 30 FPS in separate thread.\n";
 
     // Run scheduler in background thread
     std::thread scheduler_thread([&scheduler](){
         scheduler.RunLoop();
     });
 
-    std::cout << "Collecting 10 frames...\n\n";
+    std::cout << "Collecting 10 frames from queue...\n\n";
     
     // Open output file
     std::ofstream outfile("tensor_output.txt");
@@ -69,92 +78,114 @@ int main(int argc, char** argv) {
         return 1;
     }
     
+    // Create an InputPort to consume from the same queue
+    ptk::core::InputPort<ptk::data::Frame> observer_input;
+    observer_input.Bind(frame_queue);
+    
     // Collect frames loop
     int frames_collected = 0;
+    int64_t last_frame_index = -1;
+    
     while (frames_collected < 10) {
+        // Try to pop a frame from the queue (blocking with timeout)
+        auto frame_opt = observer_input.Pop(std::chrono::milliseconds(100));
         
-        // Since OutputPort::get() is non-blocking, we use a polling pattern.
-        // We track the frame index to ensure we only process each new frame once.
-        // The loop sleep ensures we don't consume 100% CPU while waiting.
-        
-        static int64_t last_frame_index = -1;
-        const ptk::data::Frame* frame = camera_output.get();
-        if (frame && frame->frame_index > last_frame_index && !frame->image.empty()) {
-            //mutex lock
-            std::unique_lock<std::mutex> lock(scheduler.GetDataMutex((void*)frame));
-
-            //check again after acquiring lock
-            if (frame->frame_index <= last_frame_index || frame->image.empty()) {
-                continue;
-            }
-
-            last_frame_index = frame->frame_index;
-            frames_collected++;
-
-            // Get tensor info (inside lock)
-            const auto& shape = frame->image.shape();
-            int H = shape.dim(0);
-            int W = shape.dim(1);
-            int C = shape.dim(2);
-            
-            const uint8_t* data = static_cast<const uint8_t*>(frame->image.buffer().data());
-
-            std::vector<uint8_t> data_copy(H * W * C);
-            std::memcpy(data_copy.data(), data, H * W * C);
-            
-            int64_t frame_idx = frame->frame_index;
-            int pixel_format = static_cast<int>(frame->pixel_format);
-            int layout = static_cast<int>(frame->layout);
-            int camera_id = frame->camera_id;
-            int64_t timestamp_ns = frame->timestamp_ns;
-            
-            lock.unlock();
-
-            outfile << "=== Frame " << frame_idx << " ===\n";
-            outfile << "Dimensions: " << H << "x" << W << "x" << C << "\n";
-            outfile << "Pixel Format: " << pixel_format << "\n";
-            outfile << "Layout: " << layout << "\n";
-            outfile << "Camera ID: " << camera_id << " (synthetic)\n";
-            outfile << "Timestamp: " << timestamp_ns << " ns\n";
-            
-            // Write first 100 pixel values as sample
-            outfile << "First 100 pixel values: ";
-            for (int j = 0; j < std::min(100, H * W * C); j++) {
-                outfile << static_cast<int>(data_copy[j]) << " ";
-            }
-            outfile << "\n";
-            
-            // Write corner pixels to show the test pattern
-            outfile << "Top-left corner (R,G,B): " 
-                    << static_cast<int>(data_copy[0]) << "," 
-                    << static_cast<int>(data_copy[1]) << "," 
-                    << static_cast<int>(data_copy[2]) << "\n";
-            
-            int bottom_right_idx = (H-1) * W * C + (W-1) * C;
-            outfile << "Bottom-right corner (R,G,B): " 
-                    << static_cast<int>(data_copy[bottom_right_idx]) << "," 
-                    << static_cast<int>(data_copy[bottom_right_idx + 1]) << "," 
-                    << static_cast<int>(data_copy[bottom_right_idx + 2]) << "\n";
-            outfile << "\n";
-            
-            // Console output
-            std::cout << "[OBSERVER][THREAD " << std::this_thread::get_id() << "] Received Frame " << frame_idx 
-                      << " (" << H << "x" << W << "x" << C << ") "
-                      << "Top-left RGB: (" 
-                      << static_cast<int>(data_copy[0]) << "," 
-                      << static_cast<int>(data_copy[1]) << "," 
-                      << static_cast<int>(data_copy[2]) << ")"
-                      << " (wrote to file)\n";
+        if (!frame_opt) {
+            // Timeout - no frame available, retry
+            std::cout << "[OBSERVER] Waiting for frame...\n";
+            continue;
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        
+        // We own this frame now - no mutex needed!
+        const ptk::data::Frame& frame = *frame_opt;
+        
+        // Skip if we somehow got an old frame (shouldn't happen with Latest-Only)
+        if (frame.frame_index <= last_frame_index) {
+            continue;
+        }
+        
+        last_frame_index = frame.frame_index;
+        frames_collected++;
+        
+        // Calculate frame age
+        int64_t now = context.NowNanoseconds();
+        double frame_age_ms = (now - frame.timestamp_ns) / 1e6;
+        
+        // Get tensor info
+        const auto& shape = frame.image.shape();
+        int H = shape.dim(0);
+        int W = shape.dim(1);
+        int C = shape.dim(2);
+        
+        const uint8_t* data = static_cast<const uint8_t*>(frame.image.buffer().data());
+
+        outfile << "=== Frame " << frame.frame_index << " ===\n";
+        outfile << "Dimensions: " << H << "x" << W << "x" << C << "\n";
+        outfile << "Pixel Format: " << static_cast<int>(frame.pixel_format) << "\n";
+        outfile << "Layout: " << static_cast<int>(frame.layout) << "\n";
+        outfile << "Camera ID: " << frame.camera_id << " (synthetic)\n";
+        outfile << "Timestamp: " << frame.timestamp_ns << " ns\n";
+        outfile << "Frame Age: " << frame_age_ms << " ms\n";
+        
+        // Write first 100 pixel values as sample
+        outfile << "First 100 pixel values: ";
+        for (int j = 0; j < std::min(100, H * W * C); j++) {
+            outfile << static_cast<int>(data[j]) << " ";
+        }
+        outfile << "\n";
+        
+        // Write corner pixels to show the test pattern
+        outfile << "Top-left corner (R,G,B): " 
+                << static_cast<int>(data[0]) << "," 
+                << static_cast<int>(data[1]) << "," 
+                << static_cast<int>(data[2]) << "\n";
+        
+        int bottom_right_idx = (H-1) * W * C + (W-1) * C;
+        outfile << "Bottom-right corner (R,G,B): " 
+                << static_cast<int>(data[bottom_right_idx]) << "," 
+                << static_cast<int>(data[bottom_right_idx + 1]) << "," 
+                << static_cast<int>(data[bottom_right_idx + 2]) << "\n";
+        outfile << "\n";
+        
+        // Console output
+        std::cout << "[OBSERVER][THREAD " << std::this_thread::get_id() << "] "
+                  << "Received Frame " << frame.frame_index 
+                  << " (" << H << "x" << W << "x" << C << ") "
+                  << "Age: " << frame_age_ms << "ms, "
+                  << "Top-left RGB: (" 
+                  << static_cast<int>(data[0]) << "," 
+                  << static_cast<int>(data[1]) << "," 
+                  << static_cast<int>(data[2]) << ")\n";
+        
+        // Simulate slow processing to test queue behavior
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     
     outfile.close();
-    std::cout << "\nDone! Tensor data written to tensor_output.txt\n";
+    
+    // Get final queue statistics
+    auto stats = frame_queue->GetStats();
+    
+    std::cout << "\n=================================================\n";
+    std::cout << "Test Complete!\n";
+    std::cout << "=================================================\n";
+    std::cout << "Queue Statistics:\n";
+    std::cout << "  Total Pushed: " << stats.total_pushed << "\n";
+    std::cout << "  Total Popped: " << stats.total_popped << "\n";
+    std::cout << "  Total Dropped: " << stats.total_dropped << " (by Latest-Only policy)\n";
+    std::cout << "  Current Depth: " << stats.current_depth << "\n\n";
+    
+    std::cout << "Tensor data written to tensor_output.txt\n";
     std::cout << "The synthetic camera generates a test pattern:\n";
     std::cout << "  - Red channel: horizontal gradient (0->255 left to right)\n";
     std::cout << "  - Green channel: vertical gradient (0->255 top to bottom)\n";
-    std::cout << "  - Blue channel: changes with frame number\n";
+    std::cout << "  - Blue channel: changes with frame number\n\n";
+    
+    std::cout << "Key Benefits Demonstrated:\n";
+    std::cout << "  ✓ No mutex contention (each frame is owned)\n";
+    std::cout << "  ✓ Explicit drop policy (Latest-Only)\n";
+    std::cout << "  ✓ Frame age tracking (freshness guarantee)\n";
+    std::cout << "  ✓ Observable queue statistics\n\n";
     
     scheduler.Stop();
     if (scheduler_thread.joinable()) {

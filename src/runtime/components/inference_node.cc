@@ -254,27 +254,47 @@ namespace ptk::components
     core::Status InferenceNode::Stop()
     {
         PublishStatistics();
+
+        if (input_ && input_->is_bound())
+        {
+            auto stats = input_->GetStats();
+            RCLCPP_INFO(this->get_logger(), 
+                        "Input Queue Stats: Pushed=%zu, Popped=%zu, Dropped=%zu",
+                        stats.total_pushed, stats.total_popped, stats.total_dropped);
+        }
+        
         return core::Status::Ok();
     }
 
     void InferenceNode::Tick()
     {
-        // Read input frame from port
         if (!input_ || !input_->is_bound())
         {
             return;
         }
-
-        const data::Frame *frame_ptr = input_->get();
-        if (!frame_ptr)
+        auto frame_opt = input_->Pop(std::chrono::milliseconds(100));
+        if (!frame_opt)
         {
+            RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
+                                 "No frame available in 100ms, likely shutting down or camera stopped");
             return;
         }
 
-        // Lock the mutex for the input frame
-        std::unique_lock<std::mutex> lock(scheduler_->GetDataMutex((void*)frame_ptr));
+        const data::Frame &input_frame = *frame_opt;
 
-        const data::Frame &input_frame = *frame_ptr;
+        int64_t now = context_->NowNanoseconds();
+        double frame_age_ms = (now - input_frame.timestamp_ns) / 1e6;
+        
+        if (frame_age_ms > 100.0) 
+        {
+            RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
+                                 "Processing stale frame %ld: %.1f ms old", 
+                                 input_frame.frame_index, frame_age_ms);
+        }
+
+        RCLCPP_DEBUG(this->get_logger(), 
+                     "Processing frame %ld (age: %.1f ms)", 
+                     input_frame.frame_index, frame_age_ms);
 
         // Prepare task input
         tasks::TaskInput task_input;
@@ -341,13 +361,14 @@ namespace ptk::components
 
         if (output_ && output_->is_bound())
         {
-            // Lock the mutex for the output data instance
-            std::unique_lock<std::mutex> out_lock(scheduler_->GetDataMutex(&output_result_));
-            output_->Bind(&output_result_);
+            if (!output_->Push(std::move(output_result_)))
+            {
+                RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
+                                     "Output frame dropped by queue policy");
+            }
         }
 
-        // Pacing: roughly 30 FPS or as fast as possible
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        // No sleep needed - we'll naturally wait when input queue is empty
     }
 
     void InferenceNode::PublishStatistics()

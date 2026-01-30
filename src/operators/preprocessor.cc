@@ -18,7 +18,7 @@ namespace ptk
           uint8_temp_(),
           output_frame_()
     {
-        // Declare ROS parameters for configuration
+
         this->declare_parameter("target_height", 224);
         this->declare_parameter("target_width", 224);
         this->declare_parameter("normalize", true);
@@ -26,7 +26,6 @@ namespace ptk
         this->declare_parameter("to_grayscale", false);
         this->declare_parameter("convert_rgb_to_bgr", false);
         
-        // Load configuration from ROS parameters
         config_.target_height = this->get_parameter("target_height").as_int();
         config_.target_width = this->get_parameter("target_width").as_int();
         config_.normalize = this->get_parameter("normalize").as_bool();
@@ -115,20 +114,16 @@ namespace ptk
             return;
         }
 
-        // Lock input frame for reading
         std::unique_lock<std::mutex> in_lock(scheduler_->GetDataMutex((void*)in));
 
-        // Check validity after acquiring lock
         if (in->image.empty())
         {
             context_->LogError("Preprocessor: input frame has empty image tensor");
             return;
         }
 
-        // Lock output frame for writing
         std::unique_lock<std::mutex> out_lock(scheduler_->GetDataMutex(out));
 
-        // Copy basic metadata
         out->frame_index = in->frame_index;
         out->timestamp_ns = in->timestamp_ns;
         out->camera_id = in->camera_id;
@@ -143,15 +138,12 @@ namespace ptk
         const data::TensorView &src = in->image;
         data::TensorView &dst = out->image;
 
-        // For now: simple uint8 -> float32 cast.
         core::Status s = operators::CastUint8ToFloat32(src, &dst);
         if (!s.ok())
         {
             context_->LogError("Preprocessor: CastUint8ToFloat32 failed");
             return;
         }
-        
-        // Locks automatically released when function exits
     }
 
 } // namespace ptk

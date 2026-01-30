@@ -28,9 +28,8 @@ namespace ptk::components
             core::RuntimeContext *context_;
             core::OutputPort<data::Frame> *output_;
             int frame_index_;
-            
-            std::vector<uint8_t> frame_buffer_[2]; // double buffering = no dangling pointers during resize
-            int current_buffer_index_;
+            size_t total_frames_generated_;
+            size_t frames_dropped_;
         };
 
 } // namespace ptk::components

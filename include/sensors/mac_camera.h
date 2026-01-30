@@ -35,8 +35,8 @@ namespace ptk::sensors
             struct Impl;
             Impl *impl_;
             
-            // Persistent buffer for zero-copy frame data
-            std::vector<uint8_t> frame_buffer_;
+            std::vector<uint8_t> frame_buffer_[2];
+            int current_buffer_index_;
             core::OutputPort<data::Frame>* output_;
         };
 

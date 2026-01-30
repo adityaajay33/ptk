@@ -9,6 +9,11 @@
 #include "runtime/core/types.h"
 #include "runtime/data/tensor.h"
 
+#include <onnxruntime_cxx_api.h>
+#ifdef PTK_ENABLE_CUDA
+#include <NvInfer.h>
+#endif
+
 namespace ptk::engine
 {
 
@@ -87,9 +92,6 @@ namespace ptk::engine
 
     namespace type_mapping
     {
-#ifndef __APPLE__
-#include <onnxruntime_cxx_api.h>
-
         inline ONNXTensorElementDataType PtkToOnnxType(core::DataType dtype)
         {
             switch (dtype)
@@ -128,10 +130,7 @@ namespace ptk::engine
             }
         }
 
-#endif
-#ifndef __APPLE__
-#include <NvInfer.h>
-
+#ifdef PTK_ENABLE_CUDA
         inline nvinfer1::DataType PtkToTrtType(core::DataType dtype)
         {
             switch (dtype)
@@ -170,7 +169,6 @@ namespace ptk::engine
                 return core::DataType::kUnknown;
             }
         }
-
 #endif
 
     } // namespace type_mapping

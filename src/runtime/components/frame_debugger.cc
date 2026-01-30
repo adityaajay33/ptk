@@ -3,8 +3,10 @@
 
 #include <cstdint>
 #include <string>
+#include <mutex>
 
 #include "runtime/core/runtime_context.h"
+#include "runtime/core/scheduler.h"
 #include "runtime/data/frame.h"
 #include "runtime/data/tensor.h" // whatever defines TensorView / TensorShape
 
@@ -66,6 +68,9 @@ namespace ptk::components
       context_->LogError("Null frame");
       return;
     }
+
+    // Lock the mutex for the input frame
+    std::unique_lock<std::mutex> lock(scheduler_->GetDataMutex((void*)frame));
 
     const data::TensorView &image = frame->image;
     const data::TensorShape &shape = image.shape();

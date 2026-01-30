@@ -10,7 +10,8 @@ namespace ptk::core
             kOk = 0,
             kInvalidArgument,
             kFailedPrecondition,
-            kInternal
+            kInternal,
+            kUnimplemented,
         };
 
         class Status

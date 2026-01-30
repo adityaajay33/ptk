@@ -6,6 +6,7 @@
 namespace ptk::core
 {
     class RuntimeContext;
+    class Scheduler;
 }
 
 namespace ptk::components
@@ -18,9 +19,11 @@ namespace ptk::components
             explicit ComponentInterface(
                 const std::string& node_name,
                 const rclcpp::NodeOptions& options = rclcpp::NodeOptions())
-                : rclcpp::Node(node_name, options) {}
+                : rclcpp::Node(node_name, options), scheduler_(nullptr) {}
 
             virtual ~ComponentInterface() = default;
+
+            void SetScheduler(core::Scheduler* scheduler) { scheduler_ = scheduler; }
 
             virtual core::Status Init(core::RuntimeContext *context) = 0; // called once before start
 
@@ -29,6 +32,9 @@ namespace ptk::components
             virtual core::Status Stop() = 0; // called once after the lasttick
 
             virtual void Tick() = 0; // called repeatedly by scheduler or external driver
+
+        protected:
+            core::Scheduler* scheduler_;
         };
 
 } // namespace ptk::components

@@ -1,7 +1,9 @@
 #include "operators/preprocessor.h"
 #include "operators/cast_uint8_to_float32.h"
 #include "runtime/core/runtime_context.h"
+#include "runtime/core/scheduler.h"
 #include "runtime/core/status.h"
+#include <mutex>
 
 namespace ptk
 {
@@ -113,19 +115,25 @@ namespace ptk
             return;
         }
 
-        // Copy basic metadata.
-        out->frame_index = in->frame_index;
-        out->timestamp_ns = in->timestamp_ns;
-        out->camera_id = in->camera_id;
-        out->pixel_format = in->pixel_format;
+        // Lock input frame for reading
+        std::unique_lock<std::mutex> in_lock(scheduler_->GetDataMutex((void*)in));
 
-        // Your Frame::image is a plain TensorView, not optional.
-        // Use TensorView::empty() to check validity.
+        // Check validity after acquiring lock
         if (in->image.empty())
         {
             context_->LogError("Preprocessor: input frame has empty image tensor");
             return;
         }
+
+        // Lock output frame for writing
+        std::unique_lock<std::mutex> out_lock(scheduler_->GetDataMutex(out));
+
+        // Copy basic metadata
+        out->frame_index = in->frame_index;
+        out->timestamp_ns = in->timestamp_ns;
+        out->camera_id = in->camera_id;
+        out->pixel_format = in->pixel_format;
+
         if (out->image.empty())
         {
             context_->LogError("Preprocessor: output frame has empty image tensor");
@@ -142,6 +150,8 @@ namespace ptk
             context_->LogError("Preprocessor: CastUint8ToFloat32 failed");
             return;
         }
+        
+        // Locks automatically released when function exits
     }
 
 } // namespace ptk

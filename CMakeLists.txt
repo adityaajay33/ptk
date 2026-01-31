@@ -19,18 +19,22 @@ endif()
 
 find_package(OpenCV REQUIRED)
 
-# Find ONNX Runtime (optional for inference)
-find_package(onnxruntime QUIET)
-if(onnxruntime_FOUND)
-    message(STATUS "ONNX Runtime found, enabling inference support")
+# Find ONNX Runtime (REQUIRED)
+find_path(ONNXRUNTIME_INCLUDE_DIR NAMES onnxruntime_cxx_api.h PATH_SUFFIXES onnxruntime core/session)
+find_library(ONNXRUNTIME_LIBRARY NAMES onnxruntime)
+
+if(ONNXRUNTIME_INCLUDE_DIR AND ONNXRUNTIME_LIBRARY)
+    message(STATUS "Found ONNX Runtime: ${ONNXRUNTIME_LIBRARY}")
+    message(STATUS "Found ONNX Runtime headers: ${ONNXRUNTIME_INCLUDE_DIR}")
     add_definitions(-DPTK_ENABLE_ONNX)
 else()
-    message(STATUS "ONNX Runtime not found, inference will be limited")
+    message(FATAL_ERROR "ONNX Runtime not found! Please install it.")
 endif()
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${OpenCV_INCLUDE_DIRS}
+    ${ONNXRUNTIME_INCLUDE_DIR}
 )
 
 # Check for CUDA (optional)
@@ -64,7 +68,7 @@ ament_target_dependencies(ptk
     rclcpp
     rclcpp_components
 )
-target_link_libraries(ptk ${OpenCV_LIBS})
+target_link_libraries(ptk ${OpenCV_LIBS} ${ONNXRUNTIME_LIBRARY})
 
 # Link CUDA libraries if available
 if(CUDA_FOUND)
@@ -93,8 +97,8 @@ rclcpp_components_register_node(ptk
 )
 
 rclcpp_components_register_node(ptk
-    PLUGIN "ptk::sensors::MacCamera"
-    EXECUTABLE mac_camera_node
+    PLUGIN "ptk::sensors::Camera"
+    EXECUTABLE camera_node
 )
 
 rclcpp_components_register_node(ptk
@@ -105,6 +109,11 @@ rclcpp_components_register_node(ptk
 rclcpp_components_register_node(ptk
     PLUGIN "ptk::components::InferenceNode"
     EXECUTABLE inference_node
+)
+
+rclcpp_components_register_node(ptk
+    PLUGIN "ptk::components::MetricsReporter"
+    EXECUTABLE metrics_reporter_node
 )
 
 # Build test apps
@@ -124,6 +133,10 @@ add_executable(test_inference src/apps/test_inference.cc)
 target_link_libraries(test_inference ptk ${OpenCV_LIBS})
 ament_target_dependencies(test_inference rclcpp)
 
+add_executable(test_queue_pipeline src/apps/test_queue_pipeline.cc)
+target_link_libraries(test_queue_pipeline ptk ${OpenCV_LIBS})
+ament_target_dependencies(test_queue_pipeline rclcpp)
+
 # Install
 install(TARGETS ptk
     ARCHIVE DESTINATION lib
@@ -131,7 +144,7 @@ install(TARGETS ptk
     RUNTIME DESTINATION bin
 )
 
-install(TARGETS test_camera test_pipeline test_pipeline_synthetic test_inference
+install(TARGETS test_camera test_pipeline test_pipeline_synthetic test_inference test_queue_pipeline
     DESTINATION lib/${PROJECT_NAME}
 )
 

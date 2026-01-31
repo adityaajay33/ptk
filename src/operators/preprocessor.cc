@@ -1,7 +1,9 @@
 #include "operators/preprocessor.h"
 #include "operators/cast_uint8_to_float32.h"
 #include "runtime/core/runtime_context.h"
+#include "runtime/core/scheduler.h"
 #include "runtime/core/status.h"
+#include <mutex>
 
 namespace ptk
 {
@@ -16,7 +18,7 @@ namespace ptk
           uint8_temp_(),
           output_frame_()
     {
-        // Declare ROS parameters for configuration
+
         this->declare_parameter("target_height", 224);
         this->declare_parameter("target_width", 224);
         this->declare_parameter("normalize", true);
@@ -24,7 +26,6 @@ namespace ptk
         this->declare_parameter("to_grayscale", false);
         this->declare_parameter("convert_rgb_to_bgr", false);
         
-        // Load configuration from ROS parameters
         config_.target_height = this->get_parameter("target_height").as_int();
         config_.target_width = this->get_parameter("target_width").as_int();
         config_.normalize = this->get_parameter("normalize").as_bool();
@@ -113,19 +114,21 @@ namespace ptk
             return;
         }
 
-        // Copy basic metadata.
-        out->frame_index = in->frame_index;
-        out->timestamp_ns = in->timestamp_ns;
-        out->camera_id = in->camera_id;
-        out->pixel_format = in->pixel_format;
+        std::unique_lock<std::mutex> in_lock(scheduler_->GetDataMutex((void*)in));
 
-        // Your Frame::image is a plain TensorView, not optional.
-        // Use TensorView::empty() to check validity.
         if (in->image.empty())
         {
             context_->LogError("Preprocessor: input frame has empty image tensor");
             return;
         }
+
+        std::unique_lock<std::mutex> out_lock(scheduler_->GetDataMutex(out));
+
+        out->frame_index = in->frame_index;
+        out->timestamp_ns = in->timestamp_ns;
+        out->camera_id = in->camera_id;
+        out->pixel_format = in->pixel_format;
+
         if (out->image.empty())
         {
             context_->LogError("Preprocessor: output frame has empty image tensor");
@@ -135,7 +138,6 @@ namespace ptk
         const data::TensorView &src = in->image;
         data::TensorView &dst = out->image;
 
-        // For now: simple uint8 -> float32 cast.
         core::Status s = operators::CastUint8ToFloat32(src, &dst);
         if (!s.ok())
         {

@@ -3,22 +3,22 @@
 #include <fstream>
 #include <thread>
 #include <chrono>
-#include "sensors/mac_camera.h"
+#include "sensors/camera.h"
 #include "runtime/core/runtime_context.h"
 
 int main(int argc, char** argv) {
     // Initialize ROS
     rclcpp::init(argc, argv);
     
-    std::cout << "Starting MacCamera -> TensorWriter pipeline test...\n";
+    std::cout << "Starting Camera -> TensorWriter pipeline test...\n";
     
     // Create runtime context for logging
     ptk::core::RuntimeContext context;
     
-    // Create MacCamera node
+    // Create Camera node
     rclcpp::NodeOptions cam_options;
     cam_options.append_parameter_override("device_index", 0);
-    auto camera = std::make_shared<ptk::sensors::MacCamera>(cam_options);
+    auto camera = std::make_shared<ptk::sensors::Camera>(cam_options);
     
     // Setup data frame and output port
     ptk::data::Frame camera_frame;

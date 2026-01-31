@@ -1,5 +1,8 @@
 #pragma once
 
+#include "runtime/core/queue_policy.h"
+#include <atomic>
+
 namespace ptk::core
 {
 
@@ -7,50 +10,69 @@ namespace ptk::core
         class OutputPort
         {
         public:
-            OutputPort() : value_(nullptr) {}
+            OutputPort() : queue_(nullptr) {}
 
-            void Bind(T *value)
+            void Bind(std::shared_ptr<BoundedQueue<T>> queue)
             {
-                value_ = value;
+                queue_ = queue;
+            }
+
+            bool Push(T&& item)
+            {
+                if (!queue_) return false;
+                return queue_->TryPush(std::move(item));
             }
 
             bool is_bound() const
             {
-                return value_ != nullptr;
+                return queue_ != nullptr;
             }
 
-            T *get() const
+            QueueStats GetStats() const
             {
-                return value_;
+                if (!queue_) return QueueStats();
+                return queue_->GetStats();
             }
 
         private:
-            T *value_;
+            std::shared_ptr<BoundedQueue<T>> queue_;
         };
 
         template <typename T>
         class InputPort
         {
         public:
-            InputPort() : value_(nullptr) {}
+            InputPort() : queue_(nullptr) {}
 
-            void Bind(T *value)
+            void Bind(std::shared_ptr<BoundedQueue<T>> queue)
             {
-                value_ = value;
+                queue_ = queue;
             }
 
             bool is_bound() const
             {
-                return value_ != nullptr;
+                return queue_ != nullptr;
             }
 
-            const T *get() const
+            std::optional<T> Pop(std::chrono::milliseconds timeout = std::chrono::milliseconds(0))
             {
-                return value_;
+                if (!queue_) return std::nullopt;
+                return queue_->Pop(timeout);
+            }
+
+            std::optional<T> TryPop()
+            {
+                if (!queue_) return std::nullopt;
+                return queue_->TryPop();
+            }
+            QueueStats GetStats() const
+            {
+                if (!queue_) return QueueStats();
+                return queue_->GetStats();
             }
 
         private:
-            const T *value_;
+            std::shared_ptr<BoundedQueue<T>> queue_;
         };
 
 }  // namespace ptk::core

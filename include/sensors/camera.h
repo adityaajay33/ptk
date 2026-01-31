@@ -6,15 +6,16 @@
 #include "runtime/data/frame.h"
 #include <vector>
 #include <cstdint>
+#include <mutex>
 
 namespace ptk::sensors
 {
 
-        class MacCamera : public CameraInterface
+        class Camera : public CameraInterface
         {
         public:
-            explicit MacCamera(const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
-            virtual ~MacCamera();
+            explicit Camera(const rclcpp::NodeOptions &options = rclcpp::NodeOptions());
+            virtual ~Camera();
 
             core::Status Init() override;
             core::Status Start() override;
@@ -23,8 +24,7 @@ namespace ptk::sensors
             core::Status GetFrame(ptk::data::Frame *out) override;
 
             void Tick() override;
-            
-            // Bind output port for scheduler-driven operation
+
             void BindOutput(core::OutputPort<data::Frame>* out);
 
         private:
@@ -34,10 +34,11 @@ namespace ptk::sensors
 
             struct Impl;
             Impl *impl_;
-            
-            // Persistent buffer for zero-copy frame data
-            std::vector<uint8_t> frame_buffer_;
+
+            std::vector<uint8_t> frame_buffer_[2];
+            int current_buffer_index_;
             core::OutputPort<data::Frame>* output_;
+            std::mutex output_mutex_;
         };
 
 } // namespace ptk::sensors

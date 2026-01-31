@@ -1,9 +1,7 @@
 #pragma once
 
 // TensorRT is only available on Linux/Windows, not macOS
-#ifdef __APPLE__
-#warning "TensorRT is not supported on macOS. This file will be empty on macOS builds."
-#else
+#ifdef PTK_ENABLE_CUDA
 
 #include <NvInfer.h>
 #include "runtime/core/types.h"
@@ -50,4 +48,4 @@ namespace ptk::trt
 
 } // namespace ptk::trt
 
-#endif // !__APPLE__
+#endif // PTK_ENABLE_CUDA

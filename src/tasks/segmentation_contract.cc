@@ -264,6 +264,13 @@ namespace ptk::tasks
             return core::Status::Ok();
         }
 
+        core::Status SegmentationContract::ParseProbabilityMask(const std::vector<data::TensorView> &outputs, TaskOutput *result) {
+            // Stub reusing logic
+            return ParseLogitMask(outputs, result);
+        }
+
+
+
         core::Status SegmentationContract::ParseLogitMask(const std::vector<data::TensorView> &outputs, TaskOutput *result) {
 
             const auto& logits_tensor = outputs[0];

@@ -1,18 +1,15 @@
-#include "sensors/mac_camera.h"
+#include "sensors/camera.h"
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include <rclcpp/rclcpp.hpp>
 
 int main() {
-    // Initialize ROS 2
     rclcpp::init(0, nullptr);
-    
-    // Create NodeOptions with device_index parameter
+
     rclcpp::NodeOptions options;
     options.append_parameter_override("device_index", 0);
-    
-    // Use FaceTime HD Camera
-    ptk::sensors::MacCamera cam(options);
+
+    ptk::sensors::Camera cam(options);
 
     auto st = cam.Init();
     if (!st.ok()) {
@@ -26,19 +23,6 @@ int main() {
         return 1;
     }
 
-    // Warm up using raw OpenCV (bypass PTK)
-    // Access underlying OpenCV capture directly
-    cv::VideoCapture warm_cap(0, cv::CAP_AVFOUNDATION);
-
-    if (warm_cap.isOpened()) {
-        cv::Mat tmp;
-        for (int i = 0; i < 60; i++) {
-            warm_cap.read(tmp);
-        }
-        warm_cap.release();
-    }
-
-    // Now grab real frame through PTK
     ptk::data::Frame frame;
     st = cam.GetFrame(&frame);
     if (!st.ok()) {
@@ -46,7 +30,6 @@ int main() {
         return 1;
     }
 
-    // Save frame as PNG
     int H = frame.image.shape().dim(0);
     int W = frame.image.shape().dim(1);
     int C = frame.image.shape().dim(2);
@@ -56,12 +39,10 @@ int main() {
 
     cv::imwrite("captured_frame.png", img);
 
-    std::cout << "Saved warmed frame to captured_frame.png\n";
+    std::cout << "Saved frame to captured_frame.png (" << W << "x" << H << ")\n";
 
     cam.Stop();
-    
-    // Shutdown ROS 2
     rclcpp::shutdown();
-    
+
     return 0;
 }

@@ -1,10 +1,17 @@
 #include "runtime/components/inference_node.h"
 #include "runtime/core/logger.h"
+#include "runtime/core/timing_helper.h"
+#include "runtime/core/metrics.h"
 #include "engines/onnx_engine.h"
+#ifdef PTK_ENABLE_CUDA
+#include "engines/trt_engine.h"
+#endif
 #include "tasks/detection_contract.h"
 #include "tasks/segmentation_contract.h"
+#include "runtime/core/scheduler.h"
 #include <rclcpp_components/register_node_macro.hpp>
 #include <chrono>
+#include <mutex>
 
 namespace ptk::components
 {
@@ -136,7 +143,7 @@ namespace ptk::components
         {
             engine_ = std::make_unique<perception::OnnxEngine>(engine_config_);
         }
-#ifndef __APPLE__
+#ifdef PTK_ENABLE_CUDA
         else if (engine_config_.backend == perception::EngineBackend::TensorRTNative)
         {
             engine_ = std::make_unique<perception::TrtEngine>(engine_config_);
@@ -249,24 +256,59 @@ namespace ptk::components
     core::Status InferenceNode::Stop()
     {
         PublishStatistics();
+
+        if (input_ && input_->is_bound())
+        {
+            auto stats = input_->GetStats();
+            RCLCPP_INFO(this->get_logger(), 
+                        "Input Queue Stats: Pushed=%zu, Popped=%zu, Dropped=%zu",
+                        stats.total_pushed, stats.total_popped, stats.total_dropped);
+        }
+        
         return core::Status::Ok();
     }
 
     void InferenceNode::Tick()
     {
-        // Read input frame from port
+        core::ScopedTimer timer(get_name());
+
         if (!input_ || !input_->is_bound())
         {
             return;
         }
 
-        const data::Frame *frame_ptr = input_->get();
-        if (!frame_ptr)
+        if (input_->is_bound())
         {
+            auto queue_stats = input_->GetStats();
+            core::MetricsCollector::Instance().RecordQueueMetrics(
+                std::string(get_name()) + "_input", queue_stats);
+        }
+
+        auto frame_opt = input_->Pop(std::chrono::milliseconds(100));
+        if (!frame_opt)
+        {
+            RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
+                                 "No frame available in 100ms, likely shutting down or camera stopped");
             return;
         }
 
-        const data::Frame &input_frame = *frame_ptr;
+        const data::Frame &input_frame = *frame_opt;
+
+        int64_t now = context_->NowNanoseconds();
+        double frame_age_ms = (now - input_frame.timestamp_ns) / 1e6;
+
+        core::MetricsCollector::Instance().RecordFrameAge(get_name(), frame_age_ms);
+        
+        if (frame_age_ms > 100.0) 
+        {
+            RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
+                                 "Processing stale frame %ld: %.1f ms old", 
+                                 input_frame.frame_index, frame_age_ms);
+        }
+
+        RCLCPP_DEBUG(this->get_logger(), 
+                     "Processing frame %ld (age: %.1f ms)", 
+                     input_frame.frame_index, frame_age_ms);
 
         // Prepare task input
         tasks::TaskInput task_input;
@@ -331,9 +373,19 @@ namespace ptk::components
         total_inferences_++;
         total_inference_time_ms_ += inference_time_ms;
 
+        core::MetricsCollector::Instance().IncrementFramesProcessed(get_name());
+
         if (output_ && output_->is_bound())
         {
-            output_->Bind(&output_result_);
+            auto queue_stats = output_->GetStats();
+            core::MetricsCollector::Instance().RecordQueueMetrics(
+                std::string(get_name()) + "_output", queue_stats);
+
+            if (!output_->Push(std::move(output_result_)))
+            {
+                RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
+                                     "Output frame dropped by queue policy");
+            }
         }
     }
 

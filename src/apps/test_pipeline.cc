@@ -5,6 +5,7 @@
 #include <chrono>
 #include "sensors/camera.h"
 #include "runtime/core/runtime_context.h"
+#include "runtime/core/queue_policy.h"
 
 int main(int argc, char** argv) {
     // Initialize ROS
@@ -20,10 +21,15 @@ int main(int argc, char** argv) {
     cam_options.append_parameter_override("device_index", 0);
     auto camera = std::make_shared<ptk::sensors::Camera>(cam_options);
     
-    // Setup data frame and output port
-    ptk::data::Frame camera_frame;
+    // Create queue for frame communication
+    auto frame_queue = std::make_shared<ptk::core::BoundedQueue<ptk::data::Frame>>(1, ptk::core::QueuePolicy::kLatestOnly);
+
+    // Setup ports
     ptk::core::OutputPort<ptk::data::Frame> camera_output;
-    camera_output.Bind(&camera_frame);
+    camera_output.Bind(frame_queue);
+
+    ptk::core::InputPort<ptk::data::Frame> test_input;
+    test_input.Bind(frame_queue);
     
     // Connect camera to output port
     camera->BindOutput(&camera_output);
@@ -60,30 +66,32 @@ int main(int argc, char** argv) {
         // Trigger camera to capture frame
         camera->Tick();
         
-        // Read frame from port (zero-copy!)
-        const ptk::data::Frame* frame = camera_output.get();
+        // Read frame from input port
+        auto frame_opt = test_input.Pop(std::chrono::milliseconds(100));
         
-        if (frame == nullptr || frame->image.empty()) {
+        if (!frame_opt || frame_opt->image.empty()) {
             std::cerr << "Frame " << i << ": Failed to capture\n";
             continue;
         }
+
+        const auto& frame = *frame_opt;
         
         // Get tensor info
-        const auto& shape = frame->image.shape();
+        const auto& shape = frame.image.shape();
         int H = shape.dim(0);
         int W = shape.dim(1);
         int C = shape.dim(2);
         
         // Write frame metadata to file
-        outfile << "=== Frame " << frame->frame_index << " ===\n";
+        outfile << "=== Frame " << frame.frame_index << " ===\n";
         outfile << "Dimensions: " << H << "x" << W << "x" << C << "\n";
-        outfile << "Pixel Format: " << static_cast<int>(frame->pixel_format) << "\n";
-        outfile << "Layout: " << static_cast<int>(frame->layout) << "\n";
-        outfile << "Camera ID: " << frame->camera_id << "\n";
-        outfile << "Timestamp: " << frame->timestamp_ns << " ns\n";
+        outfile << "Pixel Format: " << static_cast<int>(frame.pixel_format) << "\n";
+        outfile << "Layout: " << static_cast<int>(frame.layout) << "\n";
+        outfile << "Camera ID: " << frame.camera_id << "\n";
+        outfile << "Timestamp: " << frame.timestamp_ns << " ns\n";
         
         // Write first 100 pixel values as sample
-        const uint8_t* data = static_cast<const uint8_t*>(frame->image.buffer().data());
+        const uint8_t* data = static_cast<const uint8_t*>(frame.image.buffer().data());
         outfile << "First 100 pixel values: ";
         for (int j = 0; j < std::min(100, H * W * C); j++) {
             outfile << static_cast<int>(data[j]) << " ";
@@ -91,7 +99,7 @@ int main(int argc, char** argv) {
         outfile << "\n\n";
         
         // Console output
-        std::cout << "Frame " << frame->frame_index 
+        std::cout << "Frame " << frame.frame_index 
                   << ": " << H << "x" << W << "x" << C 
                   << " (wrote to file)\n";
         

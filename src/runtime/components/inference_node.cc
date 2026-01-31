@@ -1,4 +1,5 @@
 #include "runtime/components/inference_node.h"
+#include "runtime/core/runtime_context.h"
 #include "runtime/core/logger.h"
 #include "runtime/core/timing_helper.h"
 #include "runtime/core/metrics.h"

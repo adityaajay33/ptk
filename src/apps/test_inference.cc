@@ -3,6 +3,7 @@
 #include "runtime/components/synthetic_camera.h"
 #include "operators/preprocessor.h"
 #include "runtime/core/runtime_context.h"
+#include "runtime/core/scheduler.h"
 #include "runtime/core/port.h"
 #include "runtime/data/frame.h"
 #include "tasks/task_output.h"
@@ -72,37 +73,28 @@ public:
             return;
         }
 
-        const tasks::TaskOutput *result = input_->get();
-        if (!result)
+        auto result_opt = input_->Pop(std::chrono::milliseconds(10));
+        if (!result_opt)
         {
             return;
         }
 
-        // Lock the mutex for the result instance
-        std::unique_lock<std::mutex> lock(scheduler_->GetDataMutex((void*)result));
+        const tasks::TaskOutput &result = *result_opt;
 
-        if (!result->success)
+        if (!result.success)
         {
             RCLCPP_WARN(this->get_logger(), "Received failed inference result");
             return;
         }
 
-        // Copy result data to local variables while holding lock
-        int64_t frame_idx = result->frame_index;
-        float inference_time = result->inference_time_ms;
-        std::vector<tasks::Detection> detections_copy = result->detections;
-        
-        // Release lock before file I/O
-        lock.unlock();
-
-        // Write frame info (using local copies)
-        file_ << "Frame " << frame_idx
-              << " | Detections: " << detections_copy.size()
-              << " | Time: " << inference_time << " ms"
+        // Write frame info
+        file_ << "Frame " << result.frame_index
+              << " | Detections: " << result.detections.size()
+              << " | Time: " << result.inference_time_ms << " ms"
               << std::endl;
 
         // Write each detection
-        for (const auto &det : detections_copy)
+        for (const auto &det : result.detections)
         {
             file_ << "  " << det.class_name
                   << " (conf=" << det.confidence << ")"
@@ -146,28 +138,28 @@ int main(int argc, char **argv)
     auto inference = std::make_shared<components::InferenceNode>(rclcpp::NodeOptions());
     auto writer = std::make_shared<DetectionWriter>(rclcpp::NodeOptions());
 
-    // Create ports for zero-copy communication
-    data::Frame camera_frame;
-    data::Frame preprocessed_frame;
-    tasks::TaskOutput inference_output;
+    // Create queues for communication
+    auto camera_q = std::make_shared<core::BoundedQueue<data::Frame>>(1, core::QueuePolicy::kLatestOnly);
+    auto preproc_q = std::make_shared<core::BoundedQueue<data::Frame>>(1, core::QueuePolicy::kLatestOnly);
+    auto inference_q = std::make_shared<core::BoundedQueue<tasks::TaskOutput>>(1, core::QueuePolicy::kLatestOnly);
 
     core::OutputPort<data::Frame> camera_out;
-    camera_out.Bind(&camera_frame);
+    camera_out.Bind(camera_q);
 
     core::InputPort<data::Frame> preproc_in;
-    preproc_in.Bind(&camera_frame);
+    preproc_in.Bind(camera_q);
 
     core::OutputPort<data::Frame> preproc_out;
-    preproc_out.Bind(&preprocessed_frame);
+    preproc_out.Bind(preproc_q);
 
     core::InputPort<data::Frame> inference_in;
-    inference_in.Bind(&preprocessed_frame);
+    inference_in.Bind(preproc_q);
 
     core::OutputPort<tasks::TaskOutput> inference_out;
-    inference_out.Bind(&inference_output);
+    inference_out.Bind(inference_q);
 
     core::InputPort<tasks::TaskOutput> writer_in;
-    writer_in.Bind(&inference_output);
+    writer_in.Bind(inference_q);
 
     // Bind ports to components
     camera->BindOutput(&camera_out);

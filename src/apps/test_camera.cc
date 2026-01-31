@@ -13,6 +13,19 @@ int main() {
 
     std::cout << "\n========================================\n";
     std::cout << "Camera Producer-Consumer Test\n";
+    std::cout << "========================================\n";
+
+    // Direct OpenCV check to help debugging
+    std::cout << "Direct OpenCV Camera Check:\n";
+    cv::VideoCapture warm_cap(0);
+    if (!warm_cap.isOpened()) {
+        std::cout << "  - Status: FAILED (Camera 0 could not be opened)\n";
+        std::cout << "  - Note: If using Docker, use --device /dev/video0:/dev/video0\n";
+    } else {
+        std::cout << "  - Status: SUCCESS\n";
+        std::cout << "  - Backend: " << warm_cap.getBackendName() << "\n";
+        warm_cap.release();
+    }
     std::cout << "========================================\n\n";
 
     // Create Camera (Producer)

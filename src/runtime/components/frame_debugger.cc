@@ -73,20 +73,19 @@ namespace ptk::components
           std::string(get_name()) + "_input", queue_stats);
     }
 
-    const data::Frame *frame = input_->get();
-    if (frame == nullptr)
+    auto frame_opt = input_->Pop(std::chrono::milliseconds(10));
+    if (!frame_opt)
     {
-      context_->LogError("Null frame");
       return;
     }
 
-    std::unique_lock<std::mutex> lock(scheduler_->GetDataMutex((void*)frame));
+    const data::Frame &frame = *frame_opt;
 
     int64_t now = context_->NowNanoseconds();
-    double frame_age_ms = (now - frame->timestamp_ns) / 1e6;
+    double frame_age_ms = (now - frame.timestamp_ns) / 1e6;
     core::MetricsCollector::Instance().RecordFrameAge(get_name(), frame_age_ms);
 
-    const data::TensorView &image = frame->image;
+    const data::TensorView &image = frame.image;
     const data::TensorShape &shape = image.shape();
 
     if (shape.rank() != 3)

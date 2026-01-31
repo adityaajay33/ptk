@@ -63,8 +63,7 @@ public:
 
     void Tick() override
     {
-        =
-            core::ScopedTimer timer(get_name());
+        core::ScopedTimer timer(get_name());
 
         if (!input_ || !input_->is_bound())
         {

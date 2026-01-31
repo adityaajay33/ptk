@@ -105,38 +105,30 @@ namespace ptk
             return;
         }
 
-        const data::Frame *in = input_->get();
-        data::Frame *out = output_->get();
-
-        if (in == nullptr || out == nullptr)
+        auto frame_opt = input_->Pop(std::chrono::milliseconds(10));
+        if (!frame_opt)
         {
-            context_->LogError("Preprocessor: null frame from port");
             return;
         }
 
-        std::unique_lock<std::mutex> in_lock(scheduler_->GetDataMutex((void*)in));
-
-        if (in->image.empty())
-        {
-            context_->LogError("Preprocessor: input frame has empty image tensor");
-            return;
+        const data::Frame &in = *frame_opt;
+        
+        // Ensure output frame is allocated if needed
+        if (output_frame_.image.empty()) {
+            output_frame_ = data::Frame::CreateOwned(
+                config_.target_height, config_.target_width, 3,
+                config_.output_format, config_.output_layout);
         }
 
-        std::unique_lock<std::mutex> out_lock(scheduler_->GetDataMutex(out));
+        data::Frame &out = output_frame_;
 
-        out->frame_index = in->frame_index;
-        out->timestamp_ns = in->timestamp_ns;
-        out->camera_id = in->camera_id;
-        out->pixel_format = in->pixel_format;
+        out.frame_index = in.frame_index;
+        out.timestamp_ns = in.timestamp_ns;
+        out.camera_id = in.camera_id;
+        out.pixel_format = in.pixel_format;
 
-        if (out->image.empty())
-        {
-            context_->LogError("Preprocessor: output frame has empty image tensor");
-            return;
-        }
-
-        const data::TensorView &src = in->image;
-        data::TensorView &dst = out->image;
+        const data::TensorView &src = in.image;
+        data::TensorView &dst = out.image;
 
         core::Status s = operators::CastUint8ToFloat32(src, &dst);
         if (!s.ok())
@@ -144,6 +136,10 @@ namespace ptk
             context_->LogError("Preprocessor: CastUint8ToFloat32 failed");
             return;
         }
+
+        output_->Push(std::move(out));
+        // Reset output_frame_ for next tick since it was moved
+        output_frame_ = data::Frame();
     }
 
 } // namespace ptk

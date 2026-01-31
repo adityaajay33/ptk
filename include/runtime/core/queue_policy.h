@@ -102,7 +102,7 @@ namespace ptk::core
             if (timeout.count() > 0)
             {
                 if (!cv_producer_.wait_for(lock, timeout, [this]
-                                           { return queue_.size() < capacity_ || !running_ }))
+                                           { return queue_.size() < capacity_ || !running_; }))
                 {
                     stats_.total_dropped++;
                     return false;
@@ -111,7 +111,7 @@ namespace ptk::core
             else
             {
                 cv_producer_.wait(lock, [this]
-                                  { return queue_.size() < capacity_ || !running_ });
+                                  { return queue_.size() < capacity_ || !running_; });
             }
 
             if (!running_)

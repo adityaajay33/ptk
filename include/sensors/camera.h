@@ -6,7 +6,6 @@
 #include "runtime/data/frame.h"
 #include <vector>
 #include <cstdint>
-#include <mutex>
 
 namespace ptk::sensors
 {
@@ -35,10 +34,7 @@ namespace ptk::sensors
             struct Impl;
             Impl *impl_;
 
-            std::vector<uint8_t> frame_buffer_[2];
-            int current_buffer_index_;
             core::OutputPort<data::Frame>* output_;
-            std::mutex output_mutex_;
         };
 
 } // namespace ptk::sensors

@@ -16,7 +16,6 @@ namespace ptk::sensors
               is_running_(false),
               frame_index_(0),
               impl_(new Impl()),
-              current_buffer_index_(0),
               output_(nullptr)
         {
             this->declare_parameter("device_index", 0);
@@ -126,11 +125,6 @@ namespace ptk::sensors
                 return;
             }
 
-            data::Frame* out = output_->get();
-            if (out == nullptr) {
-                return;
-            }
-
             cv::Mat img;
             if (!impl_->cap.read(img)) {
                 return;
@@ -141,27 +135,23 @@ namespace ptk::sensors
             int H = img.rows;
             int W = img.cols;
             int C = img.channels();
-            size_t num_bytes = static_cast<size_t>(H * W * C);
 
-            current_buffer_index_ = 1 - current_buffer_index_;
-            std::vector<uint8_t>& active_buffer = frame_buffer_[current_buffer_index_];
+            // Create a new frame with owned data
+            data::Frame frame = data::Frame::CreateOwned(H, W, C,
+                                                         core::PixelFormat::kRgb8,
+                                                         core::TensorLayout::kHwc);
 
-            std::unique_lock<std::mutex> lock(output_mutex_);
+            // Copy camera data to the owned buffer
+            std::memcpy(frame.owned_data->data(), img.data, frame.owned_data->size());
 
-            active_buffer.resize(num_bytes);
-            std::memcpy(active_buffer.data(), img.data, num_bytes);
+            frame.frame_index = frame_index_++;
+            frame.timestamp_ns = 0;
+            frame.camera_id = device_index_;
 
-            out->image = ptk::data::TensorView(
-                ptk::data::BufferView(active_buffer.data(), num_bytes, core::DeviceType::kCpu),
-                core::DataType::kUint8,
-                ptk::data::TensorShape({H, W, C})
-            );
-
-            out->pixel_format = core::PixelFormat::kRgb8;
-            out->layout = core::TensorLayout::kHwc;
-            out->frame_index = frame_index_++;
-            out->timestamp_ns = 0;
-            out->camera_id = device_index_;
+            // Push to output queue (move ownership)
+            if (!output_->Push(std::move(frame))) {
+                // Frame was dropped by queue policy
+            }
         }
 
 } // namespace ptk::sensors

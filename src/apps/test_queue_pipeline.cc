@@ -15,9 +15,6 @@
 
 using namespace ptk;
 
-/**
- * Simple component that consumes TaskOutput from a queue and logs results
- */
 class DetectionLogger : public components::ComponentInterface
 {
 public:
@@ -49,24 +46,25 @@ public:
 
     core::Status Stop() override
     {
-        RCLCPP_INFO(this->get_logger(), 
+        RCLCPP_INFO(this->get_logger(),
                     "DetectionLogger stopped. Processed %zu frames", frames_processed_);
-        
+
         // Log queue statistics
         if (input_ && input_->is_bound())
         {
             auto stats = input_->GetStats();
-            RCLCPP_INFO(this->get_logger(), 
+            RCLCPP_INFO(this->get_logger(),
                         "Output Queue Stats: Pushed=%zu, Popped=%zu, Dropped=%zu",
                         stats.total_pushed, stats.total_popped, stats.total_dropped);
         }
-        
+
         return core::Status::Ok();
     }
 
     void Tick() override
-    {=
-        core::ScopedTimer timer(get_name());
+    {
+        =
+            core::ScopedTimer timer(get_name());
 
         if (!input_ || !input_->is_bound())
         {
@@ -157,22 +155,22 @@ int main(int argc, char **argv)
     auto camera = std::make_shared<components::SyntheticCamera>(rclcpp::NodeOptions());
     auto inference = std::make_shared<components::InferenceNode>(rclcpp::NodeOptions());
     auto logger = std::make_shared<DetectionLogger>(rclcpp::NodeOptions());
-    
+
     // Create metrics reporter with 1 second reporting interval
     auto metrics_reporter = std::make_shared<components::MetricsReporter>(
-        rclcpp::NodeOptions(), 1000  // Report every 1 second
+        rclcpp::NodeOptions(), 1000 // Report every 1 second
     );
 
     // Create queues with Latest-Only policy
     // This ensures real-time behavior - always process the freshest data
     auto frame_queue = std::make_shared<core::BoundedQueue<data::Frame>>(
-        1,  // Single slot
-        core::QueuePolicy::kLatestOnly  // Overwrite old frames
+        1,                             // Single slot
+        core::QueuePolicy::kLatestOnly // Overwrite old frames
     );
 
     auto result_queue = std::make_shared<core::BoundedQueue<tasks::TaskOutput>>(
-        1,  // Single slot
-        core::QueuePolicy::kLatestOnly  // Overwrite old results
+        1,                             // Single slot
+        core::QueuePolicy::kLatestOnly // Overwrite old results
     );
 
     std::cout << "Queue Configuration:\n";
@@ -217,7 +215,7 @@ int main(int argc, char **argv)
     // Let the pipeline run for 5 seconds
     std::cout << "Pipeline running...\n";
     std::cout << "Press Ctrl+C to stop or wait 5 seconds\n\n";
-    
+
     std::this_thread::sleep_for(std::chrono::seconds(5));
 
     std::cout << "\nStopping pipeline...\n\n";
@@ -229,7 +227,7 @@ int main(int argc, char **argv)
     std::cout << "\n========================================================\n";
     std::cout << "  Pipeline Statistics\n";
     std::cout << "========================================================\n";
-    
+
     auto frame_stats = frame_queue->GetStats();
     std::cout << "Frame Queue (Camera -> Inference):\n";
     std::cout << "  Pushed:  " << frame_stats.total_pushed << "\n";

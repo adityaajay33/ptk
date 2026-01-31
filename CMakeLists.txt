@@ -97,8 +97,8 @@ rclcpp_components_register_node(ptk
 )
 
 rclcpp_components_register_node(ptk
-    PLUGIN "ptk::sensors::MacCamera"
-    EXECUTABLE mac_camera_node
+    PLUGIN "ptk::sensors::Camera"
+    EXECUTABLE camera_node
 )
 
 rclcpp_components_register_node(ptk

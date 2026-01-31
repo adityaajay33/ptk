@@ -7,6 +7,8 @@
 
 #include "runtime/core/runtime_context.h"
 #include "runtime/core/scheduler.h"
+#include "runtime/core/timing_helper.h"
+#include "runtime/core/metrics.h"
 #include "runtime/data/frame.h"
 #include "runtime/data/tensor.h" // whatever defines TensorView / TensorShape
 
@@ -54,12 +56,21 @@ namespace ptk::components
 
   void FrameDebugger::Tick()
   {
+    core::ScopedTimer timer(get_name());
+
     ++tick_count_;
 
     if (input_ == nullptr || !input_->is_bound())
     {
       context_->LogError("Unbound input");
       return;
+    }
+
+    if (input_->is_bound())
+    {
+      auto queue_stats = input_->GetStats();
+      core::MetricsCollector::Instance().RecordQueueMetrics(
+          std::string(get_name()) + "_input", queue_stats);
     }
 
     const data::Frame *frame = input_->get();
@@ -69,8 +80,11 @@ namespace ptk::components
       return;
     }
 
-    // Lock the mutex for the input frame
     std::unique_lock<std::mutex> lock(scheduler_->GetDataMutex((void*)frame));
+
+    int64_t now = context_->NowNanoseconds();
+    double frame_age_ms = (now - frame->timestamp_ns) / 1e6;
+    core::MetricsCollector::Instance().RecordFrameAge(get_name(), frame_age_ms);
 
     const data::TensorView &image = frame->image;
     const data::TensorShape &shape = image.shape();
@@ -80,6 +94,8 @@ namespace ptk::components
       context_->LogError("Invalid image shape");
       return;
     }
+
+    core::MetricsCollector::Instance().IncrementFramesProcessed(get_name());
   }
 
 } // namespace ptk::components

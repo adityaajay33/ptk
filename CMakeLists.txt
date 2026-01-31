@@ -111,6 +111,11 @@ rclcpp_components_register_node(ptk
     EXECUTABLE inference_node
 )
 
+rclcpp_components_register_node(ptk
+    PLUGIN "ptk::components::MetricsReporter"
+    EXECUTABLE metrics_reporter_node
+)
+
 # Build test apps
 add_executable(test_camera src/apps/test_camera.cc)
 target_link_libraries(test_camera ptk ${OpenCV_LIBS})

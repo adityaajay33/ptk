@@ -1,5 +1,7 @@
 #include "runtime/components/inference_node.h"
 #include "runtime/core/logger.h"
+#include "runtime/core/timing_helper.h"
+#include "runtime/core/metrics.h"
 #include "engines/onnx_engine.h"
 #ifdef PTK_ENABLE_CUDA
 #include "engines/trt_engine.h"
@@ -268,10 +270,20 @@ namespace ptk::components
 
     void InferenceNode::Tick()
     {
+        core::ScopedTimer timer(get_name());
+
         if (!input_ || !input_->is_bound())
         {
             return;
         }
+
+        if (input_->is_bound())
+        {
+            auto queue_stats = input_->GetStats();
+            core::MetricsCollector::Instance().RecordQueueMetrics(
+                std::string(get_name()) + "_input", queue_stats);
+        }
+
         auto frame_opt = input_->Pop(std::chrono::milliseconds(100));
         if (!frame_opt)
         {
@@ -284,6 +296,8 @@ namespace ptk::components
 
         int64_t now = context_->NowNanoseconds();
         double frame_age_ms = (now - input_frame.timestamp_ns) / 1e6;
+
+        core::MetricsCollector::Instance().RecordFrameAge(get_name(), frame_age_ms);
         
         if (frame_age_ms > 100.0) 
         {
@@ -359,16 +373,20 @@ namespace ptk::components
         total_inferences_++;
         total_inference_time_ms_ += inference_time_ms;
 
+        core::MetricsCollector::Instance().IncrementFramesProcessed(get_name());
+
         if (output_ && output_->is_bound())
         {
+            auto queue_stats = output_->GetStats();
+            core::MetricsCollector::Instance().RecordQueueMetrics(
+                std::string(get_name()) + "_output", queue_stats);
+
             if (!output_->Push(std::move(output_result_)))
             {
                 RCLCPP_WARN_THROTTLE(this->get_logger(), *this->get_clock(), 1000,
                                      "Output frame dropped by queue policy");
             }
         }
-
-        // No sleep needed - we'll naturally wait when input queue is empty
     }
 
     void InferenceNode::PublishStatistics()

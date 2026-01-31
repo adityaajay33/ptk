@@ -4,9 +4,12 @@
 #include <chrono>
 #include "runtime/components/synthetic_camera.h"
 #include "runtime/components/inference_node.h"
+#include "runtime/components/metrics_reporter.h"
 #include "runtime/core/runtime_context.h"
 #include "runtime/core/scheduler.h"
 #include "runtime/core/queue_policy.h"
+#include "runtime/core/timing_helper.h"
+#include "runtime/core/metrics.h"
 #include "runtime/data/frame.h"
 #include "tasks/task_output.h"
 
@@ -62,10 +65,20 @@ public:
     }
 
     void Tick() override
-    {
+    {=
+        core::ScopedTimer timer(get_name());
+
         if (!input_ || !input_->is_bound())
         {
             return;
+        }
+
+        // Record input queue metrics
+        if (input_->is_bound())
+        {
+            auto queue_stats = input_->GetStats();
+            core::MetricsCollector::Instance().RecordQueueMetrics(
+                std::string(get_name()) + "_input", queue_stats);
         }
 
         // Block until result is available (uses condition variable - efficient!)
@@ -87,9 +100,11 @@ public:
 
         frames_processed_++;
 
-        // Calculate result age
+        // Calculate result age and record metrics
         int64_t now = context_->NowNanoseconds();
         double result_age_ms = (now - result.timestamp_ns) / 1e6;
+        core::MetricsCollector::Instance().RecordFrameAge(get_name(), result_age_ms);
+        core::MetricsCollector::Instance().IncrementFramesProcessed(get_name());
 
         RCLCPP_INFO(this->get_logger(),
                     "Frame %ld: %zu detections, inference: %.1f ms, age: %.1f ms",
@@ -142,6 +157,11 @@ int main(int argc, char **argv)
     auto camera = std::make_shared<components::SyntheticCamera>(rclcpp::NodeOptions());
     auto inference = std::make_shared<components::InferenceNode>(rclcpp::NodeOptions());
     auto logger = std::make_shared<DetectionLogger>(rclcpp::NodeOptions());
+    
+    // Create metrics reporter with 1 second reporting interval
+    auto metrics_reporter = std::make_shared<components::MetricsReporter>(
+        rclcpp::NodeOptions(), 1000  // Report every 1 second
+    );
 
     // Create queues with Latest-Only policy
     // This ensures real-time behavior - always process the freshest data
@@ -182,8 +202,9 @@ int main(int argc, char **argv)
     scheduler.AddComponent(camera.get());
     scheduler.AddComponent(inference.get());
     scheduler.AddComponent(logger.get());
+    scheduler.AddComponent(metrics_reporter.get());
 
-    std::cout << "Starting scheduler with 3 threads (one per component)...\n\n";
+    std::cout << "Starting scheduler with 4 threads (one per component + metrics)...\n\n";
 
     // Start scheduler (spawns threads)
     auto status = scheduler.Start();
@@ -230,6 +251,8 @@ int main(int argc, char **argv)
     std::cout << "  ✓ Observable queue statistics\n";
     std::cout << "  ✓ Frame age tracking\n";
     std::cout << "  ✓ Each component runs at its own pace\n";
+    std::cout << "  ✓ Per-component latency metrics (p50/p95)\n";
+    std::cout << "  ✓ End-to-end frame age monitoring\n";
     std::cout << "========================================================\n\n";
 
     rclcpp::shutdown();

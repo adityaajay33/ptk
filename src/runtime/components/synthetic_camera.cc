@@ -1,6 +1,8 @@
 #include "runtime/components/synthetic_camera.h"
 
 #include "runtime/core/runtime_context.h"
+#include "runtime/core/timing_helper.h"
+#include "runtime/core/metrics.h"
 #include "runtime/data/frame.h"
 #include "runtime/core/scheduler.h"
 #include <thread>
@@ -58,6 +60,8 @@ namespace ptk::components
 
     void SyntheticCamera::Tick()
     {
+        core::ScopedTimer timer(get_name());
+
         if (output_ == nullptr || !output_->is_bound())
         {
             context_->LogError("Unbound output");
@@ -78,6 +82,8 @@ namespace ptk::components
         frame.timestamp_ns = context_->NowNanoseconds();
         frame.camera_id = -1;  // Synthetic camera
 
+        core::MetricsCollector::Instance().RecordFrameAge(get_name(), 0.0);
+
         // Get pointer to the owned pixel data
         uint8_t* pixel_data = frame.owned_data->data();
         
@@ -93,12 +99,20 @@ namespace ptk::components
 
         total_frames_generated_++;
 
+        core::MetricsCollector::Instance().IncrementFramesProcessed(get_name());
+
         RCLCPP_DEBUG(this->get_logger(), 
                      "[CAMERA][THREAD %lu] Generating Frame %d", 
                      std::hash<std::thread::id>{}(std::this_thread::get_id()), 
                      frame_index_);
 
-        // Push to queue - non-blocking, queue policy handles drops
+        if (output_->is_bound())
+        {
+            auto queue_stats = output_->GetStats();
+            core::MetricsCollector::Instance().RecordQueueMetrics(
+                std::string(get_name()) + "_output", queue_stats);
+        }
+
         if (!output_->Push(std::move(frame)))
         {
             frames_dropped_++;
